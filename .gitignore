@@ -1,0 +1,17 @@
+# Created by Raomengnan
+### Java template
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs
+hs_err_pid*
+
+#Project Config Files
+/target
+/src/main/webapp/WEB-INF/db.properties
+.idea
+ERP-Notebook.iml
