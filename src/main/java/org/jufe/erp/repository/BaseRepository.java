@@ -2,13 +2,10 @@ package org.jufe.erp.repository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Repository;
 
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
@@ -33,15 +30,15 @@ public abstract class BaseRepository<T>{
     }
 
     public T findOne(Query query){
-        return (T)mongoTemplate.findOne(query, clazz);
+        return mongoTemplate.findOne(query, clazz);
     }
 
     public T findById(String id){
-        return (T)mongoTemplate.findById(id, clazz);
+        return mongoTemplate.findById(id, clazz);
     }
 
     public T findById(String id, String collection){
-        return (T)mongoTemplate.findById(id, clazz, collection);
+        return mongoTemplate.findById(id, clazz, collection);
     }
 
     public T insert(T obj){
@@ -51,7 +48,7 @@ public abstract class BaseRepository<T>{
 
     /**
      * 这个update调用save方法，当数据库中不存在，则创建，存在，则更新
-     * @param obj
+     * @param obj 要更新的对象
      */
     public void update(T obj){
         mongoTemplate.save(obj);
