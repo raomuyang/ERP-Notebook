@@ -25,7 +25,7 @@ public class TestRepository extends BaseRepository<MongoTest> {
     }
 
     public MongoTest getTestById(String id){
-        logger.debug("testGet");
+        logger.info("testGet");
         return super.findById(id);
     }
 
