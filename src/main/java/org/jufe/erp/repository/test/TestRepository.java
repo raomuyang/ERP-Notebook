@@ -1,5 +1,6 @@
 package org.jufe.erp.repository.test;
 
+import org.apache.log4j.Logger;
 import org.jufe.erp.entity.test.MongoTest;
 import org.jufe.erp.repository.BaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,11 +17,15 @@ public class TestRepository extends BaseRepository<MongoTest> {
     @Autowired
     private MongoOperations mongoTemplate;
 
+    private Logger logger = Logger.getLogger(TestRepository.class);
+
     public void addTest(MongoTest test){
+        logger.debug("testAdd");
         mongoTemplate.insert(test);
     }
 
     public MongoTest getTestById(String id){
+        logger.debug("testGet");
         return super.findById(id);
     }
 
@@ -33,6 +38,7 @@ public class TestRepository extends BaseRepository<MongoTest> {
     }
 
     public long testCount(){
+        logger.debug("testCount");
         return super.count();
     }
 }
