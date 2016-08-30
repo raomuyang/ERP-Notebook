@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Document(collection = "info")
 public class ERPInfo implements Serializable{
-    private String id;
+    private String id = "org.jufe.erp";
     private String tel; //联系电话
     private String intro; //协会介绍
     private String joinUs; //加入我们
