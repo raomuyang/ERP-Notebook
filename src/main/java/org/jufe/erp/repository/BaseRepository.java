@@ -77,13 +77,23 @@ public abstract class BaseRepository<T>{
             logger.error(e.toString());
             return false;
         }
+    }
 
+    public boolean save(Query query, Update update){
+        logger.info("save:" + query.toString() + " ; " + update.toString());
+        try {
+            mongoTemplate.findAndModify(query, update, clazz);
+            return true;
+        }catch (Exception e){
+            logger.error(e.toString());
+            return false;
+        }
     }
 
     public boolean update(Query query, Update update){
         logger.info("update:"+query.toString()+";--"+update.toString());
         try {
-            mongoTemplate.findAndModify(query, update, clazz);
+            mongoTemplate.updateMulti(query, update, clazz);
             return true;
         }catch (Exception e){
             logger.error(e.toString());
