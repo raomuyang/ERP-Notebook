@@ -116,7 +116,7 @@ public abstract class BaseRepository<T>{
             return mongoTemplate.count(query, clazz);
         }catch (Exception e){
             logger.error(e.toString());
-            return  0;
+            return  -1;
         }
 
     }
@@ -127,7 +127,7 @@ public abstract class BaseRepository<T>{
             return mongoTemplate.count( new Query(), clazz);
         }catch (Exception e){
             logger.error(e);
-            return 0;
+            return -1;
         }
 
     }
