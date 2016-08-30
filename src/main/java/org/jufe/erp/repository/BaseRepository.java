@@ -29,6 +29,10 @@ public abstract class BaseRepository<T>{
         this.logger = Logger.getLogger(getClass());
     }
 
+    public MongoOperations getMongoTemplate(){
+        return this.mongoTemplate;
+    }
+
     public List<T> find(Query query){
         logger.debug("find: " + query.toString());
         return mongoTemplate.find(query, clazz);
@@ -131,6 +135,11 @@ public abstract class BaseRepository<T>{
             return -1;
         }
 
+    }
+
+    public boolean isExists(Query query){
+        logger.debug("is Exists: " + query.toString());
+        return mongoTemplate.exists(query, clazz);
     }
 
 }
