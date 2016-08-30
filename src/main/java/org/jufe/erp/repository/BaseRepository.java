@@ -40,6 +40,7 @@ public abstract class BaseRepository<T>{
     }
 
     public T findById(String id){
+        logger.debug("findById: " + id);
         return mongoTemplate.findById(id, clazz);
     }
 
@@ -60,11 +61,11 @@ public abstract class BaseRepository<T>{
     }
 
     /**
-     * 这个update调用save方法，当数据库中不存在，则创建，存在，则更新
+     * 调用save方法，当数据库中不存在，则创建，存在，则更新
      * @param obj 要更新的对象
      */
-    public boolean update(T obj){
-        logger.info("update:" + obj.toString());
+    public boolean save(T obj){
+        logger.info("save:" + obj.toString());
         try {
             mongoTemplate.save(obj);
             return true;
