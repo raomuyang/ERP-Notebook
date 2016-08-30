@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,31 +15,28 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class TestRepository extends BaseRepository<MongoTest> {
-    @Autowired
-    private MongoOperations mongoTemplate;
 
     private Logger logger = Logger.getLogger(TestRepository.class);
 
-    public void addTest(MongoTest test){
-        logger.debug("testAdd");
-        mongoTemplate.insert(test);
+    public boolean addTest(MongoTest test){
+        return super.insert(test);
     }
 
     public MongoTest getTestById(String id){
-        logger.info("testGet");
         return super.findById(id);
     }
 
-    public void update(MongoTest test){
-        mongoTemplate.save(test);
+    public boolean update(MongoTest test){
+        if(test.getId() != null)
+            return super.save(test);
+        return false;
     }
 
-    public void deleteById(String id){
-        mongoTemplate.remove(new Query(Criteria.where("_id").is(id)), MongoTest.class);
+    public boolean deleteById(String id){
+        return super.deleteById(id);
     }
 
     public long testCount(){
-        logger.debug("testCount");
         return super.count();
     }
 }

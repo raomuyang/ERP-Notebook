@@ -43,16 +43,21 @@ public class TestController {
     @RequestMapping("/testFind")
     public MongoTest testFind(){
         MongoTest  test = testRepository.getTestById("testid10");
-        System.out.println(test.getId());
-        System.out.println(test.getTestList());
-//        test.setName("hhhhhhhhhhhhhhhhhhhhhhhhhh");
-//        testRepository.update(test);
         return test;
 
-//        MongoTest t = new MongoTest();
-//        t.setName("12345678980");
-//        testRepository.update(t);
-//        return t;
+    }
+
+    @RequestMapping("/testUpdate")
+    public boolean testUpdate(){
+        MongoTest  test = testRepository.getTestById("testid10");
+        test.setName("hhhhhhhhhhhhhhhhhhhhhhhhhh");
+        return testRepository.update(test);
+
+    }
+
+    @RequestMapping("/testDelete")
+    public boolean testDelete(String id){
+        return testRepository.deleteById(id);
     }
 
     @RequestMapping("/testCount")
