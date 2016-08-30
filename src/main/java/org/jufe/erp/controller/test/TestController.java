@@ -3,11 +3,13 @@ package org.jufe.erp.controller.test;
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.test.MongoTest;
 import org.jufe.erp.repository.test.TestRepository;
+import org.jufe.erp.utils.DateTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by raomengnan on 16-8-25.
@@ -27,10 +29,10 @@ public class TestController {
     }
 
     @RequestMapping("/testAdds")
-    public String testAdd(){
+    public String testAdd(String idp){
         for (int i = 0; i < 100; ++i){
             MongoTest test = new MongoTest();
-            test.setId("testid" + i);
+            test.setId(idp + i);
             test.setName("test"+i);
             test.setTestDouble(Math.random());
             test.setRegistDate(new Date());
@@ -41,8 +43,8 @@ public class TestController {
     }
 
     @RequestMapping("/testFind")
-    public MongoTest testFind(){
-        MongoTest  test = testRepository.getTestById("testid10");
+    public MongoTest testFind(String id){
+        MongoTest  test = testRepository.getTestById(id);
         return test;
 
     }
@@ -63,6 +65,18 @@ public class TestController {
     @RequestMapping("/testCount")
     public long testCount(){
         return testRepository.testCount();
+    }
+
+    @RequestMapping("/testFindByD")
+    public List<MongoTest> testFindByDate(){
+        Date d1 = DateTool.getDateBeforXDay(new Date(System.currentTimeMillis()),10);
+        Date d2 = new Date(System.currentTimeMillis());
+        return testRepository.findByDate(d1, d2);
+    }
+
+    @RequestMapping("/testMohu")
+    public List<MongoTest> testMohu(String id){
+        return testRepository.findById_Mohu(id);
     }
 
     public static void main(String[] args) {

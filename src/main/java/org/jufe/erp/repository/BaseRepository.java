@@ -2,6 +2,7 @@ package org.jufe.erp.repository;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -31,6 +32,10 @@ public abstract class BaseRepository<T>{
 
     public MongoOperations getMongoTemplate(){
         return this.mongoTemplate;
+    }
+
+    public List<T> findAll(){
+        return mongoTemplate.findAll(clazz);
     }
 
     public List<T> find(Query query){
@@ -151,5 +156,10 @@ public abstract class BaseRepository<T>{
         logger.debug("is Exists: " + query.toString());
         return mongoTemplate.exists(query, clazz);
     }
+
+
+}
+
+class Page{
 
 }
