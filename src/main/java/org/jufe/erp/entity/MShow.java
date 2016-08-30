@@ -11,13 +11,22 @@ import java.util.List;
  * Main Show
  * 展示在首页上的主要信息
  */
-@Document(collection = "mshow")
+@Document(collection = "info")
 public class MShow implements Serializable{
+    private String id;
     private List<String> iurls = new ArrayList<String>(); // 首页展示的图片链接
     private String vurls; //首页视频链接
     private String words; // 主页寄语
     private List<String> iHistory = new ArrayList<String>(); //历史图片
     private List<String> vHistory = new ArrayList<String>(); //历史视频
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public List<String> getIurls() {
         return iurls;
