@@ -13,9 +13,9 @@ import java.util.List;
  */
 @Document(collection = "info")
 public class MShow implements Serializable{
-    private String id;
+    private String id = "erp.mainshow";
     private List<String> iurls = new ArrayList<String>(); // 首页展示的图片链接
-    private String vurls; //首页视频链接
+    private String vurl; //首页视频链接
     private String words; // 主页寄语
     private List<String> iHistory = new ArrayList<String>(); //历史图片
     private List<String> vHistory = new ArrayList<String>(); //历史视频
@@ -36,12 +36,12 @@ public class MShow implements Serializable{
         this.iurls = iurls;
     }
 
-    public String getVurls() {
-        return vurls;
+    public String getVurl() {
+        return vurl;
     }
 
-    public void setVurls(String vurls) {
-        this.vurls = vurls;
+    public void setVurl(String vurl) {
+        this.vurl = vurl;
     }
 
     public String getWords() {
