@@ -38,6 +38,10 @@ public abstract class BaseRepository<T>{
         return mongoTemplate.findAll(clazz);
     }
 
+    public List<T> findAll(String key, Sort.Direction direction){
+        return mongoTemplate.find(new Query().with(new Sort(direction, key)), clazz);
+    }
+
     public List<T> find(Query query){
         logger.debug("find: " + query.toString());
         return mongoTemplate.find(query, clazz);
