@@ -55,4 +55,15 @@ public class NewsImage implements Serializable{
     public void setIntro(String intro) {
         this.intro = intro;
     }
+
+    @Override
+    public String toString() {
+        return "NewsImage{" +
+                "id='" + id + '\'' +
+                ", newsId='" + newsId + '\'' +
+                ", url='" + url + '\'' +
+                ", date='" + date + '\'' +
+                ", intro='" + intro + '\'' +
+                '}';
+    }
 }

@@ -1,10 +1,13 @@
 package org.jufe.erp.controller.test;
 
 import org.bson.types.ObjectId;
+import org.jufe.erp.entity.Policy;
 import org.jufe.erp.entity.test.MongoTest;
 import org.jufe.erp.repository.Page;
+import org.jufe.erp.repository.auth.PolicyRepository;
 import org.jufe.erp.repository.test.TestRepository;
 import org.jufe.erp.utils.DateTool;
+import org.jufe.erp.utils.enums.AuthEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +24,9 @@ public class TestController {
 
     @Autowired
     private TestRepository testRepository;
+
+    @Autowired
+    private PolicyRepository policyRepository;
 
     @RequestMapping("/test")
     public String test(){
@@ -98,5 +104,15 @@ public class TestController {
         System.out.println(new ObjectId("57c2b04b0ab75d2b98344ae3").getDate());
     }
 
-
+    @RequestMapping("/testPolicy")
+    public List<Policy> testPolicy(){
+        Policy p1 = new Policy();
+        Policy p2 = new Policy();
+        p2.getAuth().put(AuthEnum.READ, true);
+        policyRepository.insert(p1);
+        policyRepository.insert(p2);
+        List<Policy> policies = policyRepository.findAll();
+        System.out.println(policies.get(0).getAuth().get(AuthEnum.READ));
+        return policies;
+    }
 }

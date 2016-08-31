@@ -13,6 +13,15 @@ public class PhotoWall implements Serializable{
     private String userId; //nullable
     private String url; //照片url；
     private int grade; //年级
+    private String userName;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getId() {
         return id;
@@ -44,5 +53,16 @@ public class PhotoWall implements Serializable{
 
     public void setGrade(int grade) {
         this.grade = grade;
+    }
+
+    @Override
+    public String toString() {
+        return "PhotoWall{" +
+                "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
+                ", url='" + url + '\'' +
+                ", grade=" + grade +
+                ", userName='" + userName + '\'' +
+                '}';
     }
 }

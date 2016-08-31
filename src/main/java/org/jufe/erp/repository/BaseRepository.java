@@ -151,6 +151,17 @@ public abstract class BaseRepository<T>{
 
     }
 
+    public boolean update(String id, String key, Object value){
+        logger.info(String.format("update: id[%s], key[%s], value[%s]", id, key, value));
+        try {
+            mongoTemplate.updateFirst(new Query(new Criteria("id").is(id)), new Update().set(key, value), clazz);
+            return true;
+        }catch (Exception e){
+            logger.error(e.toString());
+            return false;
+        }
+    }
+
     public List<T> delete(Query query){
         logger.info("delete:"+query.toString());
         try {

@@ -7,7 +7,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Raomengnan on 2016/8/30.
@@ -27,11 +29,22 @@ public class MShowRepository extends BaseRepository<MShow> {
     }
 
     public boolean updateIurls(List<String> iurls){
+        MShow mShow = getMShow();
+
+        List<String> pushList = new ArrayList<>();
+        for (String url: iurls)
+            if(mShow.getiHistory().contains(url))
+                pushList.add(url);
+        super.update(new Query(new Criteria("id").is(id)),
+                new Update().push("iHistory", pushList));
+
         return super.update(new Query(new Criteria("id").is(id)),
                 new Update().set("iurls", iurls));
     }
 
     public boolean updateVurl(String vurl){
+        super.update(new Query(new Criteria("id").is(id)),
+                new Update().push("vHistory", vurl));
         return super.update(new Query(new Criteria("id").is(id)),
                 new Update().set("vurl", vurl));
     }
@@ -60,4 +73,5 @@ public class MShowRepository extends BaseRepository<MShow> {
         return super.update(new Query(new Criteria("id").is(id)),
                 new Update().set("iHistory", vHistory));
     }
+
 }

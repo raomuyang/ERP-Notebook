@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Role implements Serializable{
     private String id;
     private String roleName;
-    private String roleDesc; //角色描述
+    private String roleDes; //角色描述
 
     public String getId() {
         return id;
@@ -30,12 +30,20 @@ public class Role implements Serializable{
         this.roleName = roleName;
     }
 
-    public String getRoleDesc() {
-        return roleDesc;
+    public String getRoleDes() {
+        return roleDes;
     }
 
-    public void setRoleDesc(String roleDesc) {
-        this.roleDesc = roleDesc;
+    public void setRoleDes(String roleDes) {
+        this.roleDes = roleDes;
     }
 
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id='" + id + '\'' +
+                ", roleName='" + roleName + '\'' +
+                ", roleDes='" + roleDes + '\'' +
+                '}';
+    }
 }

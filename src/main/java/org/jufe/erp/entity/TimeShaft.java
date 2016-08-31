@@ -48,4 +48,14 @@ public class TimeShaft implements Serializable{
     public void setIntro(String intro) {
         this.intro = intro;
     }
+
+    @Override
+    public String toString() {
+        return "TimeShaft{" +
+                "id='" + id + '\'' +
+                ", url='" + url + '\'' +
+                ", date=" + date +
+                ", intro='" + intro + '\'' +
+                '}';
+    }
 }
