@@ -40,6 +40,8 @@ public class UserRepository extends BaseRepository<User>{
     }
 
     public boolean addUser(User user){
+        if(user.getId() == null)
+            return false;
         user.setId( user.getId() + "@erp");
         return super.insert(user);
     }
