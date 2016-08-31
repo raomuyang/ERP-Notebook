@@ -35,31 +35,70 @@ public abstract class BaseRepository<T>{
     }
 
     public List<T> findAll(){
-        return mongoTemplate.findAll(clazz);
+
+        logger.debug("find All");
+        try {
+            return mongoTemplate.findAll(clazz);
+        }catch (Exception e){
+            logger.error(e.toString());
+            return null;
+        }
+
     }
 
     public List<T> findAll(String key, Sort.Direction direction){
-        return mongoTemplate.find(new Query().with(new Sort(direction, key)), clazz);
+
+        logger.debug("find All by " + key + ", " + direction.toString());
+        try {
+            return mongoTemplate.find(new Query().with(new Sort(direction, key)), clazz);
+        }catch (Exception e){
+            logger.error(e.toString());
+            return null;
+        }
     }
 
     public List<T> find(Query query){
+
         logger.debug("find: " + query.toString());
-        return mongoTemplate.find(query, clazz);
+        try {
+            return mongoTemplate.find(query, clazz);
+        }catch (Exception e){
+            logger.error(e.toString());
+            return null;
+        }
     }
 
     public T findOne(Query query){
+
         logger.debug("findOne: " + query.toString());
-        return mongoTemplate.findOne(query, clazz);
+        try {
+            return mongoTemplate.findOne(query, clazz);
+        } catch (Exception e){
+            logger.error(e.toString());
+            return null;
+        }
     }
 
     public T findById(String id){
+
         logger.debug("findById: " + id);
-        return mongoTemplate.findById(id, clazz);
+        try {
+            return mongoTemplate.findById(id, clazz);
+        } catch (Exception e){
+            logger.error(e.toString());
+            return null;
+        }
     }
 
     public T findById(String id, String collection){
+
         logger.debug("findById:" + String.format("id[%s],collection[%s]",id,collection));
-        return mongoTemplate.findById(id, clazz, collection);
+        try {
+            return mongoTemplate.findById(id, clazz, collection);
+        }catch (Exception e){
+            logger.error(e.toString());
+            return null;
+        }
     }
 
     public boolean insert(T obj){
@@ -156,9 +195,23 @@ public abstract class BaseRepository<T>{
 
     }
 
-    public boolean isExists(Query query){
+    /**
+     *
+     * @param query
+     * @return 1：存在 0：不存在 -1：出错
+     */
+    public int isExists(Query query){
         logger.debug("is Exists: " + query.toString());
-        return mongoTemplate.exists(query, clazz);
+        try {
+            boolean re = mongoTemplate.exists(query, clazz);
+            if(re)
+                return 1;
+            return 0;
+        }catch (Exception e){
+            logger.error(e.toString());
+            return -1;
+        }
+
     }
 
 

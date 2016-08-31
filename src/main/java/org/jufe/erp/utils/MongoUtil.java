@@ -9,8 +9,8 @@ import org.springframework.data.mongodb.core.query.Query;
  */
 public class MongoUtil {
 
-    public final Sort.Direction ASC = Sort.Direction.ASC;
-    public final Sort.Direction DESC = Sort.Direction.DESC;
+    public static final Sort.Direction ASC = Sort.Direction.ASC;
+    public static final Sort.Direction DESC = Sort.Direction.DESC;
     /**
      * 模糊查询
      * @param key

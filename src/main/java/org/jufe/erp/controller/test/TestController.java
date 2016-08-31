@@ -79,6 +79,10 @@ public class TestController {
         return testRepository.findById_Mohu(id);
     }
 
+    @RequestMapping("/testFindAll")
+    public List<MongoTest> testFindAllDESC(){
+        return testRepository.testFindAllDESC();
+    }
     public static void main(String[] args) {
         System.out.println(new ObjectId("57c2b04b0ab75d2b98344ae3").getDate());
     }

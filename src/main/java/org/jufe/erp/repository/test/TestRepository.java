@@ -3,6 +3,7 @@ package org.jufe.erp.repository.test;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.test.MongoTest;
 import org.jufe.erp.repository.BaseRepository;
+import org.jufe.erp.utils.MongoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -52,5 +53,9 @@ public class TestRepository extends BaseRepository<MongoTest> {
         criteria.andOperator(new Criteria("registDate").gte(d1),
                 new Criteria("registDate").lte(d2));
         return super.find(new Query(criteria));
+    }
+
+    public List<MongoTest> testFindAllDESC(){
+        return super.findAll("name", MongoUtil.DESC);
     }
 }
