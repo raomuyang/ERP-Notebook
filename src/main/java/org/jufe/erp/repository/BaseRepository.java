@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -173,6 +174,39 @@ public abstract class BaseRepository<T>{
 
     }
 
+    /**
+     * 分页查询 无查询条件
+     * @param pno
+     * @param pageSize
+     * @return
+     */
+    public Page<T> findPage(int pno, int pageSize){
+        logger.debug(String.format("Find Page: pno[%s],psize[%s]: ", pno,pageSize));
+        if(count() == 0)
+            return new Page<T>();
+        Page<T> page = new Page<T>(pno, count(), pageSize);
+        List<T> data = find(new Query().skip((int)page.getDataSkip()).limit(pageSize));
+        page.setData(data);
+        return page;
+    }
+
+    /**
+     * 分页查询 有查询条件
+     * @param query
+     * @param pno
+     * @param pageSize
+     * @return
+     */
+    public Page<T> findPage(Query query, int pno, int pageSize){
+        logger.debug(String.format("Find Page: pno[%s],psize[%s]: ", pno,pageSize) + query.toString());
+        if(count() == 0)
+            return new Page<T>();
+        Page<T> page = new Page<T>(pno, count(query), pageSize);
+        List<T> data = find(query.skip((int)page.getDataSkip()).limit(pageSize));
+        page.setData(data);
+        return page;
+    }
+
     public long count(Query query){
         logger.debug("COUNT: " + query.toString());
         try {
@@ -214,9 +248,6 @@ public abstract class BaseRepository<T>{
 
     }
 
-
 }
 
-class Page{
 
-}

@@ -3,6 +3,7 @@ package org.jufe.erp.repository.test;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.test.MongoTest;
 import org.jufe.erp.repository.BaseRepository;
+import org.jufe.erp.repository.Page;
 import org.jufe.erp.utils.MongoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -57,5 +58,16 @@ public class TestRepository extends BaseRepository<MongoTest> {
 
     public List<MongoTest> testFindAllDESC(){
         return super.findAll("name", MongoUtil.DESC);
+    }
+
+    public Page<MongoTest> testGetPage(int pno, int psize){
+        return super.findPage(pno, psize);
+    }
+
+    public Page<MongoTest> testGetPageByQuery(){
+        return super.findPage(
+                MongoUtil.soryBy(
+                        new Query(MongoUtil.fuzzyCriteria("id","testid9")), MongoUtil.DESC, "testDouble"),
+                2, 15);
     }
 }

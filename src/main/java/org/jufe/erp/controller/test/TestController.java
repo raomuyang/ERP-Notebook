@@ -2,6 +2,7 @@ package org.jufe.erp.controller.test;
 
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.test.MongoTest;
+import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.test.TestRepository;
 import org.jufe.erp.utils.DateTool;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,16 @@ public class TestController {
     @RequestMapping("/testFindAll")
     public List<MongoTest> testFindAllDESC(){
         return testRepository.testFindAllDESC();
+    }
+
+    @RequestMapping("/testGetPage")
+    public Page<MongoTest> testGetPage(int pno){
+        return testRepository.testGetPage(pno, 15);
+    }
+
+    @RequestMapping("/testGetPageByQuery")
+    public Page<MongoTest> testGetPageByQuery(){
+        return testRepository.testGetPageByQuery();
     }
     public static void main(String[] args) {
         System.out.println(new ObjectId("57c2b04b0ab75d2b98344ae3").getDate());
