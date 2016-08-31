@@ -1,6 +1,7 @@
 package org.jufe.erp.repository.user;
 
 import org.jufe.erp.entity.User;
+import org.jufe.erp.repository.BaseInterface;
 import org.jufe.erp.repository.BaseRepository;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,66 +15,30 @@ import java.util.List;
  * Option with DB about User
  */
 @Repository
-public class UserRepository extends BaseRepository<User>{
+public interface UserRepository extends BaseInterface<User> {
 
-    public User findById(String id){
-        return super.findById(id);
-    }
+    public User findById(String id);
 
-    public List<User> findByName(String name){
-        return super.find(new Query(new Criteria("userName").is(name)));
-    }
+    public List<User> findByName(String name);
+    public List<User> findByGrade(int grade);
+    public List<User> findByLocation(String location);
 
-    public List<User> findByGrade(int grade){
-        return super.find(new Query(new Criteria("userGrade").is(grade)));
-    }
+    public User findUserByIdAndPwd(String id, String pwd);
 
-    public List<User> findByLocation(String location){
-        return super.find(new Query(new Criteria("nowInWhere").is(location )));
-    }
+    public boolean addUser(User user);
 
-    public User findUserByIdAndPwd(String id, String pwd){
-        List<User> ret = super.find(new Query(new Criteria("id").is(id).and("pwd").is(pwd)));
-        if( ret == null || ret.size() == 0 )
-            return null;
-        return ret.get(0);
-    }
+    public boolean updateUserName(User user);
 
-    public boolean addUser(User user){
-        if(user.getId() == null)
-            return false;
-        user.setId( user.getId() + "@erp");
-        return super.insert(user);
-    }
+    public boolean updateUserPwd(User user);
 
-    public boolean updateUserName(User user){
-        Query query = new Query(new Criteria("id").is(user.getId()));
-        Update update = new Update().set("userName", user.getUserName());
-        return super.update(query, update);
-    }
-
-    public boolean updateUserPwd(User user){
-        Query query = new Query(new Criteria("id").is(user.getId()));
-        Update update = new Update().set("pwd", user.getPwd());
-        return super.update(query, update);
-    }
-
-    public boolean updateLocation(User user){
-        Query query = new Query(new Criteria("id").is(user.getId()));
-        Update update = new Update().set("nowInWhere", user.getNowInWhere());
-        return super.update(query, update);
-    }
+    public boolean updateLocation(User user);
 
     /**
      * 更新全部信息时一定要检查用户ID是否属实
      * @param user
      * @return
      */
-    public boolean update(User user){
-        if(user.getId() != null && user.getRegisterTime() != null)
-            return super.save(user);
-        return false;
-    }
+    public boolean update(User user);
 
 
 }

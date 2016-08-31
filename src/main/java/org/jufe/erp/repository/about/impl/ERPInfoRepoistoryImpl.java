@@ -1,4 +1,4 @@
-package org.jufe.erp.repository.about;
+package org.jufe.erp.repository.about.impl;
 
 import org.jufe.erp.entity.ERPInfo;
 import org.jufe.erp.repository.BaseRepository;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
  * Created by Raomengnan on 2016/8/30.
  */
 @Repository
-public class ERPInfoRepoistory extends BaseRepository<ERPInfo> {
+public class ERPInfoRepoistoryImpl extends BaseRepository<ERPInfo> {
     private static final String id = "org.jufe.erp";
 
     public ERPInfo getInfo(){

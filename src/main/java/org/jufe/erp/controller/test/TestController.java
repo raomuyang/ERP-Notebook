@@ -5,6 +5,7 @@ import org.jufe.erp.entity.Policy;
 import org.jufe.erp.entity.test.MongoTest;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.auth.PolicyRepository;
+import org.jufe.erp.repository.auth.impl.PolicyRepositoryImpl;
 import org.jufe.erp.repository.test.TestRepository;
 import org.jufe.erp.utils.DateTool;
 import org.jufe.erp.utils.enums.AuthEnum;

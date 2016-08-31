@@ -1,14 +1,10 @@
 package org.jufe.erp.repository.auth;
 
 import org.jufe.erp.entity.Policy;
-import org.jufe.erp.repository.BaseRepository;
-import org.springframework.stereotype.Repository;
-
+import org.jufe.erp.repository.BaseInterface;
 
 /**
- * Created by raomengnan on 16-8-31.
+ * Created by Raomengnan on 2016/9/1.
  */
-@Repository
-public class PolicyRepository extends BaseRepository<Policy>{
-
+public interface PolicyRepository extends BaseInterface<Policy>{
 }
