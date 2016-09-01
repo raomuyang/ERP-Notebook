@@ -2,6 +2,7 @@ package org.jufe.erp.repository.about.impl;
 
 import org.jufe.erp.entity.MShow;
 import org.jufe.erp.repository.BaseRepository;
+import org.jufe.erp.repository.about.MShowRepository;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -15,8 +16,8 @@ import java.util.Set;
  * Created by Raomengnan on 2016/8/30.
  */
 @Repository
-public class MShowRepositoryImpl extends BaseRepository<MShow> {
-    private static final String id = "erp.mainshow";
+public class MShowRepositoryImpl extends BaseRepository<MShow> implements MShowRepository{
+
 
     public MShow getMShow(){
         return super.findById(id);
@@ -29,22 +30,11 @@ public class MShowRepositoryImpl extends BaseRepository<MShow> {
     }
 
     public boolean updateIurls(List<String> iurls){
-        MShow mShow = getMShow();
-
-        List<String> pushList = new ArrayList<>();
-        for (String url: iurls)
-            if(mShow.getiHistory().contains(url))
-                pushList.add(url);
-        super.update(new Query(new Criteria("id").is(id)),
-                new Update().push("iHistory", pushList));
-
         return super.update(new Query(new Criteria("id").is(id)),
                 new Update().set("iurls", iurls));
     }
 
     public boolean updateVurl(String vurl){
-        super.update(new Query(new Criteria("id").is(id)),
-                new Update().push("vHistory", vurl));
         return super.update(new Query(new Criteria("id").is(id)),
                 new Update().set("vurl", vurl));
     }

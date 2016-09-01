@@ -2,6 +2,7 @@ package org.jufe.erp.repository.about.impl;
 
 import org.jufe.erp.entity.ERPInfo;
 import org.jufe.erp.repository.BaseRepository;
+import org.jufe.erp.repository.about.ERPInfoRepository;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -11,8 +12,7 @@ import org.springframework.stereotype.Repository;
  * Created by Raomengnan on 2016/8/30.
  */
 @Repository
-public class ERPInfoRepoistoryImpl extends BaseRepository<ERPInfo> {
-    private static final String id = "org.jufe.erp";
+public class ERPInfoRepoistoryImpl extends BaseRepository<ERPInfo> implements ERPInfoRepository{
 
     public ERPInfo getInfo(){
         return super.findById(id);

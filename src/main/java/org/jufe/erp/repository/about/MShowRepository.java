@@ -1,12 +1,15 @@
 package org.jufe.erp.repository.about;
 
 import org.jufe.erp.entity.MShow;
+import org.jufe.erp.repository.BaseInterface;
+
 import java.util.List;
 
 /**
  * Created by Raomengnan on 2016/8/30.
  */
-public interface MShowRepository  {
+public interface MShowRepository  extends BaseInterface<MShow>{
+    public static final String id = "erp.mainshow";
 
     public MShow getMShow();
 

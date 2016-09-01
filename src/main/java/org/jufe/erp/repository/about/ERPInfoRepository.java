@@ -7,6 +7,8 @@ import org.jufe.erp.repository.BaseInterface;
  * Created by Raomengnan on 2016/8/31.
  */
 public interface ERPInfoRepository extends BaseInterface<ERPInfo>{
+    public static final String id = "org.jufe.erp";
+
     public ERPInfo getInfo();
 
     public boolean update(ERPInfo info);
