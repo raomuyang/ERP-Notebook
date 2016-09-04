@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by raomengnan on 16-8-31.
  */
@@ -20,8 +22,26 @@ public class NewsImageRepositoryImpl extends BaseRepository<NewsImage> implement
         return super.findPage(MongoUtil.soryBy(new Query(), MongoUtil.DESC, "date"), pno, pSize);
     }
 
-    public boolean update(NewsImage newsImage){
+    @Override
+    public List<NewsImage> findByNewsId(String newsId) {
+        return super.find(new Query(new Criteria("newsId").is(newsId)));
+    }
+
+    public boolean updateIntro(NewsImage newsImage){
         return super.update(new Query(new Criteria("id").is(newsImage.getId())),
                 new Update().set("intro", newsImage.getIntro()));
+    }
+
+    @Override
+    public List<NewsImage> deleteByNewsId(String newsId) {
+        Query query = new Query(new Criteria("newsId").is(newsId));
+        List<NewsImage> newsImages = super.delete(query);
+        return newsImages;
+    }
+
+    @Override
+    public List<NewsImage> deleteByUrl(String url) {
+        Query query = new Query(new Criteria("url").is(url));
+        return super.delete(query);
     }
 }

@@ -1,6 +1,7 @@
 package org.jufe.erp.utils;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -31,5 +32,10 @@ public class DateTool {
     public static Date getDateAfterXDay(Timestamp d, int day) {
         Date date = new Date(d.getTime());
         return getDateAfterXDay(date,day);
+    }
+
+    public static String dateFormat(Date date, String format){
+        SimpleDateFormat df = new SimpleDateFormat(format);
+        return df.format(date);
     }
 }
