@@ -59,27 +59,28 @@ public class UserServicesImpl implements UserService{
 
     @Override
     public boolean addUser(User user, MultipartFile multipartFile, String rootPath) {
-        String subpath = ResourceEnum.HEAD.p() ;
-        String path = rootPath + "/" + subpath;
-        String originalFilePath = multipartFile.getOriginalFilename();
-        String suffix = originalFilePath.substring(originalFilePath.lastIndexOf("."));
-        String fileId = user.getId();
 
         user.setPwd(MD5.getMD5(user.getPwd()));
         boolean res = repository.addUser(user);
         if(res)
-            if(multipartFile != null)
-                try {
-                    boolean result = FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
-                    if(result)
-                        user.setUserPhotoUrl("/" + ResourceEnum.HEAD.p() + "/" + fileId + suffix);
-                    else
-                        user.setUserPhotoUrl("/" + ResourceEnum.HEAD.p() + "/default/" + "default.jpg");
-                }catch (Exception e){
+            try {
+                String subpath = ResourceEnum.HEAD.p() ;
+                String path = rootPath + "/" + subpath;
+
+                String originalFilePath = multipartFile.getOriginalFilename();
+                String suffix = originalFilePath.substring(originalFilePath.lastIndexOf("."));
+                String fileId = user.getId();
+
+                boolean result = FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
+                if(result)
+                    user.setUserPhotoUrl("/" + ResourceEnum.HEAD.p() + "/" + fileId + suffix);
+                else
                     user.setUserPhotoUrl("/" + ResourceEnum.HEAD.p() + "/default/" + "default.jpg");
-                }finally {
-                    repository.update(user);
-                }
+            }catch (Exception e){
+                user.setUserPhotoUrl("/" + ResourceEnum.HEAD.p() + "/default/" + "default.jpg");
+            }finally {
+                repository.update(user);
+            }
 
         return res;
     }
@@ -108,16 +109,17 @@ public class UserServicesImpl implements UserService{
 
     @Override
     public boolean updateUserHead(String userId, MultipartFile multipartFile, String rootPath) {
-        String subpath = ResourceEnum.HEAD.p() ;
-        String path = rootPath + "/" + subpath;
-
-        String originalFilePath = multipartFile.getOriginalFilename();
-        String suffix = originalFilePath.substring(originalFilePath.lastIndexOf("."));
-
-        String filename = userId + suffix;
-        User user = repository.findById(userId);
-        user.setUserPhotoUrl("/" + subpath + "/" + filename);
         try {
+            String subpath = ResourceEnum.HEAD.p() ;
+            String path = rootPath + "/" + subpath;
+
+            String originalFilePath = multipartFile.getOriginalFilename();
+            String suffix = originalFilePath.substring(originalFilePath.lastIndexOf("."));
+
+            String filename = userId + suffix;
+            User user = repository.findById(userId);
+            user.setUserPhotoUrl("/" + subpath + "/" + filename);
+
             boolean res = FileUtil.writeFile(path, filename, multipartFile.getBytes());
             if(res)
                 return repository.update(user);

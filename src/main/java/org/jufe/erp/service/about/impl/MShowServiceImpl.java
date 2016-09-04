@@ -1,15 +1,23 @@
 package org.jufe.erp.service.about.impl;
 
+import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.jufe.erp.entity.MShow;
 import org.jufe.erp.repository.about.MShowRepository;
 import org.jufe.erp.service.about.MShowService;
+import org.jufe.erp.utils.DateTool;
+import org.jufe.erp.utils.FileUtil;
+import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +28,8 @@ public class MShowServiceImpl implements MShowService{
 
     @Autowired
     private MShowRepository mShowRepository;
+
+    private Logger logger = Logger.getLogger(MShowServiceImpl.class);
 
     @Override
     public MShow getMShow() {
@@ -72,5 +82,47 @@ public class MShowServiceImpl implements MShowService{
     @Override
     public boolean updateVHistory(List<String> vHistory) {
         return mShowRepository.updateVHistory(vHistory);
+    }
+
+    @Override
+    public String uploadImage(MultipartFile multipartFile, String rootPath) {
+        try {
+            String subpath = ResourceEnum.IMAGE.p() + "/"
+                    + DateTool.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
+            String fileId = new ObjectId().toString();
+            String path = rootPath + "/" + subpath;
+
+            String originalFileName = multipartFile.getOriginalFilename();
+            String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String filename = fileId + suffix;
+
+            boolean res = FileUtil.writeFile(path, filename, multipartFile.getBytes());
+            if(res)
+                return "/" + subpath + "/" + filename;
+        } catch (IOException e) {
+            logger.error("Upload Image:" + e);
+        }
+        return null;
+    }
+
+    @Override
+    public String uploadVideo(MultipartFile multipartFile, String rootPath) {
+        try {
+            String subpath = ResourceEnum.VIDEO.p() + "/"
+                    + DateTool.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
+            String fileId = new ObjectId().toString();
+            String path = rootPath + "/" + subpath;
+
+            String originalFileName = multipartFile.getOriginalFilename();
+            String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String filename = fileId + suffix;
+
+            boolean res = FileUtil.writeFile(path, filename, multipartFile.getBytes());
+            if(res)
+                return "/" + subpath + "/" + filename;
+        } catch (IOException e) {
+            logger.error("Upload Video:" + e);
+        }
+        return null;
     }
 }

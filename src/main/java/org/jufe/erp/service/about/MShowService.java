@@ -1,6 +1,7 @@
 package org.jufe.erp.service.about;
 
 import org.jufe.erp.entity.MShow;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -30,5 +31,9 @@ public interface MShowService {
      * @return
      */
     public boolean updateVHistory(List<String> vHistory);
+
+    public String uploadImage(MultipartFile multipartFile, String rootPath);
+
+    public String uploadVideo(MultipartFile multipartFile, String rootPath);
 
 }
