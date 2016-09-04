@@ -16,13 +16,13 @@ public interface NewsImageService{
 
     public boolean updateIntro(NewsImage newsImage);
 
-    public boolean deleteByUrl(String realPath,String url);
+    public boolean deleteByUrl(String rootPath,String url);
 
-    public boolean deleteByNewsId(String realPath,String newsId);
+    public boolean deleteByNewsId(String rootPath,String newsId);
 
     public boolean addImage(NewsImage newsImage);
 
     public List<NewsImage> getImageByNewsId(String newsId);
 
-    public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String realPath);
+    public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String rootPath);
 }

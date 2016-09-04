@@ -29,13 +29,13 @@ public class PhotoWallServiceImpl implements PhotoWallService{
     private Logger logger = Logger.getLogger(PhotoWallServiceImpl.class);
 
     @Override
-    public boolean addUserPhoto(PhotoWall photoWall, MultipartFile multipartFile, String realPath) {
+    public boolean addUserPhoto(PhotoWall photoWall, MultipartFile multipartFile, String rootPath) {
         try {
             String subpath = ResourceEnum.PHOTO.p() + "/" + photoWall.getGrade();
             String originalFilename = multipartFile.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileId = new ObjectId().toString();
-            String path = realPath + "/" + subpath;
+            String path = rootPath + "/" + subpath;
             FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
             photoWall.setId(fileId);
@@ -63,7 +63,7 @@ public class PhotoWallServiceImpl implements PhotoWallService{
     }
 
     @Override
-    public boolean updateUserPhoto(String id, MultipartFile multipartFile, String realPath) {
+    public boolean updateUserPhoto(String id, MultipartFile multipartFile, String rootPath) {
         try {
             PhotoWall photoWall = repository.findById(id);
 
@@ -71,7 +71,7 @@ public class PhotoWallServiceImpl implements PhotoWallService{
             String originalFilename = multipartFile.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-            String path = realPath + "/" + subpath;
+            String path = rootPath + "/" + subpath;
             File file = new File(path + "/" + id + suffix );
             if(file.exists())//暂时不删除上传的照片
                 file.renameTo(new File(path + "/" + id + "_bak" + System.currentTimeMillis() + suffix));
@@ -101,13 +101,13 @@ public class PhotoWallServiceImpl implements PhotoWallService{
     }
 
     @Override
-    public boolean deleteByPhotoId(String id, String realPath) {
+    public boolean deleteByPhotoId(String id, String rootPath) {
         PhotoWall photo = repository.findById(id);
         if (photo != null)
             try {
                 String url = photo.getUrl();
                 if(repository.deleteById(id)){
-                    FileUtil.deleteFile(realPath + url);
+                    FileUtil.deleteFile(rootPath + url);
                     return true;
                 }
             }catch (Exception e){

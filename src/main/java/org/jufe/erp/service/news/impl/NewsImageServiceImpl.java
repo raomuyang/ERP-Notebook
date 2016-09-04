@@ -37,8 +37,8 @@ public class NewsImageServiceImpl implements NewsImageService {
     }
 
     @Override
-    public boolean deleteByUrl(String realPath, String url) {
-        String path = realPath + "/" + url;
+    public boolean deleteByUrl(String rootPath, String url) {
+        String path = rootPath + "/" + url;
         List<NewsImage> newsImages = newsImageRepository.deleteByUrl(url);
         if(newsImages.size() > 0)
             try {
@@ -54,11 +54,11 @@ public class NewsImageServiceImpl implements NewsImageService {
     }
 
     @Override
-    public boolean deleteByNewsId(String realPath, String newsId) {
+    public boolean deleteByNewsId(String rootPath, String newsId) {
         List<NewsImage> newsImages = newsImageRepository.deleteByNewsId(newsId);
         if(newsImages.size() > 0){
             for (NewsImage newsImage: newsImages){
-                String path = realPath + "/" + newsImage.getUrl();
+                String path = rootPath + "/" + newsImage.getUrl();
                 try {
                     File file = new File(path);
                     file.delete();
@@ -82,10 +82,9 @@ public class NewsImageServiceImpl implements NewsImageService {
     }
 
     @Override
-    public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String realPath) {
+    public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String rootPath) {
         FileOutputStream fo = null;
         try {
-            String rootPath = realPath;
             String subPath =  ResourceEnum.NEWSIMAGE.p() + "/" + DateTool.dateFormat(newsImage.getDate(), "yyyyMMdd") + "/" + newsImage.getNewsId();
             String fileId = new ObjectId().toString();
             String originalFilename = multipartFile.getOriginalFilename();

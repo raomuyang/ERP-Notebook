@@ -27,11 +27,11 @@ public class TimeShaftServiceImpl implements TimeShaftService{
     private Logger logger = Logger.getLogger(TimeShaftServiceImpl.class);
 
     @Override
-    public boolean addImage(TimeShaft timeShaft, MultipartFile multipartFile, String realPath) {
+    public boolean addImage(TimeShaft timeShaft, MultipartFile multipartFile, String rootPath) {
         try {
             String subpath = ResourceEnum.TIMESHAFT.p() +
                     DateTool.dateFormat(timeShaft.getDate(), "yyyyMMdd");
-            String path = realPath + "/" + subpath;
+            String path = rootPath + "/" + subpath;
             String originalFileName = multipartFile.getOriginalFilename();
             String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
             String fileId = new ObjectId().toString();
@@ -39,7 +39,7 @@ public class TimeShaftServiceImpl implements TimeShaftService{
             FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
             timeShaft.setId(fileId);
-            timeShaft.setUrl("/" + realPath + "/" + fileId + suffix);
+            timeShaft.setUrl("/" + rootPath + "/" + fileId + suffix);
             return repository.insert(timeShaft);
         }catch (Exception e){
             logger.error("Add Image To Time Shaft: " + e);
