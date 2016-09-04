@@ -46,14 +46,42 @@ public class RolePolicyServiceImpl implements RolePolicyService{
 
     @Override
     public List<Policy> getPolicyByRoleId(String roleId) {
-        MongoOperations mongoTemplate = rolePolicyRepository.getMongoTemplate();
+
         List<RolePolocy> rolePolocies = getByRoleId(roleId);
-        if(rolePolocies == null || rolePolocies.size() == 0)
-            return new ArrayList<Policy>();
+        return getPolicyFromRolePoliciys(rolePolocies);
+    }
+
+    /**
+     * 获取有效的角色权限
+     * @param roleId
+     * @param termDate
+     * @return
+     */
+    @Override
+    public List<RolePolocy> getBeforeTermD(String roleId, Date termDate) {
+        return rolePolicyRepository.findBeforeTermD(roleId, termDate);
+    }
+
+    @Override
+    public List<Policy> getPolicyBeforTermDate(String roleId, Date termDate) {
+        List<RolePolocy> rolePolocies = getBeforeTermD(roleId, termDate);
+        return getPolicyFromRolePoliciys(rolePolocies);
+    }
+
+
+    private List<Policy> getPolicyFromRolePoliciys(List<RolePolocy> rolePolocies){
 
         List<String> policyIds = new ArrayList<>();
-        for(RolePolocy rolePolocy: rolePolocies)
-            policyIds.add(rolePolocy.getPolicyId());
+        if(rolePolocies.size() != 0)
+            for(RolePolocy rolePolocy: rolePolocies)
+                policyIds.add(rolePolocy.getPolicyId());
+        return getPolicyWhereIdIn(policyIds);
+    }
+
+
+    private List<Policy> getPolicyWhereIdIn(List<String> policyIds){
+
+        MongoOperations mongoTemplate = rolePolicyRepository.getMongoTemplate();
 
         Criteria criteria = new Criteria("id").in(policyIds);
         Query query = new Query(criteria);
@@ -61,14 +89,9 @@ public class RolePolicyServiceImpl implements RolePolicyService{
             List<Policy> policies = mongoTemplate.find(query, Policy.class);
             return policies;
         }catch (Exception e){
-               logger.error(e);
+            logger.error(e);
+            return null;
         }
-        return null;
-    }
-
-    @Override
-    public List<RolePolocy> getBeforeTermD(String roleId, Date termDate) {
-        return rolePolicyRepository.findBeforeTermD(roleId, termDate);
     }
 
 }

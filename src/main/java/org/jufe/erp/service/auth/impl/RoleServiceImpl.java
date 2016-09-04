@@ -1,9 +1,13 @@
 package org.jufe.erp.service.auth.impl;
 
+import org.apache.log4j.Logger;
 import org.jufe.erp.entity.Role;
 import org.jufe.erp.repository.auth.RoleRepository;
 import org.jufe.erp.service.auth.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +21,23 @@ public class RoleServiceImpl implements RoleService{
     @Autowired
     private RoleRepository roleRepository;
 
+    private Logger logger = Logger.getLogger(RoleServiceImpl.class);
     @Override
     public Role getRoleById(String id) {
         return roleRepository.findById(id);
+    }
+
+    @Override
+    public List<Role> getRoleById(List<String> ids) {
+        MongoOperations mongoTemplate = roleRepository.getMongoTemplate();
+        Query query = new Query(new Criteria("id").in(ids));
+        try {
+            return mongoTemplate.find(query, Role.class);
+        }catch (Exception e){
+            logger.error("getRoleById:" + e.getMessage());
+            return null;
+        }
+
     }
 
     @Override

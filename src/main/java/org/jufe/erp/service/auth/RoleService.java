@@ -12,6 +12,8 @@ public interface RoleService{
 
     public Role getRoleById(String id);
 
+    public List<Role> getRoleById(List<String> id);
+
     public List<Role> getAllRole();
 
     public boolean addRole(Role role);
@@ -21,4 +23,5 @@ public interface RoleService{
     public boolean deleteRole(String id);
 
     public boolean update(String id, String key, Object value);
+
 }

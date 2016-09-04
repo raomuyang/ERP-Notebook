@@ -1,5 +1,7 @@
 package org.jufe.erp.service.auth;
 
+import org.jufe.erp.entity.Role;
+import org.jufe.erp.entity.User;
 import org.jufe.erp.entity.UserRole;
 import org.jufe.erp.repository.BaseInterface;
 
@@ -9,10 +11,14 @@ import java.util.List;
 /**
  * Created by raomengnan on 16-8-31.
  */
-public interface UserRoleService extends BaseInterface<UserRole> {
-    public List<UserRole> findByUserId(String userId);
+public interface UserRoleService {
+    public List<UserRole> getByUserId(String userId);
 
-    public List<UserRole> findByRoleId(String roleId);
+    public List<UserRole> getByRoleId(String roleId);
+
+    public List<User> getUsersByRole(String roleId);
+
+    public List<Role> getRoleByUser(String roleId);
 
     /**
      * 查找用户有效的角色绑定
@@ -20,5 +26,7 @@ public interface UserRoleService extends BaseInterface<UserRole> {
      * @param termDate
      * @return
      */
-    public List<UserRole> findBeforeTermD(String userId, Date termDate);
+    public List<UserRole> getBeforeTermD(String userId, Date termDate);
+
+    public List<Role> getRoleBeforeTermDate(String userId, Date termDate);
 }

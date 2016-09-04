@@ -29,6 +29,8 @@ public interface RolePolicyService  {
      */
     public List<RolePolocy> getBeforeTermD(String roleId, Date termDate);
 
+    public List<Policy> getPolicyBeforTermDate(String roleId, Date termDate);
+
     public static boolean isValid(RolePolocy rolePolocy) {
         Date now = new Date(System.currentTimeMillis());
         return now.before(rolePolocy.getTermD());
