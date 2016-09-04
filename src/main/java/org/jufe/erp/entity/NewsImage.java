@@ -3,6 +3,7 @@ package org.jufe.erp.entity;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Raomengnan on 2016/8/28.
@@ -13,7 +14,7 @@ public class NewsImage implements Serializable{
     private String id;
     private String newsId;
     private String url;
-    private String date;
+    private Date date;
     private String intro; //图片描述
 
     public String getId() {
@@ -40,11 +41,11 @@ public class NewsImage implements Serializable{
         this.url = url;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
