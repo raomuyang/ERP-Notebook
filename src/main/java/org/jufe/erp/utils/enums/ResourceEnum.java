@@ -6,6 +6,7 @@ package org.jufe.erp.utils.enums;
 public enum ResourceEnum {
     NEWSIMAGE("news"),
     PHOTO("photos"),
+    HEAD("head"),
     TIMESHAFT("timeshaft"),
     VIDEO("videos");
 

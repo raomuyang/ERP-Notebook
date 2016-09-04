@@ -43,7 +43,6 @@ public class UserRepositoryImpl extends BaseRepository<User> implements UserRepo
     public boolean addUser(User user){
         if(user.getId() == null)
             return false;
-        user.setId( user.getId() + "@erp");
         return super.insert(user);
     }
 

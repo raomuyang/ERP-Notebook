@@ -14,7 +14,6 @@ import java.util.List;
  * Created by raomengnan on 16-8-29.
  * Option with DB about User
  */
-@Repository
 public interface UserRepository extends BaseInterface<User> {
 
     public User findById(String id);
