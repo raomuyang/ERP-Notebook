@@ -1,9 +1,12 @@
 package org.jufe.erp.entity;
 
+import org.jufe.erp.utils.enums.AuthEnum;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Raomengnan on 2016/8/28.
@@ -12,9 +15,15 @@ import java.util.List;
 @Document(collection = "policy")
 public class Policy implements Serializable{
     private String id;
-    private String roleId;
-    private List<String> auth; // 权限
+    private Map<AuthEnum, Boolean> auth ; // 权限
 
+    public Policy(){
+        auth = new HashMap<>();
+        auth.put(AuthEnum.READ, false);
+        auth.put(AuthEnum.WRITE, false);
+        auth.put(AuthEnum.UPDATE, false);
+        auth.put(AuthEnum.UPDATE, false);
+    }
     public String getId() {
         return id;
     }
@@ -23,19 +32,19 @@ public class Policy implements Serializable{
         this.id = id;
     }
 
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public List<String> getAuth() {
+    public Map<AuthEnum, Boolean> getAuth() {
         return auth;
     }
 
-    public void setAuth(List<String> auth) {
+    public void setAuth(Map<AuthEnum, Boolean> auth) {
         this.auth = auth;
+    }
+
+    @Override
+    public String toString() {
+        return "Policy{" +
+                "id='" + id + '\'' +
+                ", auth=" + auth +
+                '}';
     }
 }

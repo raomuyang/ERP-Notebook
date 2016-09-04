@@ -11,13 +11,22 @@ import java.util.List;
  * Main Show
  * 展示在首页上的主要信息
  */
-@Document(collection = "mshow")
+@Document(collection = "info")
 public class MShow implements Serializable{
+    private String id = "erp.mainshow";
     private List<String> iurls = new ArrayList<String>(); // 首页展示的图片链接
-    private String vurls; //首页视频链接
+    private String vurl; //首页视频链接
     private String words; // 主页寄语
     private List<String> iHistory = new ArrayList<String>(); //历史图片
     private List<String> vHistory = new ArrayList<String>(); //历史视频
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public List<String> getIurls() {
         return iurls;
@@ -27,12 +36,12 @@ public class MShow implements Serializable{
         this.iurls = iurls;
     }
 
-    public String getVurls() {
-        return vurls;
+    public String getVurl() {
+        return vurl;
     }
 
-    public void setVurls(String vurls) {
-        this.vurls = vurls;
+    public void setVurl(String vurl) {
+        this.vurl = vurl;
     }
 
     public String getWords() {
@@ -58,4 +67,6 @@ public class MShow implements Serializable{
     public void setvHistory(List<String> vHistory) {
         this.vHistory = vHistory;
     }
+
+
 }
