@@ -85,6 +85,38 @@ public class MShowServiceImpl implements MShowService{
     }
 
     @Override
+    public boolean deleteImages(List<String> urls, String rootPath) {
+        if(urls == null || rootPath == null)
+            return false;
+        List<String> imageList = getMShow().getiHistory();
+        urls.forEach(u->{
+            try {
+                FileUtil.deleteFile(rootPath + u);
+                imageList.remove(u);
+            }catch (Exception e){
+                logger.error("delete image:" + e);
+            }
+        });
+        return updateIHistory(imageList);
+    }
+
+    @Override
+    public boolean deleteVideos(List<String> urls, String rootPath) {
+        if(urls == null || rootPath == null)
+            return false;
+        List<String> videoList = getMShow().getvHistory();
+        urls.forEach(u->{
+            try {
+                FileUtil.deleteFile(rootPath + u);
+                videoList.remove(u);
+            }catch (Exception e){
+                logger.error("delete video:" + e);
+            }
+        });
+        return updateVHistory(videoList);
+    }
+
+    @Override
     public String uploadImage(MultipartFile multipartFile, String rootPath) {
         try {
             String subpath = ResourceEnum.IMAGE.p() + "/"
