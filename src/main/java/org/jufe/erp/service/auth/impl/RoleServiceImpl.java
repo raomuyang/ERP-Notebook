@@ -34,7 +34,7 @@ public class RoleServiceImpl implements RoleService{
         try {
             return mongoTemplate.find(query, Role.class);
         }catch (Exception e){
-            logger.error("getRoleById:" + e.getMessage());
+            logger.error("getRoleById:" + e);
             return null;
         }
 

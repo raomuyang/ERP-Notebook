@@ -47,7 +47,7 @@ public class NewsImageServiceImpl implements NewsImageService {
                     file.delete();
                 return true;
             }catch (Exception e){
-                logger.error(String.format("Delete by url[%s]:", path) + e.getMessage());
+                logger.error(String.format("Delete by url[%s]:", path) + e);
                 return true;
             }
         return false;
@@ -63,7 +63,7 @@ public class NewsImageServiceImpl implements NewsImageService {
                     File file = new File(path);
                     file.delete();
                 }catch (Exception e){
-                    logger.error(String.format("Delete by newsId[%s],", newsId) + e.getMessage());
+                    logger.error(String.format("Delete by newsId[%s],", newsId) + e);
                 }
                 return true;
             }
@@ -102,7 +102,7 @@ public class NewsImageServiceImpl implements NewsImageService {
             newsImage.setUrl("/" + subPath + "/" + fileId + suffix);
             return addImage(newsImage);
         }catch (Exception e){
-            logger.error(e.getMessage());
+            logger.error(e);
             return false;
         }finally {
             if(fo != null)
