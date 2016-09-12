@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  * Created by raomengnan on 16-9-12.
  */
 @RestController
-@RequestMapping("/about/mshow")
+@RequestMapping("/rest/about/mshow")
 public class MShowRestController {
     @Autowired
     private MShowService mShowService;
@@ -88,7 +88,7 @@ public class MShowRestController {
      * @return
      */
     @RequestMapping(value = "/update-video", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateVUrls(@RequestBody String vurl){
+    public ResponseEntity<ModelMap> updateVUrl(@RequestBody String vurl){
         logger.debug("/update-video: " + vurl);
         ModelMap map = new ModelMap();
         boolean result = false;
@@ -115,7 +115,7 @@ public class MShowRestController {
     }
 
     @RequestMapping(value = "/delete-video", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateVHistory(@RequestBody String args, HttpServletRequest request){
+    public ResponseEntity<ModelMap> deleteVideo(@RequestBody String args, HttpServletRequest request){
         logger.debug("/delete-video: " + args);
         ModelMap map = new ModelMap();
         boolean result = false;
@@ -128,7 +128,7 @@ public class MShowRestController {
 
     }
 
-    @RequestMapping(value = "/upload-image", method = RequestMethod.POST)
+    @RequestMapping(value = "/upload-image", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> uploadImage(MultipartFile originFile, HttpServletRequest request){
         logger.debug("/upload-iamge");
         ModelMap map = new ModelMap();
@@ -145,7 +145,7 @@ public class MShowRestController {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/upload-video", method = RequestMethod.POST)
+    @RequestMapping(value = "/upload-video", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> uploadVideo(MultipartFile originFile, HttpServletRequest request){
         logger.debug("/upload-iamge");
         ModelMap map = new ModelMap();

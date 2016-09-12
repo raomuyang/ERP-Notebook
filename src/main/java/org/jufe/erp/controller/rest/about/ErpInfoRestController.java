@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by raomengnan on 16-9-12.
  */
 @RestController
-@RequestMapping("/about/info/rest")
+@RequestMapping("/rest/about/info")
 public class ErpInfoRestController {
     @Autowired
     private ERPInfoService erpInfoService;

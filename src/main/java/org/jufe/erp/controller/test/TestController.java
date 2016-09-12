@@ -12,10 +12,7 @@ import org.jufe.erp.utils.DateTool;
 import org.jufe.erp.utils.JsonUtils;
 import org.jufe.erp.utils.enums.AuthEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -141,6 +138,11 @@ public class TestController {
     @RequestMapping(value = "/testList", method = RequestMethod.POST)
     public String testList(@RequestBody String test){
         System.out.println(JsonUtils.jsonToList(test));
+        return test;
+    }
+
+    @RequestMapping(value = "/testArg", method = RequestMethod.POST)
+    public String testArgs(@RequestParam("t") String test){
         return test;
     }
 }
