@@ -6,14 +6,12 @@ import org.jufe.erp.entity.TimeShaft;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.photo.TimeShaftRepository;
 import org.jufe.erp.service.photo.TimeShaftService;
-import org.jufe.erp.utils.DateTool;
-import org.jufe.erp.utils.FileUtil;
+import org.jufe.erp.utils.DateTools;
+import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Date;
 
 /**
  * Created by Raomengnan on 2016/9/4.
@@ -30,13 +28,13 @@ public class TimeShaftServiceImpl implements TimeShaftService{
     public boolean addImage(TimeShaft timeShaft, MultipartFile multipartFile, String rootPath) {
         try {
             String subpath = ResourceEnum.TIMESHAFT.p() +
-                    DateTool.dateFormat(timeShaft.getDate(), "yyyyMMdd");
+                    DateTools.dateFormat(timeShaft.getDate(), "yyyyMMdd");
             String path = rootPath + "/" + subpath;
             String originalFileName = multipartFile.getOriginalFilename();
             String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
             String fileId = new ObjectId().toString();
             //写文件
-            FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
+            FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
             timeShaft.setId(fileId);
             timeShaft.setUrl("/" + rootPath + "/" + fileId + suffix);
@@ -57,7 +55,7 @@ public class TimeShaftServiceImpl implements TimeShaftService{
             boolean res = repository.deleteById(id);
             if(res)
                 try {
-                    FileUtil.deleteFile(path);
+                    FileUtils.deleteFile(path);
                 }catch (Exception e){
                     logger.error("deleteNodeById:" + e);
                 }

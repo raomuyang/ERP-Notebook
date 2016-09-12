@@ -6,11 +6,10 @@ import org.jufe.erp.entity.PhotoWall;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.photo.PhotoWallRepository;
 import org.jufe.erp.service.photo.PhotoWallService;
-import org.jufe.erp.utils.FileUtil;
+import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.MongoUtil;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,7 +35,7 @@ public class PhotoWallServiceImpl implements PhotoWallService{
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileId = new ObjectId().toString();
             String path = rootPath + "/" + subpath;
-            FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
+            FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
             photoWall.setId(fileId);
             photoWall.setUrl("/" + subpath + "/" + fileId + suffix);
@@ -75,7 +74,7 @@ public class PhotoWallServiceImpl implements PhotoWallService{
             File file = new File(path + "/" + id + suffix );
             if(file.exists())//暂时不删除上传的照片
                 file.renameTo(new File(path + "/" + id + "_bak" + System.currentTimeMillis() + suffix));
-            FileUtil.writeFile(path, id + suffix, multipartFile.getBytes());
+            FileUtils.writeFile(path, id + suffix, multipartFile.getBytes());
 
             return true;
         } catch (Exception e){
@@ -107,7 +106,7 @@ public class PhotoWallServiceImpl implements PhotoWallService{
             try {
                 String url = photo.getUrl();
                 if(repository.deleteById(id)){
-                    FileUtil.deleteFile(rootPath + url);
+                    FileUtils.deleteFile(rootPath + url);
                     return true;
                 }
             }catch (Exception e){

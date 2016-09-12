@@ -5,8 +5,8 @@ import org.bson.types.ObjectId;
 import org.jufe.erp.entity.MShow;
 import org.jufe.erp.repository.about.MShowRepository;
 import org.jufe.erp.service.about.MShowService;
-import org.jufe.erp.utils.DateTool;
-import org.jufe.erp.utils.FileUtil;
+import org.jufe.erp.utils.DateTools;
+import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -91,7 +91,7 @@ public class MShowServiceImpl implements MShowService{
         List<String> imageList = getMShow().getiHistory();
         urls.forEach(u->{
             try {
-                FileUtil.deleteFile(rootPath + u);
+                FileUtils.deleteFile(rootPath + u);
                 imageList.remove(u);
             }catch (Exception e){
                 logger.error("delete image:" + e);
@@ -107,7 +107,7 @@ public class MShowServiceImpl implements MShowService{
         List<String> videoList = getMShow().getvHistory();
         urls.forEach(u->{
             try {
-                FileUtil.deleteFile(rootPath + u);
+                FileUtils.deleteFile(rootPath + u);
                 videoList.remove(u);
             }catch (Exception e){
                 logger.error("delete video:" + e);
@@ -120,7 +120,7 @@ public class MShowServiceImpl implements MShowService{
     public String uploadImage(MultipartFile multipartFile, String rootPath) {
         try {
             String subpath = ResourceEnum.IMAGE.p() + "/"
-                    + DateTool.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
+                    + DateTools.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
             String fileId = new ObjectId().toString();
             String path = rootPath + "/" + subpath;
 
@@ -128,7 +128,7 @@ public class MShowServiceImpl implements MShowService{
             String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
             String filename = fileId + suffix;
 
-            boolean res = FileUtil.writeFile(path, filename, multipartFile.getBytes());
+            boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
             if(res)
                 return "/" + subpath + "/" + filename;
         } catch (IOException e) {
@@ -141,7 +141,7 @@ public class MShowServiceImpl implements MShowService{
     public String uploadVideo(MultipartFile multipartFile, String rootPath) {
         try {
             String subpath = ResourceEnum.VIDEO.p() + "/"
-                    + DateTool.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
+                    + DateTools.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
             String fileId = new ObjectId().toString();
             String path = rootPath + "/" + subpath;
 
@@ -149,7 +149,7 @@ public class MShowServiceImpl implements MShowService{
             String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
             String filename = fileId + suffix;
 
-            boolean res = FileUtil.writeFile(path, filename, multipartFile.getBytes());
+            boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
             if(res)
                 return "/" + subpath + "/" + filename;
         } catch (IOException e) {

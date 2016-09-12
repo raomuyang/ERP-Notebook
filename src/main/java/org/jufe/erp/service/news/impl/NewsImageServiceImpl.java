@@ -6,7 +6,7 @@ import org.jufe.erp.entity.NewsImage;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.news.NewsImageRepository;
 import org.jufe.erp.service.news.NewsImageService;
-import org.jufe.erp.utils.DateTool;
+import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -85,7 +85,7 @@ public class NewsImageServiceImpl implements NewsImageService {
     public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String rootPath) {
         FileOutputStream fo = null;
         try {
-            String subPath =  ResourceEnum.NEWSIMAGE.p() + "/" + DateTool.dateFormat(newsImage.getDate(), "yyyyMMdd") + "/" + newsImage.getNewsId();
+            String subPath =  ResourceEnum.NEWSIMAGE.p() + "/" + DateTools.dateFormat(newsImage.getDate(), "yyyyMMdd") + "/" + newsImage.getNewsId();
             String fileId = new ObjectId().toString();
             String originalFilename = multipartFile.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));

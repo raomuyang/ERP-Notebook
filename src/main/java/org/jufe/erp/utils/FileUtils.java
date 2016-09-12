@@ -7,7 +7,7 @@ import java.io.IOException;
 /**
  * Created by Raomengnan on 2016/9/4.
  */
-public class FileUtil {
+public class FileUtils {
 
     public static boolean deleteFile(String path){
         File file = new File(path);

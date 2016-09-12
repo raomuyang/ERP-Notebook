@@ -4,14 +4,13 @@ import org.apache.log4j.Logger;
 import org.jufe.erp.entity.User;
 import org.jufe.erp.repository.user.UserRepository;
 import org.jufe.erp.service.user.UserService;
-import org.jufe.erp.utils.FileUtil;
+import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.MD5;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -71,7 +70,7 @@ public class UserServicesImpl implements UserService{
                 String suffix = originalFilePath.substring(originalFilePath.lastIndexOf("."));
                 String fileId = user.getId();
 
-                boolean result = FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
+                boolean result = FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
                 if(result)
                     user.setUserPhotoUrl("/" + ResourceEnum.HEAD.p() + "/" + fileId + suffix);
                 else
@@ -120,7 +119,7 @@ public class UserServicesImpl implements UserService{
             User user = repository.findById(userId);
             user.setUserPhotoUrl("/" + subpath + "/" + filename);
 
-            boolean res = FileUtil.writeFile(path, filename, multipartFile.getBytes());
+            boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
             if(res)
                 return repository.update(user);
         } catch (Exception e){
@@ -143,7 +142,7 @@ public class UserServicesImpl implements UserService{
         if(res)
             try {
                 if(!user.getUserPhotoUrl().contains("/default/"))
-                    FileUtil.deleteFile(rootPath + "/" + user.getUserPhotoUrl());
+                    FileUtils.deleteFile(rootPath + "/" + user.getUserPhotoUrl());
             }catch (Exception e){
                 logger.error("delete user:" + e);
             }
