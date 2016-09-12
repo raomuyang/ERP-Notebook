@@ -34,7 +34,7 @@ public class MShowRestController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> update(MShow mShow){
+    public ResponseEntity<ModelMap> update(@RequestBody MShow mShow){
         logger.debug("/update: " + mShow);
         ModelMap map = new ModelMap();
         boolean result = false;

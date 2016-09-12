@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -54,7 +55,7 @@ public class ErpInfoRestController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> update(ERPInfo erpInfo){
+    public ResponseEntity<ModelMap> update(@RequestBody ERPInfo erpInfo){
         logger.debug("/update:" + erpInfo);
         ModelMap map = new ModelMap();
         boolean result = false;
@@ -67,7 +68,7 @@ public class ErpInfoRestController {
     }
 
     @RequestMapping(value = "/update-tel", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateTel(String tel){
+    public ResponseEntity<ModelMap> updateTel(@RequestBody String tel){
         logger.debug("/update-tel: " + tel);
         ModelMap map = new ModelMap();
         boolean result = false;
@@ -80,7 +81,7 @@ public class ErpInfoRestController {
     }
 
     @RequestMapping(value = "/update-intro", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateIntro(String intro){
+    public ResponseEntity<ModelMap> updateIntro(@RequestBody String intro){
         logger.debug("/update-intro: " + intro);
         ModelMap map = new ModelMap();
         boolean result = false;
@@ -93,7 +94,7 @@ public class ErpInfoRestController {
     }
 
     @RequestMapping(value = "/update-join", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateJoin(String join){
+    public ResponseEntity<ModelMap> updateJoin(@RequestBody String join){
         logger.debug("/update-join: " + join);
         ModelMap map = new ModelMap();
         boolean result = false;
@@ -106,7 +107,7 @@ public class ErpInfoRestController {
     }
 
     @RequestMapping(value = "/update-org-staruct", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateOrg(String org){
+    public ResponseEntity<ModelMap> updateOrg(@RequestBody String org){
         logger.debug("/update-org-staruct: " + org);
         ModelMap map = new ModelMap();
         boolean result = false;

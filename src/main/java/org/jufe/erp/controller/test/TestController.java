@@ -6,9 +6,8 @@ import org.jufe.erp.entity.User;
 import org.jufe.erp.entity.test.MongoTest;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.auth.PolicyRepository;
-import org.jufe.erp.repository.auth.impl.PolicyRepositoryImpl;
 import org.jufe.erp.repository.test.TestRepository;
-import org.jufe.erp.utils.DateTool;
+import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.JsonUtils;
 import org.jufe.erp.utils.enums.AuthEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +78,7 @@ public class TestController {
 
     @RequestMapping("/testFindByD")
     public List<MongoTest> testFindByDate(){
-        Date d1 = DateTool.getDateBeforXDay(new Date(System.currentTimeMillis()),10);
+        Date d1 = DateTools.getDateBeforXDay(new Date(System.currentTimeMillis()),10);
         Date d2 = new Date(System.currentTimeMillis());
         return testRepository.findByDate(d1, d2);
     }

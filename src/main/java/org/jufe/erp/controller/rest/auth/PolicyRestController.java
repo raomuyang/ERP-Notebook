@@ -24,7 +24,7 @@ public class PolicyRestController {
     private Logger logger = Logger.getLogger(PolicyRestController.class);
 
     @RequestMapping("/get-policy")
-    public Policy getPolicy(@RequestBody String id){
+    public Policy getPolicy(String id){
         logger.debug("/getPolicy: " + id);
         return policyService.getPolicy(id);
     }
