@@ -39,7 +39,7 @@ public class MShowRestController {
         ModelMap map = new ModelMap();
         boolean result = false;
         if(mShow != null)
-            mShowService.update(mShow);
+            result = mShowService.update(mShow);
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -56,8 +56,13 @@ public class MShowRestController {
         logger.debug("/update-words: " + words);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(words != null)
-            mShowService.updateWords(words);
+        if(words != null){
+            result = mShowService.updateWords(words);
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -74,8 +79,13 @@ public class MShowRestController {
         logger.debug("/update-iurls: " + args);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(args != null)
-            mShowService.updateIurls(JsonUtils.jsonToList(args));
+        if(args != null){
+            result = mShowService.updateIurls(JsonUtils.jsonToList(args));
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -92,36 +102,51 @@ public class MShowRestController {
         logger.debug("/update-video: " + vurl);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(vurl != null)
-            mShowService.updateVurl(vurl);
+        if(vurl != null){
+            result = mShowService.updateVurl(vurl);
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
 
-    @RequestMapping(value = "/delete-image", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete-image", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deleteImage(@RequestBody String args, HttpServletRequest request){
         logger.debug("/delete-image: " + args);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(args != null)
-            mShowService.deleteImages(JsonUtils.jsonToList(args),
+        if(args != null){
+            result = mShowService.deleteImages(JsonUtils.jsonToList(args),
                     request.getSession().getServletContext().getRealPath("/"));
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
 
-    @RequestMapping(value = "/delete-video", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete-video", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deleteVideo(@RequestBody String args, HttpServletRequest request){
         logger.debug("/delete-video: " + args);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(args != null)
-            mShowService.deleteVideos(JsonUtils.jsonToList(args),
+        if(args != null){
+            result = mShowService.deleteVideos(JsonUtils.jsonToList(args),
                     request.getSession().getServletContext().getRealPath("/"));
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -139,7 +164,11 @@ public class MShowRestController {
             map.put("url", url);
             if(url != null && !url.equals(""))
                 result = true;
+            else
+                map.put("msg", "更新失败，请检查后重试");
         }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -156,7 +185,11 @@ public class MShowRestController {
             map.put("url", url);
             if(url != null && !url.equals(""))
                 result = true;
+            else
+                map.put("msg", "更新失败，请检查后重试");
         }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);

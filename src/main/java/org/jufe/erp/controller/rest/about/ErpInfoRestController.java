@@ -59,8 +59,13 @@ public class ErpInfoRestController {
         logger.debug("/update:" + erpInfo);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(erpInfo != null)
-            erpInfoService.update(erpInfo);
+        if(erpInfo != null){
+            result = erpInfoService.update(erpInfo);
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
@@ -72,8 +77,13 @@ public class ErpInfoRestController {
         logger.debug("/update-tel: " + tel);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(tel != null)
-            erpInfoService.updateTel(tel);
+        if(tel != null){
+            result = erpInfoService.updateTel(tel);
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+                map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -85,8 +95,13 @@ public class ErpInfoRestController {
         logger.debug("/update-intro: " + intro);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(intro != null)
-            erpInfoService.updateIntro(intro);
+        if(intro != null){
+            result = erpInfoService.updateIntro(intro);
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -98,8 +113,13 @@ public class ErpInfoRestController {
         logger.debug("/update-join: " + join);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(join != null)
-            erpInfoService.updateJoinUs(join);
+        if(join != null){
+            result = erpInfoService.updateJoinUs(join);
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
@@ -111,8 +131,13 @@ public class ErpInfoRestController {
         logger.debug("/update-org-staruct: " + org);
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(org != null)
-            erpInfoService.updateOrg(org);
+        if(org != null){
+            result = erpInfoService.updateOrg(org);
+            if(!result)
+                map.put("msg", "更新失败，请重试");
+        }
+        else
+            map.put("msg", "参数错误");
         map.put("result", result);
 
         return new ResponseEntity<>(map, HttpStatus.OK);
