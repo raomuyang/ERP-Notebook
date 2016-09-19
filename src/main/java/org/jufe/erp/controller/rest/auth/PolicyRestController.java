@@ -39,7 +39,7 @@ public class PolicyRestController {
 
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deletePolicy(@RequestBody String id){
         logger.debug("/delete-policy:" + id);
         ModelMap map = new ModelMap();

@@ -43,7 +43,7 @@ public class RoleRestController {
      * @return
      */
     @RequestMapping("/get-roles")
-    public List<Role> getByIds(@RequestBody String args){
+    public List<Role> getByIds(String args){
         logger.debug("/get-roles:" + args);
         List ids = JsonUtils.jsonToList(args);
         return roleService.getRoleById(ids);
@@ -98,7 +98,7 @@ public class RoleRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> delete(@RequestBody String id){
         logger.debug("/delete:" + id);
         boolean res = false;
