@@ -58,13 +58,13 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public List<UserRole> getBeforeTermD(String userId, Date termDate) {
-        return userRoleRepository.findBeforeTermD(userId, termDate);
+    public List<UserRole> getValidsBeforeDate(String userId, Date termDate) {
+        return userRoleRepository.findValidsBeforeTermD(userId, termDate);
     }
 
     @Override
-    public List<Role> getRoleBeforeTermDate(String userId, Date termDate) {
-        List<UserRole> userRoles = getBeforeTermD(userId, termDate);
+    public List<Role> getValidRolesBeforeDate(String userId, Date termDate) {
+        List<UserRole> userRoles = getValidsBeforeDate(userId, termDate);
         List<String> roleIds = new ArrayList<>();
         if(userRoles != null)
             for (UserRole userRole: userRoles)
@@ -72,6 +72,20 @@ public class UserRoleServiceImpl implements UserRoleService {
         return getRoleById(roleIds);
     }
 
+    @Override
+    public List<UserRole> getValids(String userId) {
+        return userRoleRepository.findValidsBeforeTermD(userId, new Date(System.currentTimeMillis()) );
+    }
+
+    @Override
+    public List<Role> getValidRoles(String userId) {
+        List<UserRole> userRoles = getValids(userId);
+        List<String> roleIds = new ArrayList<>();
+        if(userRoles != null)
+            for (UserRole userRole: userRoles)
+                roleIds.add(userRole.getRoleId());
+        return getRoleById(roleIds);
+    }
 
     private  List<Role> getRoleById(List<String> ids) {
         MongoOperations mongoTemplate = userRoleRepository.getMongoTemplate();
@@ -95,4 +109,24 @@ public class UserRoleServiceImpl implements UserRoleService {
         }
     }
 
+
+    @Override
+    public boolean saveUserRole(UserRole userRole) {
+        if(userRole == null || userRole.getRoleId() == null || userRole.getUserId() == null ||
+                userRole.getRoleId().equals("") || userRole.getUserId().equals(""))
+            return false;
+        UserRole ur = userRoleRepository.find(
+                new Query(new Criteria("userId").is(userRole.getUserId()).
+                        and("roleId").is(userRole.getRoleId()))).get(0);
+        if(ur == null)
+            return userRoleRepository.save(userRole);
+
+        ur.setTermD(userRole.getTermD());
+        return userRoleRepository.save(ur);
+    }
+
+    @Override
+    public boolean delete(String id) {
+        return userRoleRepository.deleteById(id);
+    }
 }
