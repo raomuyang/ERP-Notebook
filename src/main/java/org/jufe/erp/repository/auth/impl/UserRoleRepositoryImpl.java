@@ -29,7 +29,8 @@ public class UserRoleRepositoryImpl extends BaseRepository<UserRole> implements 
      * @param termDate
      * @return
      */
-    public List<UserRole> findBeforeTermD(String userId, Date termDate){
-        return super.find(new Query(new Criteria("roleId").is(userId).and("termD").lte(termDate)));
+    public List<UserRole> findValidsBeforeTermD(String userId, Date termDate){
+        //截止日期比参数日期更大
+        return super.find(new Query(new Criteria("roleId").is(userId).and("termD").gte(termDate)));
     }
 }

@@ -27,6 +27,6 @@ public class RolePolicyRepositoryImpl extends BaseRepository<RolePolocy> impleme
      * @return
      */
     public List<RolePolocy> findBeforeTermD(String roleId, Date termDate){
-        return super.find(new Query(new Criteria("roleId").is(roleId).and("termD").lte(termDate)));
+        return super.find(new Query(new Criteria("roleId").is(roleId).and("termD").gte(termDate)));
     }
 }
