@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
+
 /**
  * Created by Raomengnan on 2016/9/4.
  */
@@ -25,10 +27,14 @@ public class TimeShaftServiceImpl implements TimeShaftService{
     private Logger logger = Logger.getLogger(TimeShaftServiceImpl.class);
 
     @Override
-    public boolean addImage(TimeShaft timeShaft, MultipartFile multipartFile, String rootPath) {
+    public boolean addImage(TimeShaft timeShaftNode, MultipartFile multipartFile, String rootPath) {
         try {
+            if(timeShaftNode == null) {
+                timeShaftNode = new TimeShaft();
+                timeShaftNode.setDate(new Date(System.currentTimeMillis()));
+            }
             String subpath = ResourceEnum.TIMESHAFT.p() +
-                    DateTools.dateFormat(timeShaft.getDate(), "yyyyMMdd");
+                    DateTools.dateFormat(timeShaftNode.getDate(), "yyyyMMdd");
             String path = rootPath + "/" + subpath;
             String originalFileName = multipartFile.getOriginalFilename();
             String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
@@ -36,9 +42,9 @@ public class TimeShaftServiceImpl implements TimeShaftService{
             //写文件
             FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
-            timeShaft.setId(fileId);
-            timeShaft.setUrl("/" + rootPath + "/" + fileId + suffix);
-            return repository.insert(timeShaft);
+            timeShaftNode.setId(fileId);
+            timeShaftNode.setUrl("/" + rootPath + "/" + fileId + suffix);
+            return repository.insert(timeShaftNode);
         }catch (Exception e){
             logger.error("Add Image To Time Shaft: " + e);
         }
@@ -66,8 +72,16 @@ public class TimeShaftServiceImpl implements TimeShaftService{
     }
 
     @Override
-    public boolean updateIntro(String id, String intro) {
-        return repository.updateIntro(id, intro);
+    public boolean updateInfo(TimeShaft shaftNode) {
+        if(shaftNode == null)
+            return false;
+
+        TimeShaft shaft = repository.findById(shaftNode.getId());
+        if(shaft == null)
+            return false;
+        shaft.setDate(shaftNode.getDate());
+        shaft.setIntro(shaftNode.getIntro());
+        return repository.save(shaft);
     }
 
     @Override
