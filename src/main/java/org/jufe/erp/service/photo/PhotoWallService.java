@@ -1,7 +1,6 @@
 package org.jufe.erp.service.photo;
 
 import org.jufe.erp.entity.PhotoWall;
-import org.jufe.erp.repository.BaseInterface;
 import org.jufe.erp.repository.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,15 +13,15 @@ public interface PhotoWallService {
 
     /**
      * 添加照片
-     * @param photoWall
+     * @param photoInfo
      * @return
      */
-    public boolean addUserPhoto(PhotoWall photoWall, MultipartFile multipartFile, String rootPath);
+    public boolean addUserPhoto(PhotoWall photoInfo, MultipartFile multipartFile, String rootPath);
 
     public List<PhotoWall> getPhotosByGrade(int grade);
     public List<PhotoWall> getPhotosByUserNameLike(String userName);
 
-    public boolean updateUserName(String id, String userName);
+    public boolean updateUserInfo(PhotoWall photoInfo);
 
     public boolean updateUserPhoto(String id, MultipartFile multipartFile, String rootPath);
 

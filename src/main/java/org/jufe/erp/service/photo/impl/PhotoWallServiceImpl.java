@@ -28,18 +28,22 @@ public class PhotoWallServiceImpl implements PhotoWallService{
     private Logger logger = Logger.getLogger(PhotoWallServiceImpl.class);
 
     @Override
-    public boolean addUserPhoto(PhotoWall photoWall, MultipartFile multipartFile, String rootPath) {
+    public boolean addUserPhoto(PhotoWall photoInfo, MultipartFile multipartFile, String rootPath) {
         try {
-            String subpath = ResourceEnum.PHOTO.p() + "/" + photoWall.getGrade();
+            if (photoInfo == null) {
+                photoInfo = new PhotoWall();
+                photoInfo.setUserName("未设置");
+            }
+            String subpath = ResourceEnum.PHOTO.p() + "/" + photoInfo.getGrade();
             String originalFilename = multipartFile.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileId = new ObjectId().toString();
             String path = rootPath + "/" + subpath;
             FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
-            photoWall.setId(fileId);
-            photoWall.setUrl("/" + subpath + "/" + fileId + suffix);
-            return repository.insert(photoWall);
+            photoInfo.setId(fileId);
+            photoInfo.setUrl("/" + subpath + "/" + fileId + suffix);
+            return repository.insert(photoInfo);
         } catch (Exception e){
             logger.error("Add UserPhoto to wall:" + e);
         }
@@ -57,8 +61,15 @@ public class PhotoWallServiceImpl implements PhotoWallService{
     }
 
     @Override
-    public boolean updateUserName(String id, String userName) {
-        return repository.updateUserName(id, userName);
+    public boolean updateUserInfo(PhotoWall userInfo) {
+        if(userInfo == null)
+            return false;
+        PhotoWall uifo = repository.findById(userInfo.getId());
+        if(uifo == null)
+            return false;
+        uifo.setGrade(userInfo.getGrade());
+        uifo.setUserName(userInfo.getUserName());
+        return repository.save(uifo);
     }
 
     @Override
