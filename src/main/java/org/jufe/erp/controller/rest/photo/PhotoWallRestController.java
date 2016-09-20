@@ -70,19 +70,19 @@ public class PhotoWallRestController {
 
     /**
      *
-     * @param photoWall
+     * @param photoInfo
      * {"id":"", "userName":"", "grade":""}
      * @return
      */
     @RequestMapping(value = "update", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> update(@RequestBody PhotoWall photoWall){
-        logger.debug("update-username:" + photoWall);
+    public ResponseEntity<ModelMap> update(@RequestBody PhotoWall photoInfo){
+        logger.debug("update-username:" + photoInfo);
         boolean result = false;
         ModelMap map = new ModelMap();
-        if(photoWall == null)
+        if(photoInfo == null)
             map.put("msg", "参数错误，请检查后重试");
         else {
-            result = photoWallService.updateUserInfo(photoWall);
+            result = photoWallService.updateUserInfo(photoInfo);
             if(!result)
                 map.put("msg", "更新出错，请检查后重试");
         }
