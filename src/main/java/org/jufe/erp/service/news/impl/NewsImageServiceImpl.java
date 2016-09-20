@@ -6,6 +6,7 @@ import org.jufe.erp.entity.NewsImage;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.news.NewsImageRepository;
 import org.jufe.erp.service.news.NewsImageService;
+import org.jufe.erp.service.news.NewsService;
 import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import java.util.List;
 public class NewsImageServiceImpl implements NewsImageService {
     @Autowired
     private NewsImageRepository newsImageRepository;
+    @Autowired
+    private NewsService newsService;
 
     private Logger logger = Logger.getLogger(NewsImageServiceImpl.class);
     @Override
@@ -83,34 +86,39 @@ public class NewsImageServiceImpl implements NewsImageService {
 
     @Override
     public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String rootPath) {
-        FileOutputStream fo = null;
-        try {
-            String subPath =  ResourceEnum.NEWSIMAGE.p() + "/" + DateTools.dateFormat(newsImage.getDate(), "yyyyMMdd") + "/" + newsImage.getNewsId();
-            String fileId = new ObjectId().toString();
-            String originalFilename = multipartFile.getOriginalFilename();
-            String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-            String path = rootPath + "/" + subPath + "/";
-            File filePath = new File(path);
-            if(!filePath.exists())
-                filePath.mkdirs();
-            File file = new File(filePath, fileId  + suffix);
-            fo = new FileOutputStream(file);
-            fo.write(multipartFile.getBytes());
+        if(newsService.findById(newsImage.getNewsId()) != null){
+            FileOutputStream fo = null;
+            try {
+                String subPath =  ResourceEnum.NEWSIMAGE.p() + "/" + DateTools.dateFormat(newsImage.getDate(), "yyyyMMdd") + "/" + newsImage.getNewsId();
+                String fileId = new ObjectId().toString();
+                String originalFilename = multipartFile.getOriginalFilename();
+                String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
 
-            newsImage.setId(fileId);
-            newsImage.setUrl("/" + subPath + "/" + fileId + suffix);
-            return addImage(newsImage);
-        }catch (Exception e){
-            logger.error(e);
-            return false;
-        }finally {
-            if(fo != null)
-                try {
-                    fo.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                String path = rootPath + "/" + subPath + "/";
+                File filePath = new File(path);
+                if(!filePath.exists())
+                    filePath.mkdirs();
+                File file = new File(filePath, fileId  + suffix);
+                fo = new FileOutputStream(file);
+                fo.write(multipartFile.getBytes());
+
+                newsImage.setId(fileId);
+                newsImage.setUrl("/" + subPath + "/" + fileId + suffix);
+                return addImage(newsImage);
+            }catch (Exception e){
+                logger.error(e);
+                return false;
+            }finally {
+                if(fo != null)
+                    try {
+                        fo.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
         }
+
+        return false;
     }
 }
