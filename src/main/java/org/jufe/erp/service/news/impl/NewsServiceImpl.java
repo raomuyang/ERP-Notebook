@@ -21,6 +21,11 @@ public class NewsServiceImpl implements NewsService{
     private Logger logger = Logger.getLogger(NewsServiceImpl.class);
 
     @Override
+    public News findById(String id) {
+        return newsRepository.findById(id);
+    }
+
+    @Override
     public List<News> findByAuthor(String author) {
         return newsRepository.findByAuthor(author);
     }
