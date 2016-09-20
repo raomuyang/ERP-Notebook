@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface NewsService  {
 
+    public News findById(String id);
+
     public List<News> findByAuthor(String author);
 
     public List<News> findByTitle(String title);

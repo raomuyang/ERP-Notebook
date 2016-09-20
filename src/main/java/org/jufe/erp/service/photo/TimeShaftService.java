@@ -10,11 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface TimeShaftService{
 
-    public boolean addImage(TimeShaft timeShaft, MultipartFile multipartFile, String rootPath);
+    public boolean addImage(TimeShaft timeShaftNode, MultipartFile multipartFile, String rootPath);
 
     public boolean deleteNodeById(String id, String rootPath);
 
-    public boolean updateIntro(String id, String intro);
+    public boolean updateInfo(TimeShaft shaftNode);
 
     public Page<TimeShaft> findPage(int pno, int pSize);
 

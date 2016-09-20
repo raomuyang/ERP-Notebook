@@ -26,7 +26,15 @@ public interface UserRoleService {
      * @param termDate
      * @return
      */
-    public List<UserRole> getBeforeTermD(String userId, Date termDate);
+    public List<UserRole> getValidsBeforeDate(String userId, Date termDate);
 
-    public List<Role> getRoleBeforeTermDate(String userId, Date termDate);
+    public List<Role> getValidRolesBeforeDate(String userId, Date termDate);
+
+    public List<UserRole> getValids(String userId);
+
+    public List<Role> getValidRoles(String userId);
+
+    public boolean saveUserRole(UserRole userRole);
+
+    public boolean delete(String id);
 }

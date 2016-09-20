@@ -6,11 +6,10 @@ import org.jufe.erp.entity.PhotoWall;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.photo.PhotoWallRepository;
 import org.jufe.erp.service.photo.PhotoWallService;
-import org.jufe.erp.utils.FileUtil;
+import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.MongoUtil;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,18 +28,22 @@ public class PhotoWallServiceImpl implements PhotoWallService{
     private Logger logger = Logger.getLogger(PhotoWallServiceImpl.class);
 
     @Override
-    public boolean addUserPhoto(PhotoWall photoWall, MultipartFile multipartFile, String rootPath) {
+    public boolean addUserPhoto(PhotoWall photoInfo, MultipartFile multipartFile, String rootPath) {
         try {
-            String subpath = ResourceEnum.PHOTO.p() + "/" + photoWall.getGrade();
+            if (photoInfo == null) {
+                photoInfo = new PhotoWall();
+                photoInfo.setUserName("未设置");
+            }
+            String subpath = ResourceEnum.PHOTO.p() + "/" + photoInfo.getGrade();
             String originalFilename = multipartFile.getOriginalFilename();
             String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
             String fileId = new ObjectId().toString();
             String path = rootPath + "/" + subpath;
-            FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
+            FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
-            photoWall.setId(fileId);
-            photoWall.setUrl("/" + subpath + "/" + fileId + suffix);
-            return repository.insert(photoWall);
+            photoInfo.setId(fileId);
+            photoInfo.setUrl("/" + subpath + "/" + fileId + suffix);
+            return repository.insert(photoInfo);
         } catch (Exception e){
             logger.error("Add UserPhoto to wall:" + e);
         }
@@ -58,8 +61,15 @@ public class PhotoWallServiceImpl implements PhotoWallService{
     }
 
     @Override
-    public boolean updateUserName(String id, String userName) {
-        return repository.updateUserName(id, userName);
+    public boolean updateUserInfo(PhotoWall userInfo) {
+        if(userInfo == null)
+            return false;
+        PhotoWall uifo = repository.findById(userInfo.getId());
+        if(uifo == null)
+            return false;
+        uifo.setGrade(userInfo.getGrade());
+        uifo.setUserName(userInfo.getUserName());
+        return repository.save(uifo);
     }
 
     @Override
@@ -75,7 +85,7 @@ public class PhotoWallServiceImpl implements PhotoWallService{
             File file = new File(path + "/" + id + suffix );
             if(file.exists())//暂时不删除上传的照片
                 file.renameTo(new File(path + "/" + id + "_bak" + System.currentTimeMillis() + suffix));
-            FileUtil.writeFile(path, id + suffix, multipartFile.getBytes());
+            FileUtils.writeFile(path, id + suffix, multipartFile.getBytes());
 
             return true;
         } catch (Exception e){
@@ -107,7 +117,7 @@ public class PhotoWallServiceImpl implements PhotoWallService{
             try {
                 String url = photo.getUrl();
                 if(repository.deleteById(id)){
-                    FileUtil.deleteFile(rootPath + url);
+                    FileUtils.deleteFile(rootPath + url);
                     return true;
                 }
             }catch (Exception e){

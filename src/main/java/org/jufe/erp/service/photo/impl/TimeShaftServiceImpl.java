@@ -6,8 +6,8 @@ import org.jufe.erp.entity.TimeShaft;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.photo.TimeShaftRepository;
 import org.jufe.erp.service.photo.TimeShaftService;
-import org.jufe.erp.utils.DateTool;
-import org.jufe.erp.utils.FileUtil;
+import org.jufe.erp.utils.DateTools;
+import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,20 +27,24 @@ public class TimeShaftServiceImpl implements TimeShaftService{
     private Logger logger = Logger.getLogger(TimeShaftServiceImpl.class);
 
     @Override
-    public boolean addImage(TimeShaft timeShaft, MultipartFile multipartFile, String rootPath) {
+    public boolean addImage(TimeShaft timeShaftNode, MultipartFile multipartFile, String rootPath) {
         try {
+            if(timeShaftNode == null) {
+                timeShaftNode = new TimeShaft();
+                timeShaftNode.setDate(new Date(System.currentTimeMillis()));
+            }
             String subpath = ResourceEnum.TIMESHAFT.p() +
-                    DateTool.dateFormat(timeShaft.getDate(), "yyyyMMdd");
+                    DateTools.dateFormat(timeShaftNode.getDate(), "yyyyMMdd");
             String path = rootPath + "/" + subpath;
             String originalFileName = multipartFile.getOriginalFilename();
             String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
             String fileId = new ObjectId().toString();
             //写文件
-            FileUtil.writeFile(path, fileId + suffix, multipartFile.getBytes());
+            FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
-            timeShaft.setId(fileId);
-            timeShaft.setUrl("/" + rootPath + "/" + fileId + suffix);
-            return repository.insert(timeShaft);
+            timeShaftNode.setId(fileId);
+            timeShaftNode.setUrl("/" + rootPath + "/" + fileId + suffix);
+            return repository.insert(timeShaftNode);
         }catch (Exception e){
             logger.error("Add Image To Time Shaft: " + e);
         }
@@ -57,7 +61,7 @@ public class TimeShaftServiceImpl implements TimeShaftService{
             boolean res = repository.deleteById(id);
             if(res)
                 try {
-                    FileUtil.deleteFile(path);
+                    FileUtils.deleteFile(path);
                 }catch (Exception e){
                     logger.error("deleteNodeById:" + e);
                 }
@@ -68,8 +72,16 @@ public class TimeShaftServiceImpl implements TimeShaftService{
     }
 
     @Override
-    public boolean updateIntro(String id, String intro) {
-        return repository.updateIntro(id, intro);
+    public boolean updateInfo(TimeShaft shaftNode) {
+        if(shaftNode == null)
+            return false;
+
+        TimeShaft shaft = repository.findById(shaftNode.getId());
+        if(shaft == null)
+            return false;
+        shaft.setDate(shaftNode.getDate());
+        shaft.setIntro(shaftNode.getIntro());
+        return repository.save(shaft);
     }
 
     @Override

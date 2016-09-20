@@ -2,16 +2,16 @@ package org.jufe.erp.controller.test;
 
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.Policy;
+import org.jufe.erp.entity.User;
 import org.jufe.erp.entity.test.MongoTest;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.auth.PolicyRepository;
-import org.jufe.erp.repository.auth.impl.PolicyRepositoryImpl;
 import org.jufe.erp.repository.test.TestRepository;
-import org.jufe.erp.utils.DateTool;
+import org.jufe.erp.utils.DateTools;
+import org.jufe.erp.utils.JsonUtils;
 import org.jufe.erp.utils.enums.AuthEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -21,6 +21,7 @@ import java.util.List;
  */
 @RestController
 public class TestController {
+
 
 
     @Autowired
@@ -77,7 +78,7 @@ public class TestController {
 
     @RequestMapping("/testFindByD")
     public List<MongoTest> testFindByDate(){
-        Date d1 = DateTool.getDateBeforXDay(new Date(System.currentTimeMillis()),10);
+        Date d1 = DateTools.getDateBeforXDay(new Date(System.currentTimeMillis()),10);
         Date d2 = new Date(System.currentTimeMillis());
         return testRepository.findByDate(d1, d2);
     }
@@ -115,5 +116,32 @@ public class TestController {
         List<Policy> policies = policyRepository.findAll();
         System.out.println(policies.get(0).getAuth().get(AuthEnum.READ));
         return policies;
+    }
+
+    @RequestMapping(value = "/testConventer", method = RequestMethod.POST)
+    public String testConventer_x_www(User user){
+        System.out.println(user);
+        if(user == null)
+            return "123456";
+        else
+            return user.getUserName();
+    }
+
+    @RequestMapping(value = "/testConventerJSON", method = RequestMethod.POST)
+    public String testConventerJSON(@RequestBody User user){
+        System.out.println("test");
+        System.out.println(user.getId());
+        return user.getUserName();
+    }
+
+    @RequestMapping(value = "/testList", method = RequestMethod.POST)
+    public String testList(@RequestBody String test){
+        System.out.println(JsonUtils.jsonToList(test));
+        return test;
+    }
+
+    @RequestMapping(value = "/testArg", method = RequestMethod.POST)
+    public String testArgs(@RequestParam("t") String test){
+        return test;
     }
 }

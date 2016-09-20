@@ -32,6 +32,10 @@ public interface MShowService {
      */
     public boolean updateVHistory(List<String> vHistory);
 
+    public boolean deleteImages(List<String> urls, String rootPath);
+
+    public boolean deleteVideos(List<String> urls, String rootPath);
+
     public String uploadImage(MultipartFile multipartFile, String rootPath);
 
     public String uploadVideo(MultipartFile multipartFile, String rootPath);

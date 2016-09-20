@@ -58,16 +58,15 @@ public class RolePolicyServiceImpl implements RolePolicyService{
      * @return
      */
     @Override
-    public List<RolePolocy> getBeforeTermD(String roleId, Date termDate) {
+    public List<RolePolocy> getValidBeforeDate(String roleId, Date termDate) {
         return rolePolicyRepository.findBeforeTermD(roleId, termDate);
     }
 
     @Override
-    public List<Policy> getPolicyBeforTermDate(String roleId, Date termDate) {
-        List<RolePolocy> rolePolocies = getBeforeTermD(roleId, termDate);
+    public List<Policy> getValidPolicyBeforDate(String roleId, Date termDate) {
+        List<RolePolocy> rolePolocies = getValidBeforeDate(roleId, termDate);
         return getPolicyFromRolePoliciys(rolePolocies);
     }
-
 
     private List<Policy> getPolicyFromRolePoliciys(List<RolePolocy> rolePolocies){
 
@@ -76,6 +75,23 @@ public class RolePolicyServiceImpl implements RolePolicyService{
             for(RolePolocy rolePolocy: rolePolocies)
                 policyIds.add(rolePolocy.getPolicyId());
         return getPolicyWhereIdIn(policyIds);
+    }
+
+
+    @Override
+    public boolean save(RolePolocy rolePolocy) {
+        if(rolePolocy.getRoleId() == null || rolePolocy.getPolicyId() == null)
+            return false;
+        RolePolocy rp = get(rolePolocy.getRoleId(), rolePolocy.getPolicyId());
+        if(rp == null)
+            return rolePolicyRepository.save(rolePolocy);
+        return rolePolicyRepository.save(rp);
+    }
+
+
+    @Override
+    public boolean delete(String id) {
+        return rolePolicyRepository.deleteById(id);
     }
 
 

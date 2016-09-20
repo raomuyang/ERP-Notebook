@@ -24,5 +24,5 @@ public interface UserRoleRepository extends BaseInterface<UserRole> {
      * @param termDate
      * @return
      */
-    public List<UserRole> findBeforeTermD(String userId, Date termDate);
+    public List<UserRole> findValidsBeforeTermD(String userId, Date termDate);
 }
