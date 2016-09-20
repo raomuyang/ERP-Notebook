@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -90,6 +91,9 @@ public class NewsImageServiceImpl implements NewsImageService {
         if(newsService.findById(newsImage.getNewsId()) != null){
             FileOutputStream fo = null;
             try {
+                //新闻图片的上传日期就以传输到服务器上的时间为准
+                newsImage.setDate(new Date(System.currentTimeMillis()));
+
                 String subPath =  ResourceEnum.NEWSIMAGE.p() + "/" + DateTools.dateFormat(newsImage.getDate(), "yyyyMMdd") + "/" + newsImage.getNewsId();
                 String fileId = new ObjectId().toString();
                 String originalFilename = multipartFile.getOriginalFilename();
