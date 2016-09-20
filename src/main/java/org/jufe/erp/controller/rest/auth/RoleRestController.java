@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,8 +28,8 @@ public class RoleRestController {
         return roleService.getAllRole();
     }
 
-    @RequestMapping("/get")
-    public Role getById(String id){
+    @RequestMapping("/get/{roleId}")
+    public Role getById(@PathVariable("roleId") String id){
         logger.debug("/get:" + id);
         return roleService.getRoleById(id);
     }
@@ -42,8 +39,8 @@ public class RoleRestController {
      * @param args
      * @return
      */
-    @RequestMapping("/get-roles")
-    public List<Role> getByIds(String args){
+    @RequestMapping("/get-roles/{roleIds}")
+    public List<Role> getByIds(@PathVariable("roleIds") String args){
         logger.debug("/get-roles:" + args);
         List ids = JsonUtils.jsonToList(args);
         return roleService.getRoleById(ids);

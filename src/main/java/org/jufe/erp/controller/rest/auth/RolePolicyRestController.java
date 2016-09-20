@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -40,48 +37,41 @@ public class RolePolicyRestController {
         return rolePolicyService.getAll();
     }
 
-    @RequestMapping("/get")
-    public RolePolocy get(String roleId, String policyId){
+    @RequestMapping("/get/{roleId}/{policyId}")
+    public RolePolocy get(@PathVariable("roleId") String roleId, @PathVariable("policyId") String policyId){
         logger.debug(String.format("/get role[%s], policyId[%s]", roleId, policyId));
         return rolePolicyService.get(roleId, policyId);
     }
 
-    @RequestMapping("/get-policy-by-roleid")
-    public List<Policy> getPolicyByRoleId(String roleId){
+    @RequestMapping("/get-policy-by-roleid/{roleId}")
+    public List<Policy> getPolicyByRoleId(@PathVariable("roleId") String roleId){
         logger.debug("/get-policy-by-roleid:" + roleId);
         return rolePolicyService.getPolicyByRoleId(roleId);
     }
 
-    @RequestMapping("/get-valid-role-policy")
-    public List<RolePolocy> getValidRolePolicy(String roleId, String date){
+    @RequestMapping("/get-valid-role-policy/{roleId}/{date}")
+    public List<RolePolocy> getValidRolePolicy(@PathVariable("roleId") String roleId, @PathVariable("date") String date){
         logger.debug("/get-valid-role-policy:" + roleId + "," + date);
         Date dateObj = DateTools.string2Date(date);
         return rolePolicyService.getValidBeforeDate(roleId, dateObj);
     }
 
-    @RequestMapping("/get-valid-policy")
-    public List<Policy> getValidPolicy(String roleId, String date){
-        logger.debug("/get-valid-policy:" + roleId + "," + date);
-        Date dateObj = DateTools.string2Date(date);
+    @RequestMapping("/get-valid-policies-before/{roleId}/{dateStr}")
+    public List<Policy> getValidPolicy(@PathVariable("roleId") String roleId, @PathVariable("dateStr") String dateStr){
+        logger.debug("/get-valid-policy:" + roleId + "," + dateStr);
+        if(roleId == null || dateStr == null)
+            return null;
+        Date dateObj = DateTools.string2Date(dateStr);
         return rolePolicyService.getValidPolicyBeforDate(roleId, dateObj);
     }
 
-    @RequestMapping("get-valid-policies")
-    public List<Policy> getValidPolicy(String roleId){
+    @RequestMapping("get-valid-policies/{roleId}")
+    public List<Policy> getValidPolicy(@PathVariable("roleId") String roleId){
         logger.debug("get-valid-policies:" + roleId);
 
         if(roleId == null)
             return null;
         return rolePolicyService.getValidPolicyBeforDate(roleId, new Date(System.currentTimeMillis()));
-    }
-
-    @RequestMapping("get-valid-policies-before-date")
-    public List<Policy> getValidPolicyBeforeDate(String roleId, String dateStr){
-        logger.debug(String.format("get-valid-policies-before-date[%s, %s]", roleId, dateStr));
-        if(roleId == null || dateStr == null)
-            return null;
-        Date dateTime = DateTools.string2Date(dateStr);
-        return rolePolicyService.getValidPolicyBeforDate(roleId, dateTime);
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)

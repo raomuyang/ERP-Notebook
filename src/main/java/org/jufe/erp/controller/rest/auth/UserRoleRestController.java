@@ -1,5 +1,6 @@
 package org.jufe.erp.controller.rest.auth;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.Role;
 import org.jufe.erp.entity.User;
@@ -7,15 +8,13 @@ import org.jufe.erp.entity.UserRole;
 import org.jufe.erp.service.auth.RoleService;
 import org.jufe.erp.service.auth.UserRoleService;
 import org.jufe.erp.service.user.UserService;
+import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.JsonUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -37,26 +36,26 @@ public class UserRoleRestController {
 
     private Logger logger = Logger.getLogger(PolicyRestController.class);
 
-    @RequestMapping("/get-by-userid")
-    public List<UserRole> getByUserId(String userId){
+    @RequestMapping("/get-by-userid/{userid}")
+    public List<UserRole> getByUserId(@PathVariable("userid") String userId){
         logger.debug("get-by-userid: " + userId);
         return userRoleService.getByUserId(userId);
     }
 
-    @RequestMapping("/get-by-roleid")
-    public List<UserRole> getByRoleId(String roleId){
+    @RequestMapping("/get-by-roleid/{roleid}")
+    public List<UserRole> getByRoleId(@PathVariable("roleid") String roleId){
         logger.debug("get-by-roleid: " + roleId);
         return userRoleService.getByRoleId(roleId);
     }
 
-    @RequestMapping("/get-users-by-roleid")
-    public List<User> getUsersByRoleId(String roleId){
+    @RequestMapping("/get-users-by-roleid/{roleid}")
+    public List<User> getUsersByRoleId(@PathVariable("roleid") String roleId){
         logger.debug("get-users-by-roleid:" + roleId);
         return userRoleService.getUsersByRole(roleId);
     }
 
-    @RequestMapping("/get-roles-by-userid")
-    public List<Role> getRolesByUser(String userId){
+    @RequestMapping("/get-roles-by-userid/{userid}")
+    public List<Role> getRolesByUser(@PathVariable("userid") String userId){
         logger.debug("/get-roles-by-userid: " + userId);
         return userRoleService.getRoleByUser(userId);
     }
@@ -65,17 +64,20 @@ public class UserRoleRestController {
      * @param userId
      * @return
      */
-    @RequestMapping("/get-valid-roles-of-user")
-    public List<Role> getValidRoles(String userId){
+    @RequestMapping("/get-valid-roles-of-user/{userid}")
+    public List<Role> getValidRoles(@PathVariable("userid") String userId){
         logger.debug("/get-valid-roles-of-user:" + userId);
         return userRoleService.getValidRoles(userId);
     }
 
 
-    @RequestMapping(value = "/get-valid-roles-in-target-date")
-    public List<Role> getValidRolesInTargetDate(String userId, Date date){
+    @RequestMapping(value = "/get-valid-roles-in-target-date/{userid}/{date}")
+    public List<Role> getValidRolesInTargetDate(@PathVariable("userid") String userId,@PathVariable("date") String dateStr){
 
-        logger.debug("/get-valid-roles-in-target-date:"+userId + "," + date);
+        logger.debug("/get-valid-roles-in-target-date:"+userId + "," + dateStr);
+        Date date = DateTools.string2Date(dateStr);
+        if(date == null)
+            return null;
         return userRoleService.getValidRolesBeforeDate(userId, date);
     }
 

@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by raomengnan on 16-9-12.
@@ -23,8 +20,8 @@ public class PolicyRestController {
 
     private Logger logger = Logger.getLogger(PolicyRestController.class);
 
-    @RequestMapping("/get-policy")
-    public Policy getPolicy(String id){
+    @RequestMapping("/get-policy/{policyId}")
+    public Policy getPolicy(@PathVariable("policyId") String id){
         logger.debug("/getPolicy: " + id);
         return policyService.getPolicy(id);
     }
