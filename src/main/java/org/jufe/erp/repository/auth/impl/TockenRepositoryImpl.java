@@ -1,8 +1,8 @@
 package org.jufe.erp.repository.auth.impl;
 
-import org.jufe.erp.entity.TockenInfo;
+import org.jufe.erp.entity.TokenInfo;
 import org.jufe.erp.repository.BaseRepository;
-import org.jufe.erp.repository.auth.TockenRepository;
+import org.jufe.erp.repository.auth.TokenRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public class TockenRepositoryImpl extends BaseRepository<TockenInfo> implements TockenRepository {
+public class TockenRepositoryImpl extends BaseRepository<TokenInfo> implements TokenRepository {
 }

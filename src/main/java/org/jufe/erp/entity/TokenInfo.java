@@ -9,7 +9,7 @@ import java.util.Date;
  * Tocken的相关内容
  */
 @Document(collection = "tockens")
-public class TockenInfo {
+public class TokenInfo {
     private String id;
     private String userId;
     private long validDays = 30 * 60 * 1000; //失效时间，默认为30分钟
@@ -49,7 +49,7 @@ public class TockenInfo {
 
     @Override
     public String toString() {
-        return "TockenInfo{" +
+        return "TokenInfo{" +
                 "id='" + id + '\'' +
                 ", userId='" + userId + '\'' +
                 ", validDays=" + validDays +
@@ -62,7 +62,7 @@ public class TockenInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TockenInfo that = (TockenInfo) o;
+        TokenInfo that = (TokenInfo) o;
 
         if (validDays != that.validDays) return false;
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
