@@ -1,11 +1,10 @@
 package org.jufe.erp.entity;
 
-import org.jufe.erp.utils.enums.AuthEnum;
+import org.jufe.erp.utils.enums.RequestEnum;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,14 +14,14 @@ import java.util.Map;
 @Document(collection = "policy")
 public class Policy implements Serializable{
     private String id;
-    private Map<AuthEnum, Boolean> auth ; // 权限
+    private Map<RequestEnum, Boolean> auth ; // 权限
 
     public Policy(){
         auth = new HashMap<>();
-        auth.put(AuthEnum.READ, false);
-        auth.put(AuthEnum.WRITE, false);
-        auth.put(AuthEnum.UPDATE, false);
-        auth.put(AuthEnum.UPDATE, false);
+        auth.put(RequestEnum.READ, false);
+        auth.put(RequestEnum.WRITE, false);
+        auth.put(RequestEnum.UPDATE, false);
+        auth.put(RequestEnum.UPDATE, false);
     }
     public String getId() {
         return id;
@@ -32,11 +31,11 @@ public class Policy implements Serializable{
         this.id = id;
     }
 
-    public Map<AuthEnum, Boolean> getAuth() {
+    public Map<RequestEnum, Boolean> getAuth() {
         return auth;
     }
 
-    public void setAuth(Map<AuthEnum, Boolean> auth) {
+    public void setAuth(Map<RequestEnum, Boolean> auth) {
         this.auth = auth;
     }
 

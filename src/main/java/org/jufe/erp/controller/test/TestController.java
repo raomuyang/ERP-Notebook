@@ -9,7 +9,7 @@ import org.jufe.erp.repository.auth.PolicyRepository;
 import org.jufe.erp.repository.test.TestRepository;
 import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.JsonUtils;
-import org.jufe.erp.utils.enums.AuthEnum;
+import org.jufe.erp.utils.enums.RequestEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -110,11 +110,11 @@ public class TestController {
     public List<Policy> testPolicy(){
         Policy p1 = new Policy();
         Policy p2 = new Policy();
-        p2.getAuth().put(AuthEnum.READ, true);
+        p2.getAuth().put(RequestEnum.READ, true);
         policyRepository.insert(p1);
         policyRepository.insert(p2);
         List<Policy> policies = policyRepository.findAll();
-        System.out.println(policies.get(0).getAuth().get(AuthEnum.READ));
+        System.out.println(policies.get(0).getAuth().get(RequestEnum.READ));
         return policies;
     }
 
