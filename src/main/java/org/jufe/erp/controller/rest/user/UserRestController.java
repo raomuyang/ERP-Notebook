@@ -1,8 +1,10 @@
 package org.jufe.erp.controller.rest.user;
 
 import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.jufe.erp.entity.User;
 import org.jufe.erp.service.user.UserService;
+import org.jufe.erp.utils.MD5;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -173,5 +175,11 @@ public class UserRestController {
 
         map.put("result", result);
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
+    }
+
+    public static void main(String[] args) {
+        ObjectId objectId = new ObjectId();
+        System.out.println(objectId);
+        System.out.println(MD5.getMD5(objectId.toString()));
     }
 }

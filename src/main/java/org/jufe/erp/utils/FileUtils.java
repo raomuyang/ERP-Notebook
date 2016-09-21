@@ -38,4 +38,26 @@ public class FileUtils {
         return true;
 
     }
+
+    /**
+     * 创建一个文件file的上级目录
+     *
+     * @param file
+     */
+    public static void mkParentDir(File file) {
+        File parentFile = file.getAbsoluteFile().getParentFile();
+        if (!parentFile.exists()) {
+            parentFile.mkdirs();
+//            // 递归寻找上级目录
+//            mkParentDir(parentFile);
+//            parentFile.mkdirs();
+        }
+    }
+
+
+    public static String getUserHome(){
+        String path = System.getProperties().getProperty("user.home") + File.separator;
+        return path;
+    }
+
 }

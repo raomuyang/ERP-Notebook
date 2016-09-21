@@ -181,6 +181,12 @@
       <version>1.9.2.RELEASE</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.mapdb</groupId>
+      <artifactId>mapdb</artifactId>
+      <version>3.0.1</version>
+    </dependency>
+
   </dependencies>
 
   <build>
