@@ -51,6 +51,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         boolean auth = authRequest(method, httpServletRequest);
         if(!auth)
             forbidden(httpServletResponse);
+        else {
+            String token = httpServletRequest.getHeader(StandardStr.TOKEN.s());;
+            User user = tokenService.getUser(token);
+            httpServletRequest.setAttribute(StandardStr.USER.s(), user);
+        }
         return auth;
     }
 
@@ -86,6 +91,9 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return false;
             for (Role r: roles){
                 if(r.getLevel() >= authRequest.level().l()){
+                    //管理员有超级权限
+                    if(r.getLevel() == AuthLevel.ADMIN.l())
+                        return true;
                     eLevel = true;//满足等级要求
                     break;
                 }
