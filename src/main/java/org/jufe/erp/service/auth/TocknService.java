@@ -9,7 +9,9 @@ import org.jufe.erp.entity.User;
  */
 public interface TocknService {
 
-    public TokenInfo get(String id);
-    public User getUser(String id);
-    public boolean delete(String id);
+    public TokenInfo get(String token);
+    public User getUser(String token);
+    public TokenInfo create(String userId);
+    public boolean delete(String token);
+    public boolean update(String token);
 }

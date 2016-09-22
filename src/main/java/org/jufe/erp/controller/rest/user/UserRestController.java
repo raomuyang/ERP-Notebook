@@ -177,9 +177,4 @@ public class UserRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
-    public static void main(String[] args) {
-        ObjectId objectId = new ObjectId();
-        System.out.println(objectId);
-        System.out.println(MD5.getMD5(objectId.toString()));
-    }
 }

@@ -12,6 +12,7 @@ import java.util.Date;
 public class TokenInfo {
     private String id;
     private String userId;
+    private String token;
     private long validDays = 30 * 60 * 1000; //失效时间，默认为30分钟
     private Date lastTime;
 
@@ -45,6 +46,14 @@ public class TokenInfo {
 
     public void setLastTime(Date lastTime) {
         this.lastTime = lastTime;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override

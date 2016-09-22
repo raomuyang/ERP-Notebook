@@ -25,13 +25,16 @@ public class TokenOptions {
     public static TokenInfo create(String userId){
         String id = new ObjectId().toHexString();
         String md5 = MD5.getMD5(id);
-        TokenInfo token = new TokenInfo();
+        TokenInfo tokenInfo = new TokenInfo();
 
-        token.setId(id);
-        token.setUserId(userId);
-        token.setLastTime(new Date(System.currentTimeMillis()));
-        put(md5, token);
-        return token;
+        //初始化
+        tokenInfo.setId(id);
+        tokenInfo.setUserId(userId);
+        tokenInfo.setToken(md5);
+        tokenInfo.setLastTime(new Date(System.currentTimeMillis()));
+
+        put(tokenInfo);
+        return tokenInfo;
     }
 
     public static Date getDate(String id){
@@ -48,13 +51,13 @@ public class TokenOptions {
         }
     }
 
-    public static boolean isTokenValid(TokenInfo token){
-        getLog().debug("isTokenValid:" + token);
-        if(token == null)
+    public static boolean isTokenValid(TokenInfo tokenInfo){
+        getLog().debug("isTokenValid:" + tokenInfo);
+        if(tokenInfo == null)
             return false;
         try {
-            ObjectId id = new ObjectId(token.getId());
-            int validDays = (int) (token.getValidDays() / (1000 * 60 * 60 * 24));
+            ObjectId id = new ObjectId(tokenInfo.getId());
+            int validDays = (int) (tokenInfo.getValidDays() / (1000 * 60 * 60 * 24));
             Date invalidDate = DateTools.getDateAfterXDay(id.getDate(), validDays);
             Date current = new Date(System.currentTimeMillis());
             return current.before(invalidDate);
@@ -63,7 +66,18 @@ public class TokenOptions {
         }
     }
 
-    public static void put(String md5, TokenInfo token){
+    /**
+     * 将tokenput到内存的map中
+     * @param tokenInfo
+     */
+    public static void put(TokenInfo tokenInfo){
+
+        if(tokenInfo == null)
+            return;
+
+        String token = MD5.getMD5(tokenInfo.getId());
+        if(get(token) != null)
+            return;
         if(tokenMap.values().size() > 500){
             //token数量超过上限就触发一次清理
             List<TokenInfo> tokenInfos = new ArrayList<TokenInfo>();
@@ -72,15 +86,14 @@ public class TokenOptions {
             for (int i = 0; i < 200; i++)
                 tokenMap.remove(MD5.getMD5(tokenInfos.get(i).getId()));
         }
-        tokenMap.put(md5, token);
+        tokenMap.put(token, tokenInfo);
     }
 
-    public static TokenInfo pop(String id){
+    public static TokenInfo pop(String token){
         try {
-            String md5 = MD5.getMD5(id);
-            TokenInfo token = tokenMap.get(md5);
-            tokenMap.remove(md5);
-            return token;
+            TokenInfo tokenInfo = tokenMap.get(token);
+            tokenMap.remove(token);
+            return tokenInfo;
         }catch (Exception e){
             return null;
         }
@@ -129,7 +142,7 @@ public class TokenOptions {
     public static void main(String[] args) {
         long t0 = System.currentTimeMillis();
         List<TokenInfo> tokenInfos = new ArrayList<>();
-        for(int i = 0; i < 1000000; i++){
+        for(int i = 0; i < 100000; i++){
             Date d = new Date(Math.abs(new Random().nextLong()));
             TokenInfo t = new TokenInfo();
             t.setLastTime(d);
