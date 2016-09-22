@@ -24,4 +24,17 @@ public enum RequestEnum {
         return this.method;
     }
 
+    public static RequestEnum toCase(String name){
+        name = name.toUpperCase();
+        if(name.equals(READ.value()))
+            return READ;
+        if(name.equals(WRITE.value()))
+            return WRITE;
+        if(name.equals(UPDATE.value()))
+            return UPDATE;
+        if(name.equals(DELETE.value()))
+            return DELETE;
+        else
+            return null;
+    }
 }

@@ -30,7 +30,7 @@
 
     <mvc:interceptors>
         <mvc:interceptor>
-            <mvc:mapping path="/**"/>
+            <mvc:mapping path="/rest/**"/>
             <bean class="org.jufe.erp.interceptors.AuthInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>

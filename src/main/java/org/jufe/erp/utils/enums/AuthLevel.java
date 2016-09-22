@@ -17,7 +17,7 @@ public enum AuthLevel {
         this.desc = describe;
     }
 
-    public int level(){
+    public int l(){
         return this.level;
     }
 
