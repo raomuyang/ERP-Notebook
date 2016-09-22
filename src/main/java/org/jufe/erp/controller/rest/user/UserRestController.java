@@ -42,7 +42,8 @@ public class UserRestController {
     public User getById(@PathVariable("id") String id){
         logger.debug("/get/"+ id);
         User user = userService.findById(id);
-        user.setPwd(null);
+        if(user != null)
+            user.setPwd(null);
         return user;
     }
 
@@ -140,7 +141,7 @@ public class UserRestController {
     }
 
     @AuthRequest
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-head", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateHead(String userId, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("update:" + userId);
         boolean result = false;
@@ -172,6 +173,11 @@ public class UserRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    /**
+     * 登录成功返回token
+     * @param user
+     * @return {reslut:true/false, token "xxxxxx"}
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> login(@RequestBody User user){
 

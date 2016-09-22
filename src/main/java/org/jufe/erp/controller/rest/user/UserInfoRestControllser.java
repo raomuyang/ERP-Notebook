@@ -3,6 +3,7 @@ package org.jufe.erp.controller.rest.user;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.UserInfo;
 import org.jufe.erp.service.user.UserInfoService;
+import org.jufe.erp.utils.anno.AuthRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class UserInfoRestControllser {
         return userInfoService.findByUserId(userId);
     }
 
+    @AuthRequest
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> update(@RequestBody UserInfo info){
         logger.debug("update:" + info);
@@ -44,6 +46,7 @@ public class UserInfoRestControllser {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> delete(@RequestBody String userId){
         logger.debug("delete:" + userId);

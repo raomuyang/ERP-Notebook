@@ -11,6 +11,7 @@ import java.io.Serializable;
 @Document(collection = "roles")
 public class Role implements Serializable{
     private String id;
+    private int level;
     private String roleName;
     private String roleDes; //角色描述
 
@@ -36,6 +37,14 @@ public class Role implements Serializable{
 
     public void setRoleDes(String roleDes) {
         this.roleDes = roleDes;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     @Override
