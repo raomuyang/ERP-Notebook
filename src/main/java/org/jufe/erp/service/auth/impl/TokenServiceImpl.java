@@ -69,8 +69,8 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public User getUser(String id) {
-        TokenInfo tokenInfo = get(id);
+    public User getUser(String token) {
+        TokenInfo tokenInfo = get(token);
         if(tokenInfo != null)
             return null;
         return userRepository.findById(tokenInfo.getUserId());

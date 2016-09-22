@@ -25,6 +25,7 @@ import java.util.Map;
 
 /**
  * Created by Raomengnan on 2016/9/22.
+ * 对用户操作权限鉴定在此处进行
  */
 public class AuthInterceptor implements HandlerInterceptor {
 
@@ -48,7 +49,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        boolean auth = authRequest(method, httpServletRequest);
+        boolean auth = authRequest(method, httpServletRequest, httpServletResponse);
         if(!auth)
             forbidden(httpServletResponse);
         else {
@@ -73,19 +74,25 @@ public class AuthInterceptor implements HandlerInterceptor {
         httpServletResponse.setStatus(403);
     }
 
-    private boolean authRequest(Method method, HttpServletRequest request){
+    private boolean authRequest(Method method, HttpServletRequest request, HttpServletResponse response){
         logger.info("Auth user request");
         AuthRequest authRequest = method.getAnnotation(AuthRequest.class);
         if(authRequest == null)
             return true;
 
         String token = request.getHeader(StandardStr.TOKEN.s());
-        if(token == null)
+        if(token == null){
+            response.addHeader("msg", "Lack of credentials");
             return false;
+        }
 
         User user = tokenService.getUser(token);
         boolean eLevel = false;
-        if(user != null){
+        if(user == null){
+            response.addHeader("msg", "Token invalid, please reauth");
+            return false;
+        }
+        else {
             List<Role> roles = userRoleService.getValidRoles(user.getId());
             if(roles == null)
                 return false;
@@ -99,8 +106,10 @@ public class AuthInterceptor implements HandlerInterceptor {
                 }
             }
 
-            if(!eLevel)
+            if(!eLevel){
+                response.addHeader("msg", "Low level");
                 return false;
+            }
 
             //如果是普通用户等级的鉴权，到这一步便可判断成功
             if(authRequest.level() == AuthLevel.USER)
@@ -122,15 +131,17 @@ public class AuthInterceptor implements HandlerInterceptor {
                     RequestEnum m = RequestEnum.toCase( request.getMethod());
                     if(m == null){
                         logger.error("请求方式转换失败:" + request.getMethod());
+                        response.addHeader("msg", "Unknow case");
                         return false;
                     }
 
                     return reauestAuth.get(m);
                 }
             }
-        }
 
-        return false;
+            response.addHeader("msg", "Lack of permission");
+            return false;
+        }
     }
 
 }
