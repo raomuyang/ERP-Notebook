@@ -27,5 +27,5 @@ public interface NewsService  {
 
     public boolean addNews(News news);
 
-
+    public boolean delete(String newsId);
 }

@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.jufe.erp.entity.PhotoWall;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.service.photo.PhotoWallService;
+import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.AuthLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +52,7 @@ public class PhotoWallRestController {
         return photoWallService.getPage(pno, psize);
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> delete(@RequestBody String id, HttpServletRequest request){
         logger.debug("delete:" + id);
@@ -74,6 +77,7 @@ public class PhotoWallRestController {
      * {"id":"", "userName":"", "grade":""}
      * @return
      */
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "update", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> update(@RequestBody PhotoWall photoInfo){
         logger.debug("update-username:" + photoInfo);
@@ -91,6 +95,7 @@ public class PhotoWallRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "update-photo", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updatePhoto(String id, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("update-photo:" + id + "," + imageFile);
@@ -107,6 +112,7 @@ public class PhotoWallRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "upload-photo", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> uploadPhoto(PhotoWall photoInfo, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("upload-photo：" + photoInfo + "," + imageFile );

@@ -64,4 +64,9 @@ public class NewsServiceImpl implements NewsService{
     public boolean addNews(News news) {
         return newsRepository.insert(news);
     }
+
+    @Override
+    public boolean delete(String newsId) {
+        return newsRepository.deleteById(newsId);
+    }
 }

@@ -3,6 +3,8 @@ package org.jufe.erp.controller.rest.about;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.ERPInfo;
 import org.jufe.erp.service.about.ERPInfoService;
+import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.AuthLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +56,7 @@ public class ErpInfoRestController {
         return erpInfoService.getOrgStruct();
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> update(@RequestBody ERPInfo erpInfo){
         logger.debug("/update:" + erpInfo);
@@ -72,6 +75,7 @@ public class ErpInfoRestController {
 
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update-tel", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateTel(@RequestBody String tel){
         logger.debug("/update-tel: " + tel);
@@ -90,6 +94,7 @@ public class ErpInfoRestController {
 
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update-intro", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateIntro(@RequestBody String intro){
         logger.debug("/update-intro: " + intro);
@@ -108,6 +113,7 @@ public class ErpInfoRestController {
 
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update-join", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateJoin(@RequestBody String join){
         logger.debug("/update-join: " + join);
@@ -126,6 +132,7 @@ public class ErpInfoRestController {
 
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update-org-staruct", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateOrg(@RequestBody String org){
         logger.debug("/update-org-staruct: " + org);

@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.jufe.erp.entity.Role;
 import org.jufe.erp.service.auth.RoleService;
 import org.jufe.erp.utils.JsonUtils;
+import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.AuthLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +37,7 @@ public class RoleRestController {
     }
 
     /**
-     * 获取多个role的值,需要使用post方法
+     * 获取多个role的值,可能需要使用，未测试post方法
      * @param args
      * @return
      */
@@ -46,6 +48,7 @@ public class RoleRestController {
         return roleService.getRoleById(ids);
     }
 
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping(value = "/add-role", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> addRole(@RequestBody Role role){
         logger.debug("/add-role: " + role);
@@ -59,6 +62,7 @@ public class RoleRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping(value = "/update-role", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> update(@RequestBody Role role){
         logger.debug("/update-role: " + role);
@@ -77,6 +81,7 @@ public class RoleRestController {
      * @param role
      * @return
      */
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping(value = "/update-role-info", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateInfo(@RequestBody Role role){
         logger.debug("/update-role-info: " + role);
@@ -95,6 +100,7 @@ public class RoleRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> delete(@RequestBody String id){
         logger.debug("/delete:" + id);

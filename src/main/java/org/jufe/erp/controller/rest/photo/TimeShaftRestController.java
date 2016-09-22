@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.jufe.erp.entity.TimeShaft;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.service.photo.TimeShaftService;
+import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.AuthLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,7 @@ public class TimeShaftRestController {
         return timeShaftService.findPage(pno, psize);
     }
 
+    @AuthRequest(level = AuthLevel.KEEPER)
     @RequestMapping(value = "/update-info", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> update(@RequestBody TimeShaft shaftNode){
         logger.debug("update-intro:" + shaftNode);
@@ -51,6 +54,7 @@ public class TimeShaftRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.KEEPER)
     @RequestMapping(value = "delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> delete(@RequestBody String id, HttpServletRequest request){
         logger.debug("delete:" + id);
@@ -80,6 +84,7 @@ public class TimeShaftRestController {
      * @param request
      * @return
      */
+    @AuthRequest(level = AuthLevel.KEEPER)
     @RequestMapping(value = "/add-image", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> addImage(TimeShaft shaftNode, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("/add-image:" + shaftNode + "," + imageFile);
