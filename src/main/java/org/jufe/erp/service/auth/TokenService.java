@@ -7,7 +7,7 @@ import org.jufe.erp.entity.User;
  * Created by raomengnan on 16-9-21.
  * 将Tocken存储到mongoDB中
  */
-public interface TocknService {
+public interface TokenService {
 
     public TokenInfo get(String token);
     public User getUser(String token);

@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public class TockenRepositoryImpl extends BaseRepository<TokenInfo> implements TokenRepository {
+public class TokenRepositoryImpl extends BaseRepository<TokenInfo> implements TokenRepository {
 }

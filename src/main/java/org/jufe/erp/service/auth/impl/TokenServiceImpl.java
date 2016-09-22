@@ -5,8 +5,7 @@ import org.jufe.erp.entity.TokenInfo;
 import org.jufe.erp.entity.User;
 import org.jufe.erp.repository.auth.TokenRepository;
 import org.jufe.erp.repository.user.UserRepository;
-import org.jufe.erp.service.auth.TocknService;
-import org.jufe.erp.utils.MD5;
+import org.jufe.erp.service.auth.TokenService;
 import org.jufe.erp.utils.TokenOptions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -14,14 +13,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by raomengnan on 16-9-21.
  */
 @Service
-public class TokenServiceImpl implements TocknService {
+public class TokenServiceImpl implements TokenService {
 
     @Autowired
     private TokenRepository tokenRepository;
