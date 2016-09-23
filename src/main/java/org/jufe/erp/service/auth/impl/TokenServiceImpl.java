@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by raomengnan on 16-9-21.
@@ -71,7 +72,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public User getUser(String token) {
         TokenInfo tokenInfo = get(token);
-        if(tokenInfo != null)
+        if(tokenInfo == null)
             return null;
         return userRepository.findById(tokenInfo.getUserId());
     }
@@ -95,8 +96,10 @@ public class TokenServiceImpl implements TokenService {
             return tokenRepository.deleteById(tokenInfo.getId());
         }
 
-        else
-            tokenInfo = tokenRepository.find(new Query(new Criteria("token").is(token))).get(0);
+        else{
+            List<TokenInfo> tokenInfos = tokenRepository.find(new Query(new Criteria("token").is(token)));
+            tokenInfo = tokenInfos == null||tokenInfos.size()==0?null:tokenInfos.get(0);
+        };
         if(tokenInfo != null){
             boolean res = tokenRepository.deleteById(tokenInfo.getId());
             if(!res)
