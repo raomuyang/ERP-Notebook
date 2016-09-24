@@ -10,6 +10,8 @@ import org.jufe.erp.service.auth.UserRoleService;
 import org.jufe.erp.service.user.UserService;
 import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.JsonUtils;
+import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.AuthLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,6 +83,7 @@ public class UserRoleRestController {
         return userRoleService.getValidRolesBeforeDate(userId, date);
     }
 
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> update(@RequestBody UserRole userRole){
         logger.debug("update: " + userRole);
@@ -101,6 +104,7 @@ public class UserRoleRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> delete(@RequestBody String id){
         logger.debug("delete userRole: " + id);

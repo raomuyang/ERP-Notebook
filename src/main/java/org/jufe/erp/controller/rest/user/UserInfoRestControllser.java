@@ -3,12 +3,15 @@ package org.jufe.erp.controller.rest.user;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.UserInfo;
 import org.jufe.erp.service.user.UserInfoService;
+import org.jufe.erp.utils.anno.AuthRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -28,8 +31,9 @@ public class UserInfoRestControllser {
         return userInfoService.findByUserId(userId);
     }
 
+    @AuthRequest
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> update(@RequestBody UserInfo info){
+    public ResponseEntity<ModelMap> update(@RequestBody UserInfo info, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update:" + info);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -44,8 +48,9 @@ public class UserInfoRestControllser {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<ModelMap> delete(@RequestBody String userId){
+    public ResponseEntity<ModelMap> updateToNoneById(@RequestBody String userId, HttpServletRequest request, HttpServletResponse response){
         logger.debug("delete:" + userId);
         boolean result = false;
         ModelMap map = new ModelMap();

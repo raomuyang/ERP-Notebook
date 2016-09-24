@@ -4,6 +4,8 @@ import org.apache.log4j.Logger;
 import org.jufe.erp.entity.MShow;
 import org.jufe.erp.service.about.MShowService;
 import org.jufe.erp.utils.JsonUtils;
+import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.AuthLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ public class MShowRestController {
         return mShowService.getMShow();
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> update(@RequestBody MShow mShow){
         logger.debug("/update: " + mShow);
@@ -51,6 +54,7 @@ public class MShowRestController {
      * @param words
      * @return
      */
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update-words", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateWords(@RequestBody String words){
         logger.debug("/update-words: " + words);
@@ -74,6 +78,7 @@ public class MShowRestController {
      * @param args
      * @return
      */
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update-iurls", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateIUrls(@RequestBody String args){
         logger.debug("/update-iurls: " + args);
@@ -97,6 +102,7 @@ public class MShowRestController {
      * @param vurl
      * @return
      */
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/update-video", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateVUrl(@RequestBody String vurl){
         logger.debug("/update-video: " + vurl);
@@ -115,6 +121,7 @@ public class MShowRestController {
 
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/delete-image", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deleteImage(@RequestBody String args, HttpServletRequest request){
         logger.debug("/delete-image: " + args);
@@ -134,6 +141,7 @@ public class MShowRestController {
 
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/delete-video", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deleteVideo(@RequestBody String args, HttpServletRequest request){
         logger.debug("/delete-video: " + args);
@@ -153,6 +161,7 @@ public class MShowRestController {
 
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/upload-image", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> uploadImage(MultipartFile originFile, HttpServletRequest request){
         logger.debug("/upload-iamge");
@@ -174,6 +183,7 @@ public class MShowRestController {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/upload-video", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> uploadVideo(MultipartFile originFile, HttpServletRequest request){
         logger.debug("/upload-iamge");

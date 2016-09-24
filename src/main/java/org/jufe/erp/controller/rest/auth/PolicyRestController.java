@@ -3,6 +3,8 @@ package org.jufe.erp.controller.rest.auth;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.Policy;
 import org.jufe.erp.service.auth.PolicyService;
+import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.AuthLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +22,14 @@ public class PolicyRestController {
 
     private Logger logger = Logger.getLogger(PolicyRestController.class);
 
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping("/get-policy/{policyId}")
     public Policy getPolicy(@PathVariable("policyId") String id){
         logger.debug("/getPolicy: " + id);
         return policyService.getPolicy(id);
     }
 
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping(value = "/save-policy", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> savePolicy(@RequestBody Policy policy){
         logger.debug("/save-policy:" + policy);
@@ -36,6 +40,7 @@ public class PolicyRestController {
 
     }
 
+    @AuthRequest(level = AuthLevel.ADMIN)
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deletePolicy(@RequestBody String id){
         logger.debug("/delete-policy:" + id);

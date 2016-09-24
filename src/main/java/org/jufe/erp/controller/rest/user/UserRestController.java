@@ -1,8 +1,11 @@
 package org.jufe.erp.controller.rest.user;
 
 import org.apache.log4j.Logger;
+import org.jufe.erp.entity.TokenInfo;
 import org.jufe.erp.entity.User;
+import org.jufe.erp.service.auth.TokenService;
 import org.jufe.erp.service.user.UserService;
+import org.jufe.erp.utils.anno.AuthRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -22,6 +26,8 @@ public class UserRestController {
 
     @Autowired
     private UserService userService;
+    @Autowired    private TokenService tokenService;
+
     private Logger logger = Logger.getLogger(UserRestController.class);
 
     @RequestMapping("/check-exist/{id}")
@@ -30,13 +36,17 @@ public class UserRestController {
         User user = userService.findById(id);
         return user != null;
     }
+
+
     @RequestMapping("/get/{id}")
     public User getById(@PathVariable("id") String id){
         logger.debug("/get/"+ id);
         User user = userService.findById(id);
-        user.setPwd(null);
+        if(user != null)
+            user.setPwd(null);
         return user;
     }
+
 
     @RequestMapping("/search-by-name/{name}")
     public List<User> getByName(@PathVariable("name") String name){
@@ -70,8 +80,9 @@ public class UserRestController {
         return users;
     }
 
+    @AuthRequest
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> update(@RequestBody User user){
+    public ResponseEntity<ModelMap> update(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update:" + user);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -84,8 +95,9 @@ public class UserRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest
     @RequestMapping(value = "/update-username", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateUsername(@RequestBody User user){
+    public ResponseEntity<ModelMap> updateUsername(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update username:" + user);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -98,8 +110,9 @@ public class UserRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest
     @RequestMapping(value = "/update-pwd", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updatePwd(@RequestBody User user){
+    public ResponseEntity<ModelMap> updatePwd(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update pwd:" + user);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -112,8 +125,9 @@ public class UserRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest
     @RequestMapping(value = "/update-location", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateLocation(@RequestBody User user){
+    public ResponseEntity<ModelMap> updateLocation(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update location:" + user);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -126,8 +140,9 @@ public class UserRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateHead(String userId, MultipartFile imageFile, HttpServletRequest request){
+    @AuthRequest
+    @RequestMapping(value = "/update-head", method = RequestMethod.POST)
+    public ResponseEntity<ModelMap> updateHeadById(String userId, MultipartFile imageFile, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update:" + userId);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -158,6 +173,11 @@ public class UserRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    /**
+     * 登录成功返回token
+     * @param user
+     * @return {reslut:true/false, token "xxxxxx"}
+     */
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> login(@RequestBody User user){
 
@@ -169,9 +189,12 @@ public class UserRestController {
             User u = userService.checkLogin(user.getId(), user.getPwd());
             if(u != null)
                 result = true;
+            TokenInfo tokenInfo = tokenService.create(user.getId());
+            map.put("token", tokenInfo.getToken());
         }
 
         map.put("result", result);
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
+
 }

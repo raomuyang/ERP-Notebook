@@ -16,9 +16,10 @@ public class MD5 {
             int k = 0;
             for (byte b : md5){
                 //Integer中也有转换16进制的方法
-                //b&0xff>>4
-                strMd5[k++] = hexDict[((b >> 4)& 0xf)];//高四位的为16进制的第一个数
-                strMd5[k++] = hexDict[(char) (b & 0xf)]; //低四位的为16进制第二个数字
+                //(b&0xff>>4) == (b & 0xf)
+                //4bit表示一个16进制数
+                strMd5[k++] = hexDict[(b >> 4)& 0xf];// b >> 4 :高四位的为16进制的第一个数
+                strMd5[k++] = hexDict[ b & 0xf]; //低四位的为16进制第二个数字
             }
             return new String(strMd5);
         } catch (NoSuchAlgorithmException e) {

@@ -31,6 +31,11 @@ public class NewsServiceImpl implements NewsService{
     }
 
     @Override
+    public List<News> findByAuthorId(String authorId) {
+        return newsRepository.findByAuthorId(authorId);
+    }
+
+    @Override
     public List<News> findByTitle(String title) {
         return newsRepository.findByTitle(title);
     }
@@ -50,6 +55,16 @@ public class NewsServiceImpl implements NewsService{
         return newsRepository.findAll();
     }
 
+    @Override
+    public List<News> findAuthorNoFinished(String authorId) {
+        return newsRepository.findUserNoFinished(authorId);
+    }
+
+    @Override
+    public Page<News> findAuthorNoFinishedPage(String authorId, int pno, int psize) {
+        return newsRepository.findUserNoFinishedPage(authorId, pno, psize);
+    }
+
     /**
      * 只能更新标题和内容
      * @param news
@@ -63,5 +78,17 @@ public class NewsServiceImpl implements NewsService{
     @Override
     public boolean addNews(News news) {
         return newsRepository.insert(news);
+    }
+
+    @Override
+    public boolean delete(String newsId) {
+        return newsRepository.deleteById(newsId);
+    }
+
+    @Override
+    public boolean updateStatus(News news) {
+        if(news == null)
+            return false;
+        return newsRepository.update(news.getId(), "finish", news.getFinish());
     }
 }

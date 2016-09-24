@@ -2,8 +2,12 @@ package org.jufe.erp.controller.rest.news;
 
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.NewsImage;
+import org.jufe.erp.entity.User;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.service.news.NewsImageService;
+import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.AuthLevel;
+import org.jufe.erp.utils.enums.StandardStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +20,7 @@ import java.util.List;
 
 /**
  * Created by Raomengnan on 2016/9/20.
+ * 文章和文章图片允许所有用户发布
  */
 @RestController
 @RequestMapping("/rest/news/image")
@@ -26,9 +31,9 @@ public class NewsImageRestController {
 
     private Logger logger = Logger.getLogger(NewsImageRestController.class);
 
-    @RequestMapping("get/{pno}/{psize}")
+    @RequestMapping("get/{psize}/{pno}")
     public Page<NewsImage> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
-        logger.debug(String.format("get/%s/%s", pno, psize));
+        logger.debug(String.format("get/%s/%s", psize, pno));
         return service.getImagePage(pno, psize);
     }
 
@@ -38,6 +43,7 @@ public class NewsImageRestController {
         return service.getImageByNewsId(newsId);
     }
 
+    @AuthRequest(level = AuthLevel.USER)
     @RequestMapping(value = "update-intro", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updateIntro(@RequestBody NewsImage newsImage){
         logger.debug("update-intro:" + newsImage);
@@ -56,6 +62,14 @@ public class NewsImageRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    /**
+     * Controller以上的用户有直接删除图片的权限
+     * 其他用户须附带文章同时删除
+     * @param url
+     * @param request
+     * @return
+     */
+    @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "delete-by-url", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deleteByUrl(@RequestBody String url, HttpServletRequest request){
         logger.debug("deleteByUrl:" + url);
@@ -74,6 +88,7 @@ public class NewsImageRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.USER)
     @RequestMapping(value = "delete-by-newsid", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deleteByNewsId(@RequestBody String newsId, HttpServletRequest request){
         logger.debug("deleteByNewsId:" + newsId);
@@ -92,11 +107,20 @@ public class NewsImageRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
+    @AuthRequest(level = AuthLevel.USER)
     @RequestMapping(value = "upload-image", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> uploadNewsImage(NewsImage newsImage, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("upload-news-image:" + newsImage + "," + imageFile);
         boolean result = false;
         ModelMap map = new ModelMap();
+
+
+        try {
+            User user = (User) request.getAttribute(StandardStr.USER.s());
+            newsImage.setUserId(user.getId());
+        }catch (Exception e){
+            logger.error("Add newsImage[Read user error]:" + e.getMessage());
+        }
         if(newsImage.getNewsId() != null && imageFile != null){
             result = service.uploadImage(newsImage, imageFile,
                     request.getSession().getServletContext().getRealPath("/"));

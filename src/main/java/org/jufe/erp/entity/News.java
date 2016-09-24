@@ -13,8 +13,10 @@ public class News implements Serializable{
     private String id;
     private String title;
     private Date date;
-    private String author; //作者ID
+    private String author; //作者
+    private String authorId;//作者ID
     private String context; //内容
+    private boolean finish = false;//完成状态，若状态成为true，则表示发布，false表示还是草稿
 
     public String getId() {
         return id;
@@ -54,5 +56,21 @@ public class News implements Serializable{
 
     public void setContext(String context) {
         this.context = context;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
+    }
+
+    public boolean getFinish() {
+        return finish;
+    }
+
+    public void setFinish(boolean finish) {
+        this.finish = finish;
     }
 }

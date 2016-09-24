@@ -3,12 +3,11 @@ package org.jufe.erp.service.auth.impl;
 import org.jufe.erp.entity.Policy;
 import org.jufe.erp.repository.auth.PolicyRepository;
 import org.jufe.erp.service.auth.PolicyService;
-import org.jufe.erp.utils.enums.AuthEnum;
+import org.jufe.erp.utils.enums.RequestEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,11 +36,11 @@ public class PolicyServiceImpl implements PolicyService {
 
     @Override
     public boolean setAuth(String id, boolean read, boolean write, boolean update, boolean delete) {
-        Map<AuthEnum, Boolean> auth = new HashMap<>();
-        auth.put(AuthEnum.READ, read);
-        auth.put(AuthEnum.WRITE, write);
-        auth.put(AuthEnum.UPDATE, update);
-        auth.put(AuthEnum.DELETE, delete);
+        Map<RequestEnum, Boolean> auth = new HashMap<>();
+        auth.put(RequestEnum.READ, read);
+        auth.put(RequestEnum.WRITE, write);
+        auth.put(RequestEnum.UPDATE, update);
+        auth.put(RequestEnum.DELETE, delete);
 
         return policyRepository.update(id, "auth", auth);
 

@@ -13,6 +13,7 @@ import java.util.Date;
 public class NewsImage implements Serializable{
     private String id;
     private String newsId;
+    private String userId;
     private String url;
     private Date date;
     private String intro; //图片描述
@@ -57,10 +58,19 @@ public class NewsImage implements Serializable{
         this.intro = intro;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "NewsImage{" +
                 "id='" + id + '\'' +
+                ", userId='" + userId + '\'' +
                 ", newsId='" + newsId + '\'' +
                 ", url='" + url + '\'' +
                 ", date='" + date + '\'' +

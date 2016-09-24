@@ -18,33 +18,55 @@ import java.util.List;
 @Repository
 public class NewsRepositoryImpl extends BaseRepository<News> implements NewsRepository{
 
+    private Criteria crFin = new Criteria("finish").is(true);
+
+    public List<News> findByAuthorId(String authorId){
+        return super.find(new Query(new Criteria("authorId").is(authorId)));
+    }
+
     public List<News> findByAuthor(String author){
-        return super.find(new Query(new Criteria("author").is(author)));
+        Criteria criteria = MongoUtil.fuzzyCriteria("author", author);
+        return super.find(new Query(new Criteria().andOperator(criteria, crFin)));
     }
 
     public List<News> findByTitle(String title){
         Criteria criteria = MongoUtil.fuzzyCriteria("title", title);
-        return super.find(new Query(criteria));
+        return super.find(new Query(new Criteria().andOperator(criteria, crFin)));
     }
 
     public List<News> findByKeyword(String keyword){
         Criteria c1 = MongoUtil.fuzzyCriteria("title", keyword);
         Criteria c2 = MongoUtil.fuzzyCriteria("context", keyword);
         Criteria criteria = new Criteria().orOperator(c1, c2);
-        return super.find(new Query(criteria));
+        return super.find(new Query(new Criteria().andOperator(criteria, crFin)));
     }
 
     public Page<News> findPage(int pno, int pSize){
-        return super.findPage(MongoUtil.soryBy(new Query(), MongoUtil.DESC, "date"), pno, pSize);
+        return super.findPage(MongoUtil.soryBy(new Query(crFin), MongoUtil.DESC, "date"), pno, pSize);
     }
 
     public List<News> findAll(){
-        return super.findAll("date", MongoUtil.DESC);
+        Query query = MongoUtil.soryBy(new Query(crFin),MongoUtil.DESC, "date");
+        return super.find(query);
+    }
+
+    @Override
+    public List<News> findUserNoFinished(String authorId) {
+        return super.find(new Query(new Criteria("authorId").is(authorId)
+                .and("finish").is(false)));
+    }
+
+    @Override
+    public Page<News> findUserNoFinishedPage(String authorId, int pno, int psize) {
+        return findPage(new Query(new Criteria("authorId").is(authorId)
+                .and("finish").is(false)), pno, psize);
     }
 
     public boolean update(News news){
         return super.update(new Query(new Criteria("id").is(news.getId())),
-                new Update().set("title", news.getTitle()).set("context", news.getContext()));
+                new Update().set("title", news.getTitle())
+                        .set("context", news.getContext())
+                        .set("finish", news.getFinish()));
     }
 
 
