@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -25,8 +26,7 @@ public class UserRestController {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private TokenService tokenService;
+    @Autowired    private TokenService tokenService;
 
     private Logger logger = Logger.getLogger(UserRestController.class);
 
@@ -82,7 +82,7 @@ public class UserRestController {
 
     @AuthRequest
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> update(@RequestBody User user){
+    public ResponseEntity<ModelMap> update(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update:" + user);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -97,7 +97,7 @@ public class UserRestController {
 
     @AuthRequest
     @RequestMapping(value = "/update-username", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateUsername(@RequestBody User user){
+    public ResponseEntity<ModelMap> updateUsername(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update username:" + user);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -112,7 +112,7 @@ public class UserRestController {
 
     @AuthRequest
     @RequestMapping(value = "/update-pwd", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updatePwd(@RequestBody User user){
+    public ResponseEntity<ModelMap> updatePwd(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update pwd:" + user);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -127,7 +127,7 @@ public class UserRestController {
 
     @AuthRequest
     @RequestMapping(value = "/update-location", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateLocation(@RequestBody User user){
+    public ResponseEntity<ModelMap> updateLocation(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update location:" + user);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -142,7 +142,7 @@ public class UserRestController {
 
     @AuthRequest
     @RequestMapping(value = "/update-head", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> updateHead(String userId, MultipartFile imageFile, HttpServletRequest request){
+    public ResponseEntity<ModelMap> updateHeadById(String userId, MultipartFile imageFile, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update:" + userId);
         boolean result = false;
         ModelMap map = new ModelMap();

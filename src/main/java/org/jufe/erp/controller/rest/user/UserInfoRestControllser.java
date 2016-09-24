@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -31,7 +33,7 @@ public class UserInfoRestControllser {
 
     @AuthRequest
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> update(@RequestBody UserInfo info){
+    public ResponseEntity<ModelMap> update(@RequestBody UserInfo info, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update:" + info);
         boolean result = false;
         ModelMap map = new ModelMap();
@@ -48,7 +50,7 @@ public class UserInfoRestControllser {
 
     @AuthRequest
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<ModelMap> delete(@RequestBody String userId){
+    public ResponseEntity<ModelMap> updateToNoneById(@RequestBody String userId, HttpServletRequest request, HttpServletResponse response){
         logger.debug("delete:" + userId);
         boolean result = false;
         ModelMap map = new ModelMap();
