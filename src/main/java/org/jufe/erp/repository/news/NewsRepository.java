@@ -22,7 +22,12 @@ public interface NewsRepository extends BaseInterface<News> {
 
     public List<News> findAll();
 
+    public List<News> findUserNoFinished(String userId);
+
+    public Page<News> findUserNoFinishedPage(String userId, int pno, int psize);
+
     public boolean update(News news);
 
+    public List<News> findByAuthorId(String authorId);
 
 }

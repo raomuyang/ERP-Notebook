@@ -15,6 +15,8 @@ public interface NewsService  {
 
     public List<News> findByAuthor(String author);
 
+    public List<News> findByAuthorId(String authorId);
+
     public List<News> findByTitle(String title);
 
     public List<News> findByKeyword(String keyword);
@@ -23,9 +25,20 @@ public interface NewsService  {
 
     public List<News> findAll();
 
+    public List<News> findAuthorNoFinished(String authorId);
+
+    public Page<News> findAuthorNoFinishedPage(String authorId, int pno, int psize);
+
+    /**
+     * 只更新标题\内容\状态
+     * @param news
+     * @return
+     */
     public boolean update(News news);
 
     public boolean addNews(News news);
 
     public boolean delete(String newsId);
+
+    public boolean updateStatus(News news);
 }

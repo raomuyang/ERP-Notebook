@@ -2,10 +2,12 @@ package org.jufe.erp.controller.rest.news;
 
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.NewsImage;
+import org.jufe.erp.entity.User;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.service.news.NewsImageService;
 import org.jufe.erp.utils.anno.AuthRequest;
 import org.jufe.erp.utils.enums.AuthLevel;
+import org.jufe.erp.utils.enums.StandardStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -111,6 +113,14 @@ public class NewsImageRestController {
         logger.debug("upload-news-image:" + newsImage + "," + imageFile);
         boolean result = false;
         ModelMap map = new ModelMap();
+
+
+        try {
+            User user = (User) request.getAttribute(StandardStr.USER.s());
+            newsImage.setUserId(user.getId());
+        }catch (Exception e){
+            logger.error("Add newsImage[Read user error]:" + e.getMessage());
+        }
         if(newsImage.getNewsId() != null && imageFile != null){
             result = service.uploadImage(newsImage, imageFile,
                     request.getSession().getServletContext().getRealPath("/"));

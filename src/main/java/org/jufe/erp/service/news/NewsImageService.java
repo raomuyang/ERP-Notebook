@@ -25,4 +25,6 @@ public interface NewsImageService{
     public List<NewsImage> getImageByNewsId(String newsId);
 
     public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String rootPath);
+
+    public NewsImage getByUrl(String url);
 }

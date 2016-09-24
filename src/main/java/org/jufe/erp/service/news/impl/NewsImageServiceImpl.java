@@ -10,6 +10,8 @@ import org.jufe.erp.service.news.NewsService;
 import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -124,5 +126,13 @@ public class NewsImageServiceImpl implements NewsImageService {
         }
 
         return false;
+    }
+
+    @Override
+    public NewsImage getByUrl(String url) {
+        List<NewsImage> newsImages = newsImageRepository.find(new Query(new Criteria("url").is(url)));
+        if(newsImages == null || newsImages.size() == 0)
+            return null;
+        return newsImages.get(0);
     }
 }
