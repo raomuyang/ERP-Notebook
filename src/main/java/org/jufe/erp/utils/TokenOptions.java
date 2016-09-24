@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.jufe.erp.entity.TokenInfo;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by raomengnan on 16-9-21.
@@ -16,7 +17,7 @@ public class TokenOptions {
 
     public static int MAX_TOKEN;
 
-    private static Map<String, TokenInfo> tokenMap = new HashMap<>();
+    private static Map<String, TokenInfo> tokenMap = new ConcurrentHashMap<>();
 
     private static Logger getLog(){
         return Logger.getLogger(TokenOptions.class);

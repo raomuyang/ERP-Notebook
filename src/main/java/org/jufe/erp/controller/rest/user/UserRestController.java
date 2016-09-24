@@ -6,6 +6,7 @@ import org.jufe.erp.entity.User;
 import org.jufe.erp.service.auth.TokenService;
 import org.jufe.erp.service.user.UserService;
 import org.jufe.erp.utils.anno.AuthRequest;
+import org.jufe.erp.utils.enums.StandardStr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -178,7 +179,7 @@ public class UserRestController {
      * @param user
      * @return {reslut:true/false, token "xxxxxx"}
      */
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/auth", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> login(@RequestBody User user){
 
         logger.debug("login:" + user);
@@ -195,6 +196,19 @@ public class UserRestController {
 
         map.put("result", result);
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
+    }
+
+    @AuthRequest
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public ResponseEntity<ModelMap> logout(HttpServletRequest request){
+        logger.debug(String.format("logout[%s]", request.getHeader(StandardStr.TOKEN.s())));
+        boolean res = tokenService.delete(request.getHeader(StandardStr.TOKEN.s()));
+        ModelMap map = new ModelMap();
+        HttpStatus status = HttpStatus.OK;
+        map.put("result", res);
+        if(!res)
+            status = HttpStatus.UNAUTHORIZED;
+        return new ResponseEntity<ModelMap>(map, status);
     }
 
 }
