@@ -49,8 +49,14 @@ public class AuthInterceptor implements HandlerInterceptor {
         }catch (Exception e){
             return true;
         }
+        if(method == null)
+            return true;
 
-        boolean auth = authRequest(method, httpServletRequest, httpServletResponse);
+        AuthRequest authRequest = method.getAnnotation(AuthRequest.class);
+        if(authRequest == null)
+            return true;
+
+        boolean auth = authRequest(authRequest, httpServletRequest, httpServletResponse);
         if(auth) {
             String token = httpServletRequest.getHeader(StandardStr.TOKEN.s());;
             User user = tokenService.getUser(token);
@@ -72,11 +78,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         httpServletResponse.setStatus(status.value());
     }
 
-    private boolean authRequest(Method method, HttpServletRequest request, HttpServletResponse response){
+    private boolean authRequest(AuthRequest authRequest, HttpServletRequest request, HttpServletResponse response){
         logger.info("Auth user request");
-        AuthRequest authRequest = method.getAnnotation(AuthRequest.class);
-        if(authRequest == null)
-            return true;
 
         String token = request.getHeader(StandardStr.TOKEN.s());
         if(token == null){
