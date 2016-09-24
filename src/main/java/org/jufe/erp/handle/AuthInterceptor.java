@@ -12,6 +12,7 @@ import org.jufe.erp.utils.enums.AuthLevel;
 import org.jufe.erp.utils.enums.RequestEnum;
 import org.jufe.erp.utils.enums.StandardStr;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -50,9 +51,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         }
 
         boolean auth = authRequest(method, httpServletRequest, httpServletResponse);
-        if(!auth)
-            forbidden(httpServletResponse);
-        else {
+        if(auth) {
             String token = httpServletRequest.getHeader(StandardStr.TOKEN.s());;
             User user = tokenService.getUser(token);
             httpServletRequest.setAttribute(StandardStr.USER.s(), user);
@@ -69,8 +68,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
     }
 
-    private void forbidden(HttpServletResponse httpServletResponse){
-        httpServletResponse.setStatus(403);
+    private void forbidden(HttpServletResponse httpServletResponse, HttpStatus status){
+        httpServletResponse.setStatus(status.value());
     }
 
     private boolean authRequest(Method method, HttpServletRequest request, HttpServletResponse response){
@@ -82,6 +81,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         String token = request.getHeader(StandardStr.TOKEN.s());
         if(token == null){
             response.addHeader("msg", "Lack of credentials");
+            forbidden(response, HttpStatus.UNAUTHORIZED);
             return false;
         }
 
@@ -89,12 +89,15 @@ public class AuthInterceptor implements HandlerInterceptor {
         boolean eLevel = false;
         if(user == null){
             response.addHeader("msg", "Token invalid, please reauth");
+            forbidden(response, HttpStatus.UNAUTHORIZED);
             return false;
         }
         else {
             List<Role> roles = userRoleService.getValidRoles(user.getId());
-            if(roles == null)
+            if(roles == null){
+                forbidden(response, HttpStatus.FORBIDDEN);
                 return false;
+            }
             for (Role r: roles){
                 if(r.getLevel() >= authRequest.level().l()){
                     //管理员有超级权限
@@ -107,6 +110,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             if(!eLevel){
                 response.addHeader("msg", "Low level");
+                forbidden(response, HttpStatus.FORBIDDEN);
                 return false;
             }
 
@@ -122,7 +126,6 @@ public class AuthInterceptor implements HandlerInterceptor {
             }
 
             String requestPath = request.getRequestURI();
-            boolean auth = false;
             //此处日后用搜索算法优化
             for (Policy p: policies){
                 if(requestPath.contains(p.getId())){
@@ -131,13 +134,17 @@ public class AuthInterceptor implements HandlerInterceptor {
                     if(m == null){
                         logger.error("请求方式转换失败:" + request.getMethod());
                         response.addHeader("msg", "Unknow case");
+                        forbidden(response, HttpStatus.INTERNAL_SERVER_ERROR);
                         return false;
                     }
 
-                    return reauestAuth.get(m);
+                    boolean auth = reauestAuth.get(m);
+                    if(auth)
+                        return auth;
                 }
             }
 
+            forbidden(response, HttpStatus.FORBIDDEN);
             response.addHeader("msg", "Lack of permission");
             return false;
         }
