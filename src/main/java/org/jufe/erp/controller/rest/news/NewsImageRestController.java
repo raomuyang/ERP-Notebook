@@ -31,9 +31,9 @@ public class NewsImageRestController {
 
     private Logger logger = Logger.getLogger(NewsImageRestController.class);
 
-    @RequestMapping("get/{pno}/{psize}")
+    @RequestMapping("get/{psize}/{pno}")
     public Page<NewsImage> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
-        logger.debug(String.format("get/%s/%s", pno, psize));
+        logger.debug(String.format("get/%s/%s", psize, pno));
         return service.getImagePage(pno, psize);
     }
 

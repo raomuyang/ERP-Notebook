@@ -46,9 +46,9 @@ public class PhotoWallRestController {
         return photoWallService.getAll();
     }
 
-    @RequestMapping("get-page/{pno}/{psize}")
+    @RequestMapping("get-page/{psize}/{pno}")
     public Page<PhotoWall> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
-        logger.debug(String.format("get-page/%s/%s", pno, psize));
+        logger.debug(String.format("get-page/%s/%s", psize, pno));
         return photoWallService.getPage(pno, psize);
     }
 

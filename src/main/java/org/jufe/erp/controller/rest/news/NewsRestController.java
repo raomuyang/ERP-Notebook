@@ -87,10 +87,10 @@ public class NewsRestController {
         return newsService.findByKeyword(keyw);
     }
 
-    @RequestMapping("/page/{pno}/{psize}")
+    @RequestMapping("/page/{psize}/{pno}")
     public Page<News> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
 
-        logger.debug("/page/{pno}/{psize}:" + pno + "," + "psize");
+        logger.debug("/page/{psize}/{pno}:" + psize + "," + pno);
         return newsService.findPage(pno, psize);
     }
 
@@ -109,10 +109,10 @@ public class NewsRestController {
     }
 
     @AuthRequest
-    @RequestMapping("/no-finish-page/{pno}/{psize}")
+    @RequestMapping("/no-finish-page/{psize}/{pno}")
     public Page<News> getUserNoFinishPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize, HttpServletRequest request){
 
-        logger.debug("/no-finish-page/{pno}/{psize}:" + pno + "," + "psize");
+        logger.debug("/no-finish-page/{psize}/{pno}:" + psize + "," + pno);
         String id = "";
         try {
             User user = (User) request.getAttribute(StandardStr.USER.s());

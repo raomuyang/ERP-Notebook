@@ -26,9 +26,9 @@ public class TimeShaftRestController {
     private TimeShaftService timeShaftService;
     private Logger logger;
 
-    @RequestMapping("/get-page/{pno}/{psize}")
+    @RequestMapping("/get-page/{psize}/{pno}")
     public Page<TimeShaft> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
-        logger.debug(String.format("get-page/%s/%s", pno, psize));
+        logger.debug(String.format("get-page/%s/%s", psize, pno));
         return timeShaftService.findPage(pno, psize);
     }
 
