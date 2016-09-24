@@ -12,6 +12,7 @@ import org.jufe.erp.utils.enums.AuthLevel;
 import org.jufe.erp.utils.enums.RequestEnum;
 import org.jufe.erp.utils.enums.StandardStr;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -39,25 +40,24 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
-//        HandlerMethod handlerMethod = null;
-//        Method method = null;
-//        try {
-//            handlerMethod = (HandlerMethod) o;
-//            method = handlerMethod.getMethod();
-//        }catch (Exception e){
-//            return true;
-//        }
-//
-//        boolean auth = authRequest(method, httpServletRequest, httpServletResponse);
-//        if(!auth)
-//            forbidden(httpServletResponse);
-//        else {
-//            String token = httpServletRequest.getHeader(StandardStr.TOKEN.s());;
-//            User user = tokenService.getUser(token);
-//            httpServletRequest.setAttribute(StandardStr.USER.s(), user);
-//        }
-//        return auth;
-        return true;
+        HandlerMethod handlerMethod = null;
+        Method method = null;
+        try {
+            handlerMethod = (HandlerMethod) o;
+            method = handlerMethod.getMethod();
+        }catch (Exception e){
+            return true;
+        }
+
+        boolean auth = authRequest(method, httpServletRequest, httpServletResponse);
+        if(!auth)
+            forbidden(httpServletResponse);
+        else {
+            String token = httpServletRequest.getHeader(StandardStr.TOKEN.s());;
+            User user = tokenService.getUser(token);
+            httpServletRequest.setAttribute(StandardStr.USER.s(), user);
+        }
+        return auth;
     }
 
     @Override
