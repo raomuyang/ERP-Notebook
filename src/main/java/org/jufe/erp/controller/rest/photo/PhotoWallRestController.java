@@ -113,7 +113,7 @@ public class PhotoWallRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "upload-photo", method = RequestMethod.PUT)
+    @RequestMapping(value = "upload-photo", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> uploadPhoto(PhotoWall photoInfo, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("upload-photo：" + photoInfo + "," + imageFile );
 

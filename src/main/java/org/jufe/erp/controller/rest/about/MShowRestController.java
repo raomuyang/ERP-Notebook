@@ -162,7 +162,7 @@ public class MShowRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/upload-image", method = RequestMethod.PUT)
+    @RequestMapping(value = "/upload-image", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> uploadImage(MultipartFile originFile, HttpServletRequest request){
         logger.debug("/upload-iamge");
         ModelMap map = new ModelMap();
@@ -184,7 +184,7 @@ public class MShowRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/upload-video", method = RequestMethod.PUT)
+    @RequestMapping(value = "/upload-video", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> uploadVideo(MultipartFile originFile, HttpServletRequest request){
         logger.debug("/upload-iamge");
         ModelMap map = new ModelMap();

@@ -157,17 +157,19 @@ public class UserRestController {
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/regist", method = RequestMethod.PUT)
+    @RequestMapping(value = "/regist", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> regist(User user, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("/regist"+ user == null ? user: user.getId());
         boolean result = false;
         ModelMap map = new ModelMap();
-        result = userService.addUser(user, imageFile,
-                request.getSession().getServletContext().getRealPath("/"));
+
+        if(!check(user.getId()))
+            result = userService.addUser(user, imageFile,
+                    request.getSession().getServletContext().getRealPath("/"));
 
         if(!result) {
             user.setPwd("**************");
-            map.put("msg", "注册失败，请检查后重试:" + user);
+            map.put("msg", "当前用户已存在:" + user.getId());
         }
 
         map.put("result", result);

@@ -108,7 +108,7 @@ public class NewsImageRestController {
     }
 
     @AuthRequest(level = AuthLevel.USER)
-    @RequestMapping(value = "upload-image", method = RequestMethod.PUT)
+    @RequestMapping(value = "upload-image", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> uploadNewsImage(NewsImage newsImage, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("upload-news-image:" + newsImage + "," + imageFile);
         boolean result = false;

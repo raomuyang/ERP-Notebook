@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -60,6 +61,7 @@ public class UserServicesImpl implements UserService{
     public boolean addUser(User user, MultipartFile multipartFile, String rootPath) {
 
         user.setPwd(MD5.getMD5(user.getPwd()));
+        user.setRegisterTime(new Date(System.currentTimeMillis()));
         boolean res = repository.addUser(user);
         if(res)
             try {
