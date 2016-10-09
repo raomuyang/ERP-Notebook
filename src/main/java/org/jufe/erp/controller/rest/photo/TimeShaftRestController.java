@@ -85,7 +85,7 @@ public class TimeShaftRestController {
      * @return
      */
     @AuthRequest(level = AuthLevel.KEEPER)
-    @RequestMapping(value = "/add-image", method = RequestMethod.PUT)
+    @RequestMapping(value = "/add-image", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> addImage(TimeShaft shaftNode, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("/add-image:" + shaftNode + "," + imageFile);
 
