@@ -22,22 +22,34 @@ public class ERPInfoServiceImpl implements ERPInfoService{
 
     @Override
     public String getTel() {
-        return getInfo().getTel();
+        ERPInfo info = getInfo();
+        if(info == null)
+            return null;
+        return info.getTel();
     }
 
     @Override
     public String getIntro() {
-        return getInfo().getIntro();
+        ERPInfo info = getInfo();
+        if(info == null)
+            return null;
+        return info.getIntro();
     }
 
     @Override
     public String getJoinUs() {
-        return getInfo().getJoinUs();
+        ERPInfo info = getInfo();
+        if(info == null)
+            return null;
+        return info.getJoinUs();
     }
 
     @Override
     public String getOrgStruct() {
-        return getInfo().getOrg();
+        ERPInfo info = getInfo();
+        if(info == null)
+            return null;
+        return info.getOrg();
     }
 
     @Override
