@@ -190,10 +190,11 @@ public class UserRestController {
 
         if(user != null){
             User u = userService.checkLogin(user.getId(), user.getPwd());
-            if(u != null)
+            if(u != null) {
                 result = true;
-            TokenInfo tokenInfo = tokenService.create(user.getId());
-            map.put("token", tokenInfo.getToken());
+                TokenInfo tokenInfo = tokenService.create(user.getId());
+                map.put("token", tokenInfo.getToken());
+            }
         }
 
         map.put("result", result);
