@@ -59,7 +59,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<UserRole> getValidsBeforeDate(String userId, Date termDate) {
-        return userRoleRepository.findValidsBeforeTermD(userId, termDate);
+        return userRoleRepository.findValidsInDate(userId, termDate);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<UserRole> getValids(String userId) {
-        return userRoleRepository.findValidsBeforeTermD(userId, new Date(System.currentTimeMillis()) );
+        return userRoleRepository.findValidsInDate(userId, new Date(System.currentTimeMillis()) );
     }
 
     @Override

@@ -21,8 +21,8 @@ public interface UserRoleRepository extends BaseInterface<UserRole> {
     /**
      * 查找用户有效的角色绑定
      * @param userId
-     * @param termDate
+     * @param date
      * @return
      */
-    public List<UserRole> findValidsBeforeTermD(String userId, Date termDate);
+    public List<UserRole> findValidsInDate(String userId, Date date);
 }
