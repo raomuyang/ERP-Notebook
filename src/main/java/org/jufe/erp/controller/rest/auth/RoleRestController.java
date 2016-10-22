@@ -89,12 +89,14 @@ public class RoleRestController {
         boolean res = false;
         if(role != null && role.getId() != null){
             Role originRole = roleService.getRoleById(role.getId());
-            if(role.getRoleDes() != null)
-                originRole.setRoleDes(role.getRoleDes());
-            if(role.getRoleName() != null)
-                originRole.setRoleName(role.getRoleName());
-            res = roleService.updateRole(role);
-            map.put("id", role.getId());
+            if(originRole != null){
+                if(role.getRoleDes() != null)
+                    originRole.setRoleDes(role.getRoleDes());
+                if(role.getRoleName() != null)
+                    originRole.setRoleName(role.getRoleName());
+                res = roleService.updateRole(role);
+                map.put("id", role.getId());
+            }
         }
         map.put("result", res);
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);
