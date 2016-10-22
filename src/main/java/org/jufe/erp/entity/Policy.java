@@ -21,7 +21,7 @@ public class Policy implements Serializable{
         auth.put(RequestEnum.READ, false);
         auth.put(RequestEnum.WRITE, false);
         auth.put(RequestEnum.UPDATE, false);
-        auth.put(RequestEnum.UPDATE, false);
+        auth.put(RequestEnum.DELETE, false);
     }
     public String getId() {
         return id;
