@@ -37,10 +37,10 @@ public class NewsUpdateAspect {
     @Autowired
     private NewsImageService newsImageService;
 
-    @Pointcut("execution(* org.jufe.erp.controller.rest..update*(..))")
+    @Pointcut("execution(* org.jufe.erp.controller.rest.news..update*(..))")
     void update(){}
 
-    @Pointcut("execution(* org.jufe.erp.controller.rest..delete*())")
+    @Pointcut("execution(* org.jufe.erp.controller.rest.news..delete*())")
     void delete(){}
 
     @Before("update()")
