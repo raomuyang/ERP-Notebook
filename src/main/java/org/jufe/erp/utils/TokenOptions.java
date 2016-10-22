@@ -58,8 +58,8 @@ public class TokenOptions {
             return false;
         try {
             ObjectId id = new ObjectId(tokenInfo.getId());
-            int validDays = (int) (tokenInfo.getValidDays() / (1000 * 60 * 60 * 24));
-            Date invalidDate = DateTools.getDateAfterXDay(id.getDate(), validDays);
+            long validDays = tokenInfo.getValidDays() ;
+            Date invalidDate = DateTools.getDateAfter(id.getDate(), validDays);
             Date current = new Date(System.currentTimeMillis());
             return current.before(invalidDate);
         }catch (Exception e){

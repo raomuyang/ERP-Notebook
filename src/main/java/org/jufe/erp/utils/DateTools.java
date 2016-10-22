@@ -23,6 +23,10 @@ public class DateTools {
         return getDateBeforXDay(date,day);
     }
 
+    public static Date getDateAfter(Date d, long mills){
+        return new Date(d.getTime() + mills);
+    }
+
     public static Date getDateAfterXDay(Date d, int day){
         Calendar now = Calendar.getInstance();
         now.setTime(d);
@@ -53,6 +57,11 @@ public class DateTools {
             }
         }
 
+    }
+
+    public static void main(String[] args) {
+        long t = 1000 * 60 * 60;
+        System.out.println(new Date(System.currentTimeMillis()).before(getDateAfter(new Date(System.currentTimeMillis()), t)));
     }
 
 }
