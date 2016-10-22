@@ -38,6 +38,31 @@ public class MShowServiceImpl implements MShowService{
 
     @Override
     public boolean update(MShow mShow) {
+        if(mShow == null)
+            return false;
+        /**
+         * 更新历史url列表
+         */
+        MShow mShowCurrent = getMShow();
+        if(mShowCurrent == null)
+            mShowCurrent = new MShow();
+
+        List<String> iHistory = mShowCurrent.getiHistory();
+        if(iHistory == null)
+            iHistory = new ArrayList<>();
+        for (String url: mShow.getIurls())
+            if(!(iHistory.contains(url)))
+                iHistory.add(url);
+
+        List<String> vHistory = mShowCurrent.getvHistory();
+        if(vHistory == null)
+            vHistory = new ArrayList<>();
+        if(!vHistory.contains(mShow.getVurl()))
+            vHistory.add(mShow.getVurl());
+
+        mShow.setiHistory(iHistory);
+        mShow.setvHistory(vHistory);
+
         return mShowRepository.update(mShow);
     }
 
@@ -46,15 +71,18 @@ public class MShowServiceImpl implements MShowService{
 
         //更新urls时一并更新历史链接
         MShow mShow = getMShow();
-        List<String> pushList = new ArrayList<>();
-        for (String url: iurls)
-            if(mShow.getiHistory().contains(url))
-                pushList.add(url);
+        List<String> iList = createNewIHistoryList(iurls, mShow);
+
+        if (mShow == null) {
+            mShow = new MShow();
+            mShow.setiHistory(iList);
+            mShow.setIurls(iurls);
+            return mShowRepository.update(mShow);
+        }
 
         mShowRepository.getMongoTemplate().updateFirst(
-                new Query(new Criteria("id").is(MShowRepository.id)),
-                new Update().push("iHistory", pushList), MShow.class
-        );
+                    new Query(new Criteria("id").is(MShowRepository.id)),
+                    new Update().set("iHistory", iList), MShow.class);
 
         return mShowRepository.updateIurls(iurls);
     }
@@ -62,10 +90,18 @@ public class MShowServiceImpl implements MShowService{
     @Override
     public boolean updateVurl(String vurl) {
         MShow mShow = getMShow();
-        if( !mShow.getvHistory().contains( vurl ) )
-            mShowRepository.getMongoTemplate().updateFirst(
-                    new Query(new Criteria("id").is(MShowRepository.id)),
-                    new Update().push("vHistory", vurl), MShow.class);
+        List<String> vHistory = createNewVHistoryList(vurl, mShow);
+
+        if(mShow == null){
+            mShow = new MShow();
+            mShow.setvHistory(vHistory);
+            mShow.setVurl(vurl);
+            return mShowRepository.update(mShow);
+        }
+
+        mShowRepository.getMongoTemplate().updateFirst(
+                new Query(new Criteria("id").is(MShowRepository.id)),
+                new Update().set("vHistory", vurl), MShow.class);
         return mShowRepository.updateVurl(vurl);
     }
 
@@ -88,15 +124,28 @@ public class MShowServiceImpl implements MShowService{
     public boolean deleteImages(List<String> urls, String rootPath) {
         if(urls == null || rootPath == null)
             return false;
-        List<String> imageList = getMShow().getiHistory();
+        MShow mShow = getMShow();
+        if(mShow == null)
+            return false;
+
+        List<String> imageList = mShow.getiHistory();
+        if(imageList == null)
+            return false;
+        int len = urls.size();
         urls.forEach(u->{
             try {
-                FileUtils.deleteFile(rootPath + u);
-                imageList.remove(u);
+                boolean delF = FileUtils.deleteFile(rootPath + u);
+                boolean remU = imageList.remove(u);
+                logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
+                        (rootPath + u), delF, u, remU));
             }catch (Exception e){
                 logger.error("delete image:" + e);
             }
         });
+
+        if(imageList.size() == len)
+            return false;
+
         return updateIHistory(imageList);
     }
 
@@ -104,15 +153,26 @@ public class MShowServiceImpl implements MShowService{
     public boolean deleteVideos(List<String> urls, String rootPath) {
         if(urls == null || rootPath == null)
             return false;
-        List<String> videoList = getMShow().getvHistory();
+        MShow mShow = getMShow();
+        if(mShow == null)
+            return false;
+
+        List<String> videoList = mShow.getvHistory();
+        int len = videoList.size();
+        if(videoList == null)
+            return false;
         urls.forEach(u->{
             try {
-                FileUtils.deleteFile(rootPath + u);
-                videoList.remove(u);
+                boolean delF = FileUtils.deleteFile(rootPath + u);
+                boolean remU = videoList.remove(u);
+                logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
+                        (rootPath + u), delF, u, remU));
             }catch (Exception e){
                 logger.error("delete video:" + e);
             }
         });
+        if(videoList.size() == len)
+            return false;
         return updateVHistory(videoList);
     }
 
@@ -129,8 +189,16 @@ public class MShowServiceImpl implements MShowService{
             String filename = fileId + suffix;
 
             boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
-            if(res)
-                return "/" + subpath + "/" + filename;
+            if(res) {
+                //将新的图片url加到历史【图库】中
+                String url = "/" + subpath + "/" + filename;
+                List iurls = new ArrayList();
+                iurls.add(url);
+                List<String> iHistory = createNewIHistoryList(iurls, getMShow());
+                updateIHistory(iHistory);
+
+                return url;
+            }
         } catch (IOException e) {
             logger.error("Upload Image:" + e);
         }
@@ -150,11 +218,44 @@ public class MShowServiceImpl implements MShowService{
             String filename = fileId + suffix;
 
             boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
-            if(res)
-                return "/" + subpath + "/" + filename;
+            if(res) {
+                //将新的视频url加到历史【视频库】中
+                String url = "/" + subpath + "/" + filename;
+                List<String> vHistory = createNewVHistoryList(url, getMShow());
+                updateVHistory(vHistory);
+
+                return url;
+            }
         } catch (IOException e) {
             logger.error("Upload Video:" + e);
         }
         return null;
+    }
+
+    private List<String> createNewIHistoryList(List<String> iurls, MShow mShow){
+        if(iurls == null || iurls.size() == 0)
+            return null;
+
+        List<String> iList = null;
+        if(mShow == null || (iList = mShow.getiHistory()) == null)
+            iList = new ArrayList<>();
+
+        for (String url: iurls)
+            if( !iList.contains(url))
+                iList.add(url);
+
+        return iList;
+    }
+
+    private List<String> createNewVHistoryList(String vurl, MShow mShow){
+        List<String> vHistoryList = null;
+        if(mShow != null )
+            vHistoryList = mShow.getvHistory();
+        if(vHistoryList == null)
+            vHistoryList = new ArrayList<>();
+
+        if(!vHistoryList.contains( vurl ) )
+            vHistoryList.add(vurl);
+        return vHistoryList;
     }
 }

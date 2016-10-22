@@ -163,18 +163,18 @@ public class MShowRestController {
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/upload-image", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> uploadImage(MultipartFile originFile, HttpServletRequest request){
-        logger.debug("/upload-iamge");
+    public ResponseEntity<ModelMap> uploadImage(MultipartFile image, HttpServletRequest request){
+        logger.debug("/upload-image");
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(originFile != null){
-            String url = mShowService.uploadImage(originFile,
+        if(image != null){
+            String url = mShowService.uploadImage(image,
                     request.getSession().getServletContext().getRealPath("/"));
             map.put("url", url);
             if(url != null && !url.equals(""))
                 result = true;
             else
-                map.put("msg", "更新失败，请检查后重试");
+                map.put("msg", "上传失败，请检查后重试");
         }
         else
             map.put("msg", "参数错误");
@@ -185,12 +185,12 @@ public class MShowRestController {
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
     @RequestMapping(value = "/upload-video", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> uploadVideo(MultipartFile originFile, HttpServletRequest request){
-        logger.debug("/upload-iamge");
+    public ResponseEntity<ModelMap> uploadVideo(MultipartFile video, HttpServletRequest request){
+        logger.debug("/upload-video");
         ModelMap map = new ModelMap();
         boolean result = false;
-        if(originFile != null){
-            String url = mShowService.uploadVideo(originFile,
+        if(video != null){
+            String url = mShowService.uploadVideo(video,
                     request.getSession().getServletContext().getRealPath("/"));
             map.put("url", url);
             if(url != null && !url.equals(""))
