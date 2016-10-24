@@ -29,9 +29,9 @@ public class MShowRestController {
 
     private Logger logger = Logger.getLogger(MShowRestController.class);
 
-    @RequestMapping("/get")
+    @RequestMapping("/main")
     public MShow getMShow(){
-        logger.debug("/get");
+        logger.debug("/main");
         return mShowService.getMShow();
     }
 
