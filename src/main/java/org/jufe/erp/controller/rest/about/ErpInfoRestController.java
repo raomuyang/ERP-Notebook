@@ -26,33 +26,33 @@ public class ErpInfoRestController {
 
     private Logger logger = Logger.getLogger(ErpInfoRestController.class);
 
-    @RequestMapping("/get-base-info")
+    @RequestMapping("/base-info")
     public ERPInfo getBaseInfo(){
-        logger.debug("/get-base-info");
+        logger.debug("/base-info");
         return erpInfoService.getInfo();
     }
 
-    @RequestMapping("/get-tel")
+    @RequestMapping("/tel")
     public String getTel(){
-        logger.debug("/get-tel");
+        logger.debug("/tel");
         return erpInfoService.getTel();
     }
 
-    @RequestMapping("/get-intro")
+    @RequestMapping("/intro")
     public String getIntro(){
-        logger.debug("/get-intro");
+        logger.debug("/intro");
         return erpInfoService.getIntro();
     }
 
-    @RequestMapping("/get-joinus")
+    @RequestMapping("/joinus")
     public String getJoinUs(){
-        logger.debug("/get-joinus");
+        logger.debug("/joinus");
         return erpInfoService.getJoinUs();
     }
 
-    @RequestMapping("/get-org-struct")
+    @RequestMapping("/org-struct")
     public String getStruct(){
-        logger.debug("/get-org-struct");
+        logger.debug("/org-struct");
         return erpInfoService.getOrgStruct();
     }
 
