@@ -34,38 +34,39 @@ public class RolePolicyRestController {
     private Logger logger = Logger.getLogger(PolicyRestController.class);
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping("/get-all")
+    @RequestMapping("/info/all")
     public List<RolePolocy> getAll(){
-        logger.debug("/get-all");
+        logger.debug("/rest/auth/role-policy/info/all");
         return rolePolicyService.getAll();
     }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping("/get/{roleId}/{policyId}")
+    @RequestMapping("/info/roleid/{roleId}/policyid/{policyId}")
     public RolePolocy get(@PathVariable("roleId") String roleId, @PathVariable("policyId") String policyId){
-        logger.debug(String.format("/get role[%s], policyId[%s]", roleId, policyId));
+        logger.debug(String.format("role-policy: role[%s], policyId[%s]", roleId, policyId));
         return rolePolicyService.get(roleId, policyId);
     }
 
-    @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping("/get-policy-by-roleid/{roleId}")
-    public List<Policy> getPolicyByRoleId(@PathVariable("roleId") String roleId){
-        logger.debug("/get-policy-by-roleid:" + roleId);
-        return rolePolicyService.getPolicyByRoleId(roleId);
-    }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping("/get-valid-role-policy/{roleId}/{date}")
+    @RequestMapping("/info/valid/roleid/{roleId}/date/{date}")
     public List<RolePolocy> getValidRolePolicy(@PathVariable("roleId") String roleId, @PathVariable("date") String date){
-        logger.debug("/get-valid-role-policy:" + roleId + "," + date);
+        logger.debug("Get valid role-policy:" + roleId + "," + date);
         Date dateObj = DateTools.string2Date(date);
         return rolePolicyService.getValidBeforeDate(roleId, dateObj);
     }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping("/get-valid-policies-before/{roleId}/{dateStr}")
+    @RequestMapping("/policies/roleid/{roleId}")
+    public List<Policy> getPolicyByRoleId(@PathVariable("roleId") String roleId){
+        logger.debug("Get policy by roleid:" + roleId);
+        return rolePolicyService.getPolicyByRoleId(roleId);
+    }
+
+    @AuthRequest(level = AuthLevel.ADMIN)
+    @RequestMapping("/policies/valid/roleid/{roleId}/data/{dateStr}")
     public List<Policy> getValidPolicy(@PathVariable("roleId") String roleId, @PathVariable("dateStr") String dateStr){
-        logger.debug("/get-valid-policy:" + roleId + "," + dateStr);
+        logger.debug("/Get valid policies:" + roleId + "," + dateStr);
         if(roleId == null || dateStr == null)
             return null;
         Date dateObj = DateTools.string2Date(dateStr);
@@ -73,9 +74,9 @@ public class RolePolicyRestController {
     }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping("get-valid-policies/{roleId}")
+    @RequestMapping("/policies/valid/roleid/{roleId}")
     public List<Policy> getValidPolicy(@PathVariable("roleId") String roleId){
-        logger.debug("get-valid-policies:" + roleId);
+        logger.debug("Get valid policies:" + roleId);
 
         if(roleId == null)
             return null;

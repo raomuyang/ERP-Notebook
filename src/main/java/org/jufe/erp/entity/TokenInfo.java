@@ -13,7 +13,7 @@ public class TokenInfo {
     private String id;
     private String userId;
     private String token;
-    private long validDays = 30 * 60 * 1000; //失效时间，默认为30分钟
+    private long validDays = 30 * 60 * 1000 * 48; //失效时间，默认为30分钟
     private Date lastTime;
 
     public String getId() {
