@@ -23,9 +23,9 @@ public class PolicyRestController {
     private Logger logger = Logger.getLogger(PolicyRestController.class);
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping("/get-policy/{policyId}")
+    @RequestMapping("/policy-info/{policyId}")
     public Policy getPolicy(@PathVariable("policyId") String id){
-        logger.debug("/getPolicy: " + id);
+        logger.debug("/policy-info: " + id);
         return policyService.getPolicy(id);
     }
 
