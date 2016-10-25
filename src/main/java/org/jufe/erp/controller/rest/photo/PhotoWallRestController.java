@@ -28,32 +28,32 @@ public class PhotoWallRestController {
 
     private Logger logger = Logger.getLogger(PhotoWallRestController.class);
 
-    @RequestMapping("get-by-grade/{grade}")
+    @RequestMapping("/grade/{grade}")
     public List<PhotoWall> getByGrade(@PathVariable("grade") int grade){
         logger.debug("get by grade:" + grade);
         return photoWallService.getPhotosByGrade(grade);
     }
 
-    @RequestMapping("search/{username}")
+    @RequestMapping("/username/{username}")
     public List<PhotoWall> getByNameLike(@PathVariable("username") String userName){
         logger.debug("Search by userName:" + userName);
         return photoWallService.getPhotosByUserNameLike(userName);
     }
 
-    @RequestMapping("get-all")
+    @RequestMapping("/list")
     public List<PhotoWall> getAll(){
         logger.debug("getAll");
         return photoWallService.getAll();
     }
 
-    @RequestMapping("get-page/{psize}/{pno}")
+    @RequestMapping("/page/psize/{psize}/pno/{pno}")
     public Page<PhotoWall> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
         logger.debug(String.format("get-page/%s/%s", psize, pno));
         return photoWallService.getPage(pno, psize);
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> delete(@RequestBody String id, HttpServletRequest request){
         logger.debug("delete:" + id);
         boolean result = false;
@@ -78,7 +78,7 @@ public class PhotoWallRestController {
      * @return
      */
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-info", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> update(@RequestBody PhotoWall photoInfo){
         logger.debug("update-username:" + photoInfo);
         boolean result = false;
@@ -96,7 +96,7 @@ public class PhotoWallRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "update-photo", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-photo", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> updatePhoto(String id, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("update-photo:" + id + "," + imageFile);
         boolean result = false;
@@ -113,7 +113,7 @@ public class PhotoWallRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "upload-photo", method = RequestMethod.POST)
+    @RequestMapping(value = "/upload-photo", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> uploadPhoto(PhotoWall photoInfo, MultipartFile imageFile, HttpServletRequest request){
         logger.debug("upload-photo：" + photoInfo + "," + imageFile );
 
