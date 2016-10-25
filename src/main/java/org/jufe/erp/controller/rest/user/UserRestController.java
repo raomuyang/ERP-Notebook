@@ -3,8 +3,11 @@ package org.jufe.erp.controller.rest.user;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.TokenInfo;
 import org.jufe.erp.entity.User;
+import org.jufe.erp.entity.UserRole;
 import org.jufe.erp.service.auth.TokenService;
+import org.jufe.erp.service.auth.UserRoleService;
 import org.jufe.erp.service.user.UserService;
+import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.anno.AuthRequest;
 import org.jufe.erp.utils.enums.StandardStr;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +31,10 @@ public class UserRestController {
 
     @Autowired
     private UserService userService;
-    @Autowired    private TokenService tokenService;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private UserRoleService userRoleService;
 
     private Logger logger = Logger.getLogger(UserRestController.class);
 
@@ -39,7 +46,7 @@ public class UserRestController {
     }
 
 
-    @RequestMapping("/get/{id}")
+    @RequestMapping("/info/{id}")
     public User getById(@PathVariable("id") String id){
         logger.debug("/get/"+ id);
         User user = userService.findById(id);
@@ -49,7 +56,7 @@ public class UserRestController {
     }
 
 
-    @RequestMapping("/search-by-name/{name}")
+    @RequestMapping("/info/list/name/{name}")
     public List<User> getByName(@PathVariable("name") String name){
         logger.debug("/get-by-name/"+ name);
         List<User> users = userService.findByName(name);
@@ -60,7 +67,7 @@ public class UserRestController {
         return users;
     }
 
-    @RequestMapping("/search-by-grade/{grade}")
+    @RequestMapping("/info/list/grade/{grade}")
     public List<User> getByGrade(@PathVariable("grade") int grade){
         logger.debug("/get-by-grade/"+ grade);
         List<User> users = userService.findByGrade(grade);
@@ -70,7 +77,7 @@ public class UserRestController {
         return users;
     }
 
-    @RequestMapping("/search-by-location/{location}")
+    @RequestMapping("/info/list/location/{location}")
     public List<User> getByLocation(@PathVariable("location") String location){
         logger.debug("/get-by-name/"+ location);
         List<User> users = userService.findByLocation(location);
@@ -118,6 +125,8 @@ public class UserRestController {
         boolean result = false;
         ModelMap map = new ModelMap();
 
+        User u = (User) request.getAttribute(StandardStr.USER.s());
+        user.setId(u.getId());
         result = userService.updateUserPwd(user);
         if(!result)
             map.put("msg", "更新失败，请检查后重试:" + user);
@@ -170,6 +179,14 @@ public class UserRestController {
         if(!result) {
             user.setPwd("**************");
             map.put("msg", "当前用户已存在:" + user.getId());
+        }
+        else {
+            UserRole userRole = new UserRole();
+            userRole.setRoleId("user");
+            userRole.setUserId(user.getId());
+            userRole.setTermD(DateTools.getDateAfter(
+                    new Date(System.currentTimeMillis()), 999999999));
+            userRoleService.saveUserRole(userRole);
         }
 
         map.put("result", result);
