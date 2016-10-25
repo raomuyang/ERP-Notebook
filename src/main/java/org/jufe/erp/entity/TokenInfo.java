@@ -8,7 +8,7 @@ import java.util.Date;
  * Created by raomengnan on 16-9-21.
  * Tocken的相关内容
  */
-@Document(collection = "tockens")
+@Document(collection = "tokens")
 public class TokenInfo {
     private String id;
     private String userId;
