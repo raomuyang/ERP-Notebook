@@ -17,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,13 +42,19 @@ public class NewsRestController {
      * @return
      */
     @RequestMapping("/{newsId}")
-    public News getById(@PathVariable("newsId") String id){
+    public News getById(@PathVariable("newsId") String id, HttpServletRequest request, HttpServletResponse response){
         logger.debug("Get by id:" + id);
         if(id == null || id.isEmpty())
             return null;
         News news = newsService.findById(id);
-        if(news == null || !news.getFinish())
-            return null;
+        if(news != null || !news.getFinish()){
+            User user = (User) request.getAttribute(StandardStr.USER.s());
+            if(user == null || !user.getId().equals(news.getAuthorId())){
+                response.setStatus(403);
+                response.setHeader("msg", "ILLEGAL OPERATION");
+                return null;
+            }
+        }
         return news;
     }
 

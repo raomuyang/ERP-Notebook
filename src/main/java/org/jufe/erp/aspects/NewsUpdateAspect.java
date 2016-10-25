@@ -40,8 +40,11 @@ public class NewsUpdateAspect {
     @Pointcut("execution(* org.jufe.erp.controller.rest.news..update*(..))")
     void update(){}
 
-    @Pointcut("execution(* org.jufe.erp.controller.rest.news..delete*())")
+    @Pointcut("execution(* org.jufe.erp.controller.rest.news..delete*(..))")
     void delete(){}
+
+    @Pointcut("execution(* org.jufe.erp.controller.rest.news..upload*(..))")
+    void upload(){}
 
     @Before("update()")
     void authBeforeUpdate(JoinPoint joinPoint){
@@ -122,6 +125,31 @@ public class NewsUpdateAspect {
 
         }catch (Exception e){
             throw e;
+        }
+
+    }
+
+    @Before("upload()")
+    void authBeforeUpload(JoinPoint joinPoint){
+        Object[] args = joinPoint.getArgs();
+        if(args.length < 3)
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Param Error");
+        NewsImage newsImage = null;
+        HttpServletRequest request;
+        User user = null;
+        try {
+            newsImage = (NewsImage) args[0];
+            request = (HttpServletRequest) args[2];
+            user = (User) request.getAttribute(StandardStr.USER.s());
+        }catch (Exception e){
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Param Error, please check it");
+        }
+
+        News news = newsService.findById(newsImage.getNewsId());
+        if(news == null)
+            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "News doesn't exist");
+        if(user== null || !user.getId().equals(news.getAuthorId())) {
+            throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "ILLEGAL OPERATION");
         }
 
     }
