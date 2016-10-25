@@ -1,10 +1,12 @@
 package org.jufe.erp.controller.rest.news;
 
 import org.apache.log4j.Logger;
+import org.jufe.erp.entity.News;
 import org.jufe.erp.entity.NewsImage;
 import org.jufe.erp.entity.User;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.service.news.NewsImageService;
+import org.jufe.erp.service.news.NewsService;
 import org.jufe.erp.utils.anno.AuthRequest;
 import org.jufe.erp.utils.enums.AuthLevel;
 import org.jufe.erp.utils.enums.StandardStr;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,18 +32,41 @@ public class NewsImageRestController {
 
     @Autowired
     private NewsImageService service;
+    @Autowired
+    private NewsService newsService;
 
     private Logger logger = Logger.getLogger(NewsImageRestController.class);
 
-    @RequestMapping("get/{psize}/{pno}")
+    @AuthRequest(level = AuthLevel.CONTROLLER)
+    @RequestMapping("/psize/{psize}/pno/{pno}")
     public Page<NewsImage> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
         logger.debug(String.format("get/%s/%s", psize, pno));
         return service.getImagePage(pno, psize);
     }
 
-    @RequestMapping("get-by-newsid/{newsid}")
-    public List<NewsImage> getByNewsId(@PathVariable("newsid") String newsId){
+    /**
+     * 不验证token的话，不予以显示未完成文章的图片
+     * @param newsId
+     * @param request
+     * @return
+     */
+    @RequestMapping("/newsid/{newsid}")
+    public List<NewsImage> getByNewsId(@PathVariable("newsid") String newsId, HttpServletRequest request, HttpServletResponse response){
         logger.debug("get-by-newsid/" + newsId);
+        News news = newsService.findById(newsId);
+        if(news == null) {
+            response.setStatus(404);
+            response.setHeader("msg", "News doesn't exist");
+            return new ArrayList<>();
+        }
+
+        if(!news.getFinish()){
+            User user = (User) request.getAttribute(StandardStr.USER.s());
+            if(user == null || !user.getId().equals(news.getAuthorId())) {
+                response.setStatus(403);
+                return new ArrayList<>();
+            }
+        }
         return service.getImageByNewsId(newsId);
     }
 
@@ -64,12 +91,12 @@ public class NewsImageRestController {
 
     /**
      * Controller以上的用户有直接删除图片的权限
-     * 其他用户须附带文章同时删除
+     * 其他用户只能操作自己的文章图片
      * @param url
      * @param request
      * @return
      */
-    @AuthRequest(level = AuthLevel.CONTROLLER)
+    @AuthRequest(level = AuthLevel.USER)
     @RequestMapping(value = "delete-by-url", method = RequestMethod.DELETE)
     public ResponseEntity<ModelMap> deleteByUrl(@RequestBody String url, HttpServletRequest request){
         logger.debug("deleteByUrl:" + url);

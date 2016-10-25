@@ -14,6 +14,7 @@ import java.util.List;
 
 /**
  * Created by Raomengnan on 2016/8/30.
+ * 所有的一般查询，均只展示finish==true的
  */
 @Repository
 public class NewsRepositoryImpl extends BaseRepository<News> implements NewsRepository{
@@ -21,7 +22,8 @@ public class NewsRepositoryImpl extends BaseRepository<News> implements NewsRepo
     private Criteria crFin = new Criteria("finish").is(true);
 
     public List<News> findByAuthorId(String authorId){
-        return super.find(new Query(new Criteria("authorId").is(authorId)));
+        Criteria criteria = new Criteria("authorId").is(authorId);
+        return super.find(new Query(new Criteria().andOperator(criteria, crFin)));
     }
 
     public List<News> findByAuthor(String author){
@@ -63,6 +65,8 @@ public class NewsRepositoryImpl extends BaseRepository<News> implements NewsRepo
     }
 
     public boolean update(News news){
+        if(news == null || news.getId() == null)
+            return false;
         return super.update(new Query(new Criteria("id").is(news.getId())),
                 new Update().set("title", news.getTitle())
                         .set("context", news.getContext())

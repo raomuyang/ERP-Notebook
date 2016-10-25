@@ -3,6 +3,7 @@ package org.jufe.erp.repository.user.impl;
 import org.jufe.erp.entity.User;
 import org.jufe.erp.repository.BaseRepository;
 import org.jufe.erp.repository.user.UserRepository;
+import org.jufe.erp.utils.MongoUtil;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -12,7 +13,7 @@ import java.util.List;
 
 /**
  * Created by raomengnan on 16-8-29.
- * Option with DB about User
+ * Operation with DB about User
  */
 @Repository
 public class UserRepositoryImpl extends BaseRepository<User> implements UserRepository{
@@ -22,7 +23,8 @@ public class UserRepositoryImpl extends BaseRepository<User> implements UserRepo
     }
 
     public List<User> findByName(String name){
-        return super.find(new Query(new Criteria("userName").is(name)));
+        Criteria criteria = MongoUtil.fuzzyCriteria("userName", name);
+        return super.find(new Query(criteria));
     }
 
     public List<User> findByGrade(int grade){
@@ -30,7 +32,8 @@ public class UserRepositoryImpl extends BaseRepository<User> implements UserRepo
     }
 
     public List<User> findByLocation(String location){
-        return super.find(new Query(new Criteria("nowInWhere").is(location )));
+        Criteria criteria = MongoUtil.fuzzyCriteria("nowInWhere", location);
+        return super.find(new Query(criteria));
     }
 
     public User findUserByIdAndPwd(String id, String pwd){

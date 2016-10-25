@@ -44,12 +44,14 @@ public class UserRoleServiceImpl implements UserRoleService {
             for (UserRole userRole: userRoles)
                 userIds.add(userRole.getUserId());
 
-        return getUserById(userIds);
+        List<User> users = getUserById(userIds);
+        users.forEach(u->{u.setPwd("");});
+        return users;
     }
 
     @Override
-    public List<Role> getRoleByUser(String roleId) {
-        List<UserRole> userRoles = getByRoleId(roleId);
+    public List<Role> getRoleByUser(String userId) {
+        List<UserRole> userRoles = getByUserId(userId);
         List<String> roleIds = new ArrayList<>();
         if(userRoles != null)
             for (UserRole userRole: userRoles)
@@ -59,7 +61,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<UserRole> getValidsBeforeDate(String userId, Date termDate) {
-        return userRoleRepository.findValidsBeforeTermD(userId, termDate);
+        return userRoleRepository.findValidsInDate(userId, termDate);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<UserRole> getValids(String userId) {
-        return userRoleRepository.findValidsBeforeTermD(userId, new Date(System.currentTimeMillis()) );
+        return userRoleRepository.findValidsInDate(userId, new Date(System.currentTimeMillis()) );
     }
 
     @Override
@@ -115,9 +117,12 @@ public class UserRoleServiceImpl implements UserRoleService {
         if(userRole == null || userRole.getRoleId() == null || userRole.getUserId() == null ||
                 userRole.getRoleId().equals("") || userRole.getUserId().equals(""))
             return false;
-        UserRole ur = userRoleRepository.find(
+        List<UserRole> urs = userRoleRepository.find(
                 new Query(new Criteria("userId").is(userRole.getUserId()).
-                        and("roleId").is(userRole.getRoleId()))).get(0);
+                        and("roleId").is(userRole.getRoleId())));
+        UserRole ur = null;
+        if(urs != null && urs.size() > 0)
+            ur = urs.get(0);
         if(ur == null)
             return userRoleRepository.save(userRole);
 

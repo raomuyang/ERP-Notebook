@@ -133,7 +133,16 @@ public class UserServicesImpl implements UserService{
 
     @Override
     public boolean update(User user) {
-        return repository.update(user);
+        User u = findById(user.getId());
+        if(user.getPwd() != null)
+            u.setPwd(MD5.getMD5(user.getPwd()));
+
+        if(user.getRegisterTime() != null)
+            u.setNowInWhere(user.getNowInWhere());
+
+        if(user.getUserName() != null)
+            u.setUserName(user.getUserName());
+        return repository.update(u);
     }
 
     @Override

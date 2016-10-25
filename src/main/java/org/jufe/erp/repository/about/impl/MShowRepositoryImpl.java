@@ -61,7 +61,7 @@ public class MShowRepositoryImpl extends BaseRepository<MShow> implements MShowR
      */
     public boolean updateVHistory(List<String> vHistory){
         return super.update(new Query(new Criteria("id").is(id)),
-                new Update().set("iHistory", vHistory));
+                new Update().set("vHistory", vHistory));
     }
 
 }

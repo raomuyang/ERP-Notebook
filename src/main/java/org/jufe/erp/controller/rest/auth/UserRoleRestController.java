@@ -38,27 +38,28 @@ public class UserRoleRestController {
 
     private Logger logger = Logger.getLogger(PolicyRestController.class);
 
-    @RequestMapping("/get-by-userid/{userid}")
+    @RequestMapping("/infos/userid/{userid}")
     public List<UserRole> getByUserId(@PathVariable("userid") String userId){
-        logger.debug("get-by-userid: " + userId);
+        logger.debug("Get UserRole by userid:" + userId);
+        List l = userRoleService.getByUserId(userId);
         return userRoleService.getByUserId(userId);
     }
 
-    @RequestMapping("/get-by-roleid/{roleid}")
+    @RequestMapping("/infos/roleid/{roleid}")
     public List<UserRole> getByRoleId(@PathVariable("roleid") String roleId){
-        logger.debug("get-by-roleid: " + roleId);
+        logger.debug("Get User-role by roleid: " + roleId);
         return userRoleService.getByRoleId(roleId);
     }
 
-    @RequestMapping("/get-users-by-roleid/{roleid}")
+    @RequestMapping("/users/roleid/{roleid}")
     public List<User> getUsersByRoleId(@PathVariable("roleid") String roleId){
-        logger.debug("get-users-by-roleid:" + roleId);
+        logger.debug("Get users by roleid:" + roleId);
         return userRoleService.getUsersByRole(roleId);
     }
 
-    @RequestMapping("/get-roles-by-userid/{userid}")
+    @RequestMapping("/roles/userid/{userid}")
     public List<Role> getRolesByUser(@PathVariable("userid") String userId){
-        logger.debug("/get-roles-by-userid: " + userId);
+        logger.debug("Get roles by userid:" + userId);
         return userRoleService.getRoleByUser(userId);
     }
 
@@ -66,14 +67,14 @@ public class UserRoleRestController {
      * @param userId
      * @return
      */
-    @RequestMapping("/get-valid-roles-of-user/{userid}")
+    @RequestMapping("/roles/valid/userid/{userid}")
     public List<Role> getValidRoles(@PathVariable("userid") String userId){
         logger.debug("/get-valid-roles-of-user:" + userId);
         return userRoleService.getValidRoles(userId);
     }
 
 
-    @RequestMapping(value = "/get-valid-roles-in-target-date/{userid}/{date}")
+    @RequestMapping(value = "/roles/valid/userid/{userid}/date/{date}")
     public List<Role> getValidRolesInTargetDate(@PathVariable("userid") String userId,@PathVariable("date") String dateStr){
 
         logger.debug("/get-valid-roles-in-target-date:"+userId + "," + dateStr);

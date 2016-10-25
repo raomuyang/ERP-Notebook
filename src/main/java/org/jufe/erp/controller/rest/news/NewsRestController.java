@@ -17,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,18 +41,24 @@ public class NewsRestController {
      * @param id
      * @return
      */
-    @RequestMapping("/get/{newsId}")
-    public News getById(@PathVariable("newsId") String id){
-        logger.debug("/get/" + id);
+    @RequestMapping("/{newsId}")
+    public News getById(@PathVariable("newsId") String id, HttpServletRequest request, HttpServletResponse response){
+        logger.debug("Get by id:" + id);
         if(id == null || id.isEmpty())
             return null;
         News news = newsService.findById(id);
-        if(news == null || !news.getFinish())
-            return null;
+        if(news != null || !news.getFinish()){
+            User user = (User) request.getAttribute(StandardStr.USER.s());
+            if(user == null || !user.getId().equals(news.getAuthorId())){
+                response.setStatus(403);
+                response.setHeader("msg", "ILLEGAL OPERATION");
+                return null;
+            }
+        }
         return news;
     }
 
-    @RequestMapping("/get-by-author/{author}")
+    @RequestMapping("/author/{author}")
     public List<News> getByAuthor(@PathVariable("author") String author){
         logger.debug("/get-by-author/" + author);
         if(author == null || author.isEmpty())
@@ -60,34 +67,34 @@ public class NewsRestController {
         return newsService.findByAuthor(author);
     }
 
-    @RequestMapping("/get-by-authorid/{authorid}")
+    @RequestMapping("/authorid/{authorid}")
     public List<News> getByAuthorId(@PathVariable("authorid") String authorId){
-        logger.debug("/get-by-authorid/" + authorId);
+        logger.debug("Get by authorid/" + authorId);
         if(authorId == null || authorId.isEmpty())
             return new ArrayList<>();
 
         return newsService.findByAuthorId(authorId);
     }
 
-    @RequestMapping("/get-by-title/{title}")
+    @RequestMapping("/title/{title}")
     public List<News> getByTitle(@PathVariable("title") String title){
-        logger.debug("/get-by-title/" + title);
+        logger.debug("/Get by title/" + title);
         if(title == null || title.isEmpty())
             return new ArrayList<>();
 
         return newsService.findByTitle(title);
     }
 
-    @RequestMapping("/get-by-keyw/{keyw}")
+    @RequestMapping("/keyw/{keyw}")
     public List<News> getByKeyWord(@PathVariable("keyw") String keyw){
-        logger.debug("/get-by-title/" + keyw);
+        logger.debug("/Get by keyword/" + keyw);
         if(keyw == null || keyw.isEmpty())
             return new ArrayList<>();
 
         return newsService.findByKeyword(keyw);
     }
 
-    @RequestMapping("/page/{psize}/{pno}")
+    @RequestMapping("/page/psize/{psize}/pno/{pno}")
     public Page<News> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
 
         logger.debug("/page/{psize}/{pno}:" + psize + "," + pno);
@@ -109,7 +116,7 @@ public class NewsRestController {
     }
 
     @AuthRequest
-    @RequestMapping("/no-finish-page/{psize}/{pno}")
+    @RequestMapping("/no-finish/page/psize/{psize}/pno/{pno}")
     public Page<News> getUserNoFinishPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize, HttpServletRequest request){
 
         logger.debug("/no-finish-page/{psize}/{pno}:" + psize + "," + pno);

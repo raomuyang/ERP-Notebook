@@ -41,6 +41,18 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
+        //只要请求中附带了token，若token有效，就将其添加到request的attribute中以标示状态
+        String token = httpServletRequest.getHeader(StandardStr.TOKEN.s());
+        if(token != null) {
+            User user = tokenService.getUser(token);
+            if(user != null){
+                httpServletRequest.setAttribute(StandardStr.USER.s(), user);
+                boolean updateToken = tokenService.update(token);
+                httpServletResponse.setHeader("Token-active", String.valueOf(updateToken));
+            }
+        }
+
+
         HandlerMethod handlerMethod = null;
         Method method = null;
         try {
@@ -56,13 +68,7 @@ public class AuthInterceptor implements HandlerInterceptor {
         if(authRequest == null)
             return true;
 
-        boolean auth = authRequest(authRequest, httpServletRequest, httpServletResponse);
-        if(auth) {
-            String token = httpServletRequest.getHeader(StandardStr.TOKEN.s());;
-            User user = tokenService.getUser(token);
-            httpServletRequest.setAttribute(StandardStr.USER.s(), user);
-        }
-        return auth;
+        return authRequest(authRequest, httpServletRequest, httpServletResponse);
     }
 
     @Override

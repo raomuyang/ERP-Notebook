@@ -41,7 +41,7 @@ public class TokenServiceImpl implements TokenService {
 
         //先从本地查询
         TokenInfo tokenInfo = TokenOptions.get(token);
-        if(token != null) {
+        if(tokenInfo != null) {
             if(TokenOptions.isTokenValid(tokenInfo))
                 return tokenInfo;
             else {
@@ -50,10 +50,9 @@ public class TokenServiceImpl implements TokenService {
             }
         }
 
-
         //不存在，则从远端查询
         logger.debug("不存在本地token：" + token);
-        final TokenInfo rtoken = tokenRepository.find(new Query(new Criteria("token").is(token))).get(0);
+        TokenInfo rtoken = tokenRepository.findOne(new Query(new Criteria("token").is(token)));
         if(!TokenOptions.isTokenValid(rtoken)){
             delete(token);
             return null;
@@ -80,6 +79,7 @@ public class TokenServiceImpl implements TokenService {
     @Override
     public TokenInfo create(String userId) {
         TokenInfo tokenInfo = TokenOptions.create(userId);
+        tokenRepository.save(tokenInfo);
         return tokenInfo;
     }
 
@@ -97,9 +97,8 @@ public class TokenServiceImpl implements TokenService {
         }
 
         else{
-            List<TokenInfo> tokenInfos = tokenRepository.find(new Query(new Criteria("token").is(token)));
-            tokenInfo = tokenInfos == null||tokenInfos.size()==0?null:tokenInfos.get(0);
-        };
+            tokenInfo = tokenRepository.findOne(new Query(new Criteria("token").is(token)));
+        }
         if(tokenInfo != null){
             boolean res = tokenRepository.deleteById(tokenInfo.getId());
             if(!res)

@@ -18,4 +18,5 @@ public interface TimeShaftService{
 
     public Page<TimeShaft> findPage(int pno, int pSize);
 
+    public TimeShaft findById(String id);
 }

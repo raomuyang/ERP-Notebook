@@ -32,6 +32,8 @@ public class TimeShaftServiceImpl implements TimeShaftService{
             if(timeShaftNode == null) {
                 timeShaftNode = new TimeShaft();
                 timeShaftNode.setDate(new Date(System.currentTimeMillis()));
+            }else if(timeShaftNode.getDate() == null){
+                timeShaftNode.setDate(new Date(System.currentTimeMillis()));
             }
             String subpath = ResourceEnum.TIMESHAFT.p() +
                     DateTools.dateFormat(timeShaftNode.getDate(), "yyyyMMdd");
@@ -87,5 +89,10 @@ public class TimeShaftServiceImpl implements TimeShaftService{
     @Override
     public Page<TimeShaft> findPage(int pno, int pSize) {
         return repository.findPage(pno, pSize);
+    }
+
+    @Override
+    public TimeShaft findById(String id) {
+        return repository.findById(id);
     }
 }

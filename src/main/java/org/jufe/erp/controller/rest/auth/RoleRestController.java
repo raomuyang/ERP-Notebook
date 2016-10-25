@@ -24,24 +24,24 @@ public class RoleRestController {
     private RoleService roleService;
     private Logger logger = Logger.getLogger(PolicyRestController.class);
 
-    @RequestMapping("get-all")
+    @RequestMapping("/role-infos/all")
     public List<Role> getAll(){
-        logger.debug("/get-all");
+        logger.debug("/rest/auth/role/all");
         return roleService.getAllRole();
     }
 
-    @RequestMapping("/get/{roleId}")
+    @RequestMapping("/role-info/{roleId}")
     public Role getById(@PathVariable("roleId") String id){
         logger.debug("/get:" + id);
         return roleService.getRoleById(id);
     }
 
     /**
-     * 获取多个role的值,可能需要使用，未测试post方法
-     * @param args
+     * 获取多个role的值
+     * @param args ['id1','id2','id3']
      * @return
      */
-    @RequestMapping("/get-roles/{roleIds}")
+    @RequestMapping("/role-infos/{roleIds}")
     public List<Role> getByIds(@PathVariable("roleIds") String args){
         logger.debug("/get-roles:" + args);
         List ids = JsonUtils.jsonToList(args);
@@ -89,12 +89,14 @@ public class RoleRestController {
         boolean res = false;
         if(role != null && role.getId() != null){
             Role originRole = roleService.getRoleById(role.getId());
-            if(role.getRoleDes() != null)
-                originRole.setRoleDes(role.getRoleDes());
-            if(role.getRoleName() != null)
-                originRole.setRoleName(role.getRoleName());
-            res = roleService.updateRole(role);
-            map.put("id", role.getId());
+            if(originRole != null){
+                if(role.getRoleDes() != null)
+                    originRole.setRoleDes(role.getRoleDes());
+                if(role.getRoleName() != null)
+                    originRole.setRoleName(role.getRoleName());
+                res = roleService.updateRole(role);
+                map.put("id", role.getId());
+            }
         }
         map.put("result", res);
         return new ResponseEntity<ModelMap>(map, HttpStatus.OK);

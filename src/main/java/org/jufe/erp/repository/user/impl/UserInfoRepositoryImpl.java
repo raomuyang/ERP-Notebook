@@ -27,7 +27,11 @@ public class UserInfoRepositoryImpl extends BaseRepository<UserInfo> implements 
      */
     public boolean update(UserInfo userInfo){
         try {
-            ObjectId id = new ObjectId(userInfo.getId());
+            ObjectId id = null;
+            if(userInfo.getId() == null)
+                id = new ObjectId();
+            else
+                id = new ObjectId(userInfo.getId());
             return super.save(userInfo);//如果没有信息，则创建
         }catch (Exception e){
             logger.error(e.toString());

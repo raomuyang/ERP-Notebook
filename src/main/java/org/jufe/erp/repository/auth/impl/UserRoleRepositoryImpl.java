@@ -24,13 +24,14 @@ public class UserRoleRepositoryImpl extends BaseRepository<UserRole> implements 
     }
 
     /**
-     * 查找用户有效的角色绑定
+     * 查找用户在某个日期有效的角色绑定
      * @param userId
-     * @param termDate
+     * @param date
      * @return
      */
-    public List<UserRole> findValidsBeforeTermD(String userId, Date termDate){
+    public List<UserRole> findValidsInDate(String userId, Date date){
         //截止日期比参数日期更大
-        return super.find(new Query(new Criteria("roleId").is(userId).and("termD").gte(termDate)));
+        List<UserRole> userRoles = super.find(new Query(new Criteria("userId").is(userId).and("termD").gte(date)));
+        return userRoles;
     }
 }

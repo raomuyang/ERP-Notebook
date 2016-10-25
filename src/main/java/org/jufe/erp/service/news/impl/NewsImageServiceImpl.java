@@ -5,6 +5,7 @@ import org.bson.types.ObjectId;
 import org.jufe.erp.entity.NewsImage;
 import org.jufe.erp.repository.Page;
 import org.jufe.erp.repository.news.NewsImageRepository;
+import org.jufe.erp.repository.news.NewsRepository;
 import org.jufe.erp.service.news.NewsImageService;
 import org.jufe.erp.service.news.NewsService;
 import org.jufe.erp.utils.DateTools;
@@ -29,7 +30,7 @@ public class NewsImageServiceImpl implements NewsImageService {
     @Autowired
     private NewsImageRepository newsImageRepository;
     @Autowired
-    private NewsService newsService;
+    private NewsRepository newsRepository;
 
     private Logger logger = Logger.getLogger(NewsImageServiceImpl.class);
     @Override
@@ -90,7 +91,7 @@ public class NewsImageServiceImpl implements NewsImageService {
     @Override
     public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String rootPath) {
 
-        if(newsService.findById(newsImage.getNewsId()) != null){
+        if(newsRepository.findById(newsImage.getNewsId()) != null){
             FileOutputStream fo = null;
             try {
                 //新闻图片的上传日期就以传输到服务器上的时间为准

@@ -16,7 +16,7 @@ public class UserInfo implements Serializable{
     private String wechat;
     private String qq;
     private String weibo;
-    private String location;
+    private String address;
 
     public String getId() {
         return id;
@@ -66,11 +66,11 @@ public class UserInfo implements Serializable{
         this.weibo = weibo;
     }
 
-    public String getLocation() {
-        return location;
+    public String getAddress() {
+        return address;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
