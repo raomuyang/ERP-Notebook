@@ -31,13 +31,13 @@ public class NewsImageRestController {
 
     private Logger logger = Logger.getLogger(NewsImageRestController.class);
 
-    @RequestMapping("get/{psize}/{pno}")
+    @RequestMapping("/psize/{psize}/pno/{pno}")
     public Page<NewsImage> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
         logger.debug(String.format("get/%s/%s", psize, pno));
         return service.getImagePage(pno, psize);
     }
 
-    @RequestMapping("get-by-newsid/{newsid}")
+    @RequestMapping("/newsid/{newsid}")
     public List<NewsImage> getByNewsId(@PathVariable("newsid") String newsId){
         logger.debug("get-by-newsid/" + newsId);
         return service.getImageByNewsId(newsId);

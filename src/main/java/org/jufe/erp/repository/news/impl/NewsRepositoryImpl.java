@@ -63,6 +63,8 @@ public class NewsRepositoryImpl extends BaseRepository<News> implements NewsRepo
     }
 
     public boolean update(News news){
+        if(news == null || news.getId() == null)
+            return false;
         return super.update(new Query(new Criteria("id").is(news.getId())),
                 new Update().set("title", news.getTitle())
                         .set("context", news.getContext())
