@@ -59,9 +59,10 @@ public class TokenOptions {
         try {
             ObjectId id = new ObjectId(tokenInfo.getId());
             long validDays = tokenInfo.getValidDays() ;
-            Date invalidDate = DateTools.getDateAfter(id.getDate(), validDays);
+            Date invalidDate = DateTools.getDateAfter(tokenInfo.getLastTime(), validDays);
+            Date maxInvalidDate = DateTools.getDateAfter(id.getDate(), validDays * 48);
             Date current = new Date(System.currentTimeMillis());
-            return current.before(invalidDate);
+            return current.before(invalidDate) && invalidDate.before(maxInvalidDate);
         }catch (Exception e){
             return false;
         }

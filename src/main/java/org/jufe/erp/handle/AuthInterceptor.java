@@ -45,7 +45,11 @@ public class AuthInterceptor implements HandlerInterceptor {
         String token = httpServletRequest.getHeader(StandardStr.TOKEN.s());
         if(token != null) {
             User user = tokenService.getUser(token);
-            httpServletRequest.setAttribute(StandardStr.USER.s(), user);
+            if(user != null){
+                httpServletRequest.setAttribute(StandardStr.USER.s(), user);
+                boolean updateToken = tokenService.update(token);
+                httpServletResponse.setHeader("Token-active", String.valueOf(updateToken));
+            }
         }
 
 
