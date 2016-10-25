@@ -24,9 +24,14 @@ public class TimeShaftRestController {
 
     @Autowired
     private TimeShaftService timeShaftService;
-    private Logger logger;
+    private Logger logger = Logger.getLogger(TimeShaftRestController.class);
 
-    @RequestMapping("/get-page/{psize}/{pno}")
+    @RequestMapping("/info/{id}")
+    public TimeShaft getInfo(@PathVariable("id") String id){
+        logger.debug("Get time shaft node by id:" + id);
+        return timeShaftService.findById(id);
+    }
+    @RequestMapping("/page/psize/{psize}/pno/{pno}")
     public Page<TimeShaft> getPage(@PathVariable("pno") int pno, @PathVariable("psize") int psize){
         logger.debug(String.format("get-page/%s/%s", psize, pno));
         return timeShaftService.findPage(pno, psize);
