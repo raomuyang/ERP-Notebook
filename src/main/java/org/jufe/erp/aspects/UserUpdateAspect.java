@@ -75,7 +75,7 @@ public class UserUpdateAspect {
             case 401:
                 throw new HttpClientErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "TOKEN INVALID");
             case 403:
-                throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "EXCESS OF AUTHORITY OPTION");
+                throw new HttpClientErrorException(HttpStatus.FORBIDDEN, "EXCESS OF AUTHORITY OPERATION");
             default:return;
         }
 

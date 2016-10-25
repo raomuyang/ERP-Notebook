@@ -74,7 +74,7 @@ public class NewsUpdateAspect {
             List<Role> roles = userRoleService.getValidRoles(user.getId());
             for (Role r : roles)
                 if(r.getLevel() > AuthLevel.CONTROLLER.l()){
-                    logger.info(r.getRoleName() + String.format(" option[]:", user.getId()) + methodName);
+                    logger.info(r.getRoleName() + String.format(" operation[%s]:", user.getId()) + methodName);
                     return;
                 }
 
@@ -116,7 +116,7 @@ public class NewsUpdateAspect {
             List<Role> roles = userRoleService.getValidRoles(user.getId());
             for (Role r : roles)
                 if(r.getLevel() > AuthLevel.CONTROLLER.l()){
-                    logger.info(r.getRoleName() + String.format(" option[]:", user.getId()) + methodName);
+                    logger.info(r.getRoleName() + String.format(" operation[%s]:", user.getId()) + methodName);
                     return;
                 }
 

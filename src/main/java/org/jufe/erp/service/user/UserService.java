@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Created by raomengnan on 16-8-29.
- * Option with DB about User
+ * Operation with DB about User
  */
 @Repository
 public interface UserService {
