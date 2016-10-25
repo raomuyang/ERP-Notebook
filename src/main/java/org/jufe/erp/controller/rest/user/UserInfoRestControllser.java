@@ -18,14 +18,14 @@ import java.util.List;
  * Created by Raomengnan on 2016/9/21.
  */
 @RestController
-@RequestMapping("/rest/user/info")
+@RequestMapping("/rest/user/f-info")
 public class UserInfoRestControllser {
 
     @Autowired
     private UserInfoService userInfoService;
     private Logger logger = Logger.getLogger(UserInfoRestControllser.class);
 
-    @RequestMapping("/get-by-userid/{userId}")
+    @RequestMapping("/{userId}")
     public UserInfo getByUserId(@PathVariable("userId") String userId){
         logger.debug("get-by-userid/" + userId);
         return userInfoService.findByUserId(userId);
