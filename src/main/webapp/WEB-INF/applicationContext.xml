@@ -63,5 +63,6 @@
         <property name="secrecKey" value="${secretKey}"></property>
         <property name="zone" value="${zone}"></property>
         <property name="bucket" value="${bucket}"></property>
+        <property name="host" value="${qos_host}"></property>
     </bean>
 </beans>

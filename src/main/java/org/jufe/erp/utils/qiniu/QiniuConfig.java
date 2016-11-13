@@ -10,6 +10,7 @@ public class QiniuConfig {
     String secrecKey;
     int zone;
     String bucket;
+    String host;
 
     public String getAccessKey() {
         return accessKey;
@@ -50,5 +51,13 @@ public class QiniuConfig {
 
     public void setBucket(String bucket) {
         this.bucket = bucket;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 }
