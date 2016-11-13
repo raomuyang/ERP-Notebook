@@ -168,8 +168,7 @@ public class MShowRestController {
         ModelMap map = new ModelMap();
         boolean result = false;
         if(image != null){
-            String url = mShowService.uploadImage(image,
-                    request.getSession().getServletContext().getRealPath("/"));
+            String url = mShowService.uploadImage(image);
             map.put("url", url);
             if(url != null && !url.equals(""))
                 result = true;
@@ -190,8 +189,7 @@ public class MShowRestController {
         ModelMap map = new ModelMap();
         boolean result = false;
         if(video != null){
-            String url = mShowService.uploadVideo(video,
-                    request.getSession().getServletContext().getRealPath("/"));
+            String url = mShowService.uploadVideo(video);
             map.put("url", url);
             if(url != null && !url.equals(""))
                 result = true;

@@ -1,5 +1,6 @@
 package org.jufe.erp.service.about.impl;
 
+import com.qiniu.http.Response;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.MShow;
@@ -8,6 +9,8 @@ import org.jufe.erp.service.about.MShowService;
 import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.enums.ResourceEnum;
+import org.jufe.erp.utils.qiniu.QiniuConfig;
+import org.jufe.erp.utils.qiniu.QiniuQOS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -28,6 +31,10 @@ public class MShowServiceImpl implements MShowService{
 
     @Autowired
     private MShowRepository mShowRepository;
+
+    @Autowired
+    private QiniuConfig qiniuConfig;
+    private QiniuQOS qiniuQOS;
 
     private Logger logger = Logger.getLogger(MShowServiceImpl.class);
 
@@ -134,7 +141,7 @@ public class MShowServiceImpl implements MShowService{
         int len = urls.size();
         urls.forEach(u->{
             try {
-                boolean delF = FileUtils.deleteFile(rootPath + u);
+                boolean delF = getQos().deleteFile(u);
                 boolean remU = imageList.remove(u);
                 logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
                         (rootPath + u), delF, u, remU));
@@ -163,7 +170,7 @@ public class MShowServiceImpl implements MShowService{
             return false;
         urls.forEach(u->{
             try {
-                boolean delF = FileUtils.deleteFile(rootPath + u);
+                boolean delF = getQos().deleteFile(u);
                 boolean remU = videoList.remove(u);
                 logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
                         (rootPath + u), delF, u, remU));
@@ -177,27 +184,26 @@ public class MShowServiceImpl implements MShowService{
     }
 
     @Override
-    public String uploadImage(MultipartFile multipartFile, String rootPath) {
+    public String uploadImage(MultipartFile multipartFile) {
         try {
-            String subpath = ResourceEnum.IMAGE.p() + "/"
-                    + DateTools.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
-            String fileId = new ObjectId().toString();
-            String path = rootPath + "/" + subpath;
+            final String subpath = ResourceEnum.IMAGE.p() + "/"
+                    + DateTools.dateFormat(new Date(), "yyyyMMdd");
 
+            String fileId = new ObjectId().toString();
             String originalFileName = multipartFile.getOriginalFilename();
             String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String filename = fileId + suffix;
+            final String filename = fileId + suffix;
 
-            boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
-            if(res) {
+            final String key = "/" + subpath + "/" + filename;
+            Response response = getQos().upload(multipartFile.getBytes(), key, true);
+            if(response.isOK()) {
                 //将新的图片url加到历史【图库】中
-                String url = "/" + subpath + "/" + filename;
                 List iurls = new ArrayList();
-                iurls.add(url);
+                iurls.add(key);
                 List<String> iHistory = createNewIHistoryList(iurls, getMShow());
                 updateIHistory(iHistory);
 
-                return url;
+                return qiniuConfig.getHost() + key;
             }
         } catch (IOException e) {
             logger.error("Upload Image:" + e);
@@ -206,25 +212,25 @@ public class MShowServiceImpl implements MShowService{
     }
 
     @Override
-    public String uploadVideo(MultipartFile multipartFile, String rootPath) {
+    public String uploadVideo(MultipartFile multipartFile) {
         try {
-            String subpath = ResourceEnum.VIDEO.p() + "/"
+            final String subpath = ResourceEnum.VIDEO.p() + "/"
                     + DateTools.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
-            String fileId = new ObjectId().toString();
-            String path = rootPath + "/" + subpath;
 
+            String fileId = new ObjectId().toString();
             String originalFileName = multipartFile.getOriginalFilename();
             String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String filename = fileId + suffix;
+            final String filename = fileId + suffix;
 
-            boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
-            if(res) {
+            final String key = "/" + subpath + "/" + filename;
+            Response response = getQos().upload(multipartFile.getBytes(), key, true);
+            if(response.isOK()) {
                 //将新的视频url加到历史【视频库】中
-                String url = "/" + subpath + "/" + filename;
-                List<String> vHistory = createNewVHistoryList(url, getMShow());
+
+                List<String> vHistory = createNewVHistoryList(key, getMShow());
                 updateVHistory(vHistory);
 
-                return url;
+                return qiniuConfig.getHost() + key;
             }
         } catch (IOException e) {
             logger.error("Upload Video:" + e);
@@ -257,5 +263,13 @@ public class MShowServiceImpl implements MShowService{
         if(!vHistoryList.contains( vurl ) )
             vHistoryList.add(vurl);
         return vHistoryList;
+    }
+
+    private QiniuQOS getQos(){
+        if(qiniuQOS == null)
+            qiniuQOS = new QiniuQOS(qiniuConfig.getAccessKey(),
+                                    qiniuConfig.getSecrecKey(),
+                                    qiniuConfig.getBucket(), qiniuConfig.getZone());
+        return qiniuQOS;
     }
 }

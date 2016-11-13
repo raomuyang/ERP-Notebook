@@ -26,7 +26,7 @@ public class QiniuQOS {
 
     private Logger logger = Logger.getLogger(QiniuQOS.class);
 
-    QiniuQOS(String accessKey, String secretKey, String bucket, Zone z){
+    public QiniuQOS(String accessKey, String secretKey, String bucket, Zone z){
         auth = Auth.create(accessKey, secretKey);
         zone =z;
         this.bucket = bucket;

@@ -36,8 +36,8 @@ public interface MShowService {
 
     public boolean deleteVideos(List<String> urls, String rootPath);
 
-    public String uploadImage(MultipartFile multipartFile, String rootPath);
+    public String uploadImage(MultipartFile multipartFile);
 
-    public String uploadVideo(MultipartFile multipartFile, String rootPath);
+    public String uploadVideo(MultipartFile multipartFile);
 
 }
