@@ -1,4 +1,4 @@
-package org.jufe.erp.utils;
+package org.jufe.erp.utils.qiniu;
 
 import com.qiniu.common.QiniuException;
 import com.qiniu.common.Zone;
@@ -151,6 +151,38 @@ public class QiniuQOS {
         Zone v(){
             return this.zone;
         }
+    }
+
+    public Auth getAuth() {
+        return auth;
+    }
+
+    public void setAuth(Auth auth) {
+        this.auth = auth;
+    }
+
+    public Zone getZone() {
+        return zone;
+    }
+
+    public void setZone(Zone z) {
+        this.zone = z;
+    }
+
+    public String getBucket() {
+        return bucket;
+    }
+
+    public void setBucket(String bucket) {
+        this.bucket = bucket;
+    }
+
+    public Configuration getConfiguration() {
+        return configuration;
+    }
+
+    public void setConfiguration(Configuration configuration) {
+        this.configuration = configuration;
     }
 }
 

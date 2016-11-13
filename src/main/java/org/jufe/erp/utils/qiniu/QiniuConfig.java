@@ -1,0 +1,54 @@
+package org.jufe.erp.utils.qiniu;
+
+import com.qiniu.common.Zone;
+
+/**
+ * Created by Raomengnan on 2016/11/14.
+ */
+public class QiniuConfig {
+    String accessKey;
+    String secrecKey;
+    int zone;
+    String bucket;
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    public String getSecrecKey() {
+        return secrecKey;
+    }
+
+    public void setSecrecKey(String secrecKey) {
+        this.secrecKey = secrecKey;
+    }
+
+    public Zone getZone() {
+        switch (zone){
+            case 0:
+                return Zone.zone0();
+            case 1:
+                return Zone.zone1();
+            case 2:
+                return Zone.zone2();
+            default:
+                return Zone.autoZone();
+        }
+    }
+
+    public void setZone(int zone) {
+        this.zone = zone;
+    }
+
+    public String getBucket() {
+        return bucket;
+    }
+
+    public void setBucket(String bucket) {
+        this.bucket = bucket;
+    }
+}
