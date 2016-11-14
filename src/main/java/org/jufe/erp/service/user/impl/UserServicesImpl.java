@@ -2,10 +2,12 @@ package org.jufe.erp.service.user.impl;
 
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.User;
+import org.jufe.erp.repository.QOSComponent;
 import org.jufe.erp.repository.user.UserRepository;
 import org.jufe.erp.service.user.UserService;
 import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.MD5;
+import org.jufe.erp.utils.MultipartFileSave;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class UserServicesImpl implements UserService{
 
     @Autowired
     private UserRepository repository;
+    @Autowired
+    private QOSComponent qosComponent;
 
     private Logger logger = Logger.getLogger(UserServicesImpl.class);
 
@@ -58,23 +62,19 @@ public class UserServicesImpl implements UserService{
     }
 
     @Override
-    public boolean addUser(User user, MultipartFile multipartFile, String rootPath) {
+    public boolean addUser(User user, MultipartFile multipartFile) {
 
         user.setPwd(MD5.getMD5(user.getPwd()));
         user.setRegisterTime(new Date(System.currentTimeMillis()));
         boolean res = repository.addUser(user);
         if(res)
             try {
-                String subpath = ResourceEnum.HEAD.p() ;
-                String path = rootPath + "/" + subpath;
 
-                String originalFilePath = multipartFile.getOriginalFilename();
-                String suffix = originalFilePath.substring(originalFilePath.lastIndexOf("."));
                 String fileId = user.getId();
+                String url = MultipartFileSave.save2Qiniu(qosComponent.getQos(), multipartFile, ResourceEnum.HEAD, fileId);
 
-                boolean result = FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
-                if(result)
-                    user.setUserPhotoUrl("/" + ResourceEnum.HEAD.p() + "/" + fileId + suffix);
+                if(url != null)
+                    user.setUserPhotoUrl(url);
                 else
                     user.setUserPhotoUrl("/" + ResourceEnum.HEAD.p() + "/default/" + "default.jpg");
             }catch (Exception e){
@@ -109,23 +109,18 @@ public class UserServicesImpl implements UserService{
     }
 
     @Override
-    public boolean updateUserHead(String userId, MultipartFile multipartFile, String rootPath) {
+    public boolean updateUserHead(String userId, MultipartFile multipartFile) {
         try {
-            String subpath = ResourceEnum.HEAD.p() ;
-            String path = rootPath + "/" + subpath;
+            String url = MultipartFileSave.save2Qiniu(
+                    qosComponent.getQos(), multipartFile, ResourceEnum.HEAD, userId);
 
-            String originalFilePath = multipartFile.getOriginalFilename();
-            String suffix = originalFilePath.substring(originalFilePath.lastIndexOf("."));
-
-            String filename = userId + suffix;
             User user = repository.findById(userId);
-            user.setUserPhotoUrl("/" + subpath + "/" + filename);
+            user.setUserPhotoUrl(url);
 
-            boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
-            if(res)
+            if(url != null)
                 return repository.update(user);
         } catch (Exception e){
-            logger.error("Update User's Head");
+            logger.error("Update User's Head failed");
         }
 
         return false;

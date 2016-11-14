@@ -22,7 +22,7 @@ public interface UserService {
 
     public User checkLogin(String id, String pwd);
 
-    public boolean addUser(User user, MultipartFile multipartFile, String rootPath);
+    public boolean addUser(User user, MultipartFile multipartFile);
 
     public boolean updateUserName(User user);
 
@@ -30,7 +30,7 @@ public interface UserService {
 
     public boolean updateLocation(User user);
 
-    public boolean updateUserHead(String userId, MultipartFile multipartFile, String rootPath);
+    public boolean updateUserHead(String userId, MultipartFile multipartFile);
 
     /**
      * 更新全部信息时一定要检查用户ID是否属实
