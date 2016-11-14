@@ -141,14 +141,14 @@ public class UserServicesImpl implements UserService{
     }
 
     @Override
-    public boolean deleteUser(String userId, String rootPath) {
+    public boolean deleteUser(String userId) {
 
         User user = repository.findById(userId);
         boolean res = repository.deleteById(userId);
         if(res)
             try {
                 if(!user.getUserPhotoUrl().contains("/default/"))
-                    FileUtils.deleteFile(rootPath + "/" + user.getUserPhotoUrl());
+                    qosComponent.getQos().deleteFile(user.getUserPhotoUrl());
             }catch (Exception e){
                 logger.error("delete user:" + e);
             }
