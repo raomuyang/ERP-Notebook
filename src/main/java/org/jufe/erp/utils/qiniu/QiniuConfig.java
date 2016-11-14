@@ -7,7 +7,7 @@ import com.qiniu.common.Zone;
  */
 public class QiniuConfig {
     String accessKey;
-    String secrecKey;
+    String secretKey;
     int zone;
     String bucket;
     String host;
@@ -20,12 +20,12 @@ public class QiniuConfig {
         this.accessKey = accessKey;
     }
 
-    public String getSecrecKey() {
-        return secrecKey;
+    public String getSecretKey() {
+        return secretKey;
     }
 
-    public void setSecrecKey(String secrecKey) {
-        this.secrecKey = secrecKey;
+    public void setSecretKey(String secretKey) {
+        this.secretKey = secretKey;
     }
 
     public Zone getZone() {

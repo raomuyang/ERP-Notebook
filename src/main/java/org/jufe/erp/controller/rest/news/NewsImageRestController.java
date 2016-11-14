@@ -105,8 +105,7 @@ public class NewsImageRestController {
         if(url == null)
             map.put("msg", "参数错误");
         else {
-            result = service.deleteByUrl(request.getSession().getServletContext().getRealPath("/"),
-                     url);
+            result = service.deleteByUrl(url);
             if(!result)
                 map.put("msg", "删除失败，请检查后重试");
         }
@@ -124,8 +123,7 @@ public class NewsImageRestController {
         if(newsId == null)
             map.put("msg", "参数错误");
         else {
-            result = service.deleteByNewsId(request.getSession().getServletContext().getRealPath("/"),
-                    newsId);
+            result = service.deleteByNewsId(newsId);
             if(!result)
                 map.put("msg", "删除失败，请检查后重试");
         }
@@ -141,7 +139,6 @@ public class NewsImageRestController {
         boolean result = false;
         ModelMap map = new ModelMap();
 
-
         try {
             User user = (User) request.getAttribute(StandardStr.USER.s());
             newsImage.setUserId(user.getId());
@@ -149,8 +146,7 @@ public class NewsImageRestController {
             logger.error("Add newsImage[Read user error]:" + e.getMessage());
         }
         if(newsImage.getNewsId() != null && imageFile != null){
-            result = service.uploadImage(newsImage, imageFile,
-                    request.getSession().getServletContext().getRealPath("/"));
+            result = service.uploadImage(newsImage, imageFile);
             if(!result)
                 map.put("msg", "上传失败，请检查后重试");
         }

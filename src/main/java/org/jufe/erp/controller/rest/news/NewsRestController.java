@@ -205,7 +205,7 @@ public class NewsRestController {
         result = newsService.delete(newsId);
         map.put("result", result);
         if(result){
-            newsImageService.deleteByNewsId(request.getSession().getServletContext().getRealPath("/"), newsId);
+            newsImageService.deleteByNewsId( newsId);
         }
         else {
             map.put("msg", "更新出错，请重试");

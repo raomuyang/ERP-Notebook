@@ -12,7 +12,7 @@
 
     <context:component-scan base-package="org.jufe.erp"/>
     <context:property-placeholder location="/WEB-INF/db.properties"></context:property-placeholder>
-    <context:property-placeholder location="/WEB-INF/qos.properties"></context:property-placeholder>
+
     <!--mongoDB数据源配置，定义mongo对象-->
     <mongo:mongo-client id="mongo" host="${db.host}" port="${db.port}"
                         credentials="${db.username}:${db.password}@${db.dbname}">
@@ -58,9 +58,9 @@
         <constructor-arg name="mongoConverter" ref="mappingMongoConverter"/>
     </bean>
 
-    <bean id="qiniuQOS" class="org.jufe.erp.utils.qiniu.QiniuConfig">
+    <bean id="qiniuConfig" class="org.jufe.erp.utils.qiniu.QiniuConfig">
         <property name="accessKey" value="${accessKey}"></property>
-        <property name="secrecKey" value="${secretKey}"></property>
+        <property name="secretKey" value="${secretKey}"></property>
         <property name="zone" value="${zone}"></property>
         <property name="bucket" value="${bucket}"></property>
         <property name="host" value="${qos_host}"></property>
