@@ -129,8 +129,8 @@ public class MShowServiceImpl implements MShowService{
     }
 
     @Override
-    public boolean deleteImages(List<String> urls, String rootPath) {
-        if(urls == null || rootPath == null)
+    public boolean deleteImages(List<String> urls) {
+        if(urls == null )
             return false;
         MShow mShow = getMShow();
         if(mShow == null)
@@ -145,7 +145,7 @@ public class MShowServiceImpl implements MShowService{
                 boolean delF = qosComponent.getQos().deleteFile(u);
                 boolean remU = imageList.remove(u);
                 logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
-                        (rootPath + u), delF, u, remU));
+                         u, delF, u, remU));
             }catch (Exception e){
                 logger.error("delete image:" + e);
             }
@@ -158,8 +158,8 @@ public class MShowServiceImpl implements MShowService{
     }
 
     @Override
-    public boolean deleteVideos(List<String> urls, String rootPath) {
-        if(urls == null || rootPath == null)
+    public boolean deleteVideos(List<String> urls) {
+        if(urls == null )
             return false;
         MShow mShow = getMShow();
         if(mShow == null)
@@ -174,7 +174,7 @@ public class MShowServiceImpl implements MShowService{
                 boolean delF = qosComponent.getQos().deleteFile(u);
                 boolean remU = videoList.remove(u);
                 logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
-                        (rootPath + u), delF, u, remU));
+                         u, delF, u, remU));
             }catch (Exception e){
                 logger.error("delete video:" + e);
             }

@@ -128,8 +128,7 @@ public class MShowRestController {
         ModelMap map = new ModelMap();
         boolean result = false;
         if(args != null){
-            result = mShowService.deleteImages(JsonUtils.jsonToList(args),
-                    request.getSession().getServletContext().getRealPath("/"));
+            result = mShowService.deleteImages(JsonUtils.jsonToList(args));
             if(!result)
                 map.put("msg", "删除失败，请刷新重试");
         }
@@ -148,8 +147,7 @@ public class MShowRestController {
         ModelMap map = new ModelMap();
         boolean result = false;
         if(args != null){
-            result = mShowService.deleteVideos(JsonUtils.jsonToList(args),
-                    request.getSession().getServletContext().getRealPath("/"));
+            result = mShowService.deleteVideos(JsonUtils.jsonToList(args));
             if(!result)
                 map.put("msg", "删除失败，请重试");
         }

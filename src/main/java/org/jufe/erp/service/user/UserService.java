@@ -39,6 +39,6 @@ public interface UserService {
      */
     public boolean update(User user);
 
-    public boolean deleteUser(String userId, String rootPath);
+    public boolean deleteUser(String userId);
 
 }
