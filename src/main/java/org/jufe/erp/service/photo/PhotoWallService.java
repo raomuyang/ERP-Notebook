@@ -16,14 +16,14 @@ public interface PhotoWallService {
      * @param photoInfo
      * @return
      */
-    public boolean addUserPhoto(PhotoWall photoInfo, MultipartFile multipartFile, String rootPath);
+    public boolean addUserPhoto(PhotoWall photoInfo, MultipartFile multipartFile);
 
     public List<PhotoWall> getPhotosByGrade(int grade);
     public List<PhotoWall> getPhotosByUserNameLike(String userName);
 
     public boolean updateUserInfo(PhotoWall photoInfo);
 
-    public boolean updateUserPhoto(String id, MultipartFile multipartFile, String rootPath);
+    public boolean updateUserPhoto(String id, MultipartFile multipartFile);
 
     /**
      * 按年级从低到高排列 例如 2016---2013
@@ -35,6 +35,6 @@ public interface PhotoWallService {
 
     public List<PhotoWall> getAll();
 
-    public boolean deleteByPhotoId(String id, String rootPath);
+    public boolean deleteByPhotoId(String id);
 
 }

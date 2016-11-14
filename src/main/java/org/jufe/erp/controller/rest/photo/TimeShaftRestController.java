@@ -70,8 +70,7 @@ public class TimeShaftRestController {
         if(id == null || id.isEmpty())
             msg = "参数错误";
         else {
-            result = timeShaftService.deleteNodeById(id,
-                    request.getSession().getServletContext().getRealPath("/"));
+            result = timeShaftService.deleteNodeById(id);
             if(!result)
                 msg = "删除失败，请检查后重试";
         }
@@ -97,8 +96,7 @@ public class TimeShaftRestController {
         ModelMap map = new ModelMap();
         boolean result = false;
 
-        String root = request.getSession().getServletContext().getRealPath("/");
-        result = timeShaftService.addImage(shaftNode, imageFile, root);
+        result = timeShaftService.addImage(shaftNode, imageFile);
 
         if(!result)
             map.put("msg", "上传失败，请重试");
