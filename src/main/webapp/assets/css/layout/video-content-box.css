@@ -1,0 +1,100 @@
+@media only screen and (min-width: 1300px){
+    .color-content-box{
+        margin-top: 5px;
+        width: 100%;
+        background: white;
+    }
+    .box-buttom-bg{
+        height: 270px;
+        width: 100%;
+        float: left;
+        background: url("../../img/top.png") no-repeat;
+        margin-top: 60px;
+        position: relative;
+    }
+
+    .box-top-content{
+        height: 300px;
+        width: 80%;
+        margin: -60px auto;
+        background: white;
+        border:1px solid #D3D3D3;
+    }
+
+    .box-content-left{
+        width: 30%;
+        height: 100%;
+        float: left;
+        background:black;
+    }
+
+    .box-content-center{
+        width: 16%;
+        height: 100%;
+        float: left;
+        background: url("../../i/about.jpg") no-repeat;
+    }
+    .box-content-right{
+        width: 50%;
+        height: 80%;
+        margin-top: 10px;
+        float: left;
+    }
+}
+
+@media only screen and (max-width: 1299px){
+    .color-content-box{
+        margin-top: 5px;
+        width: 100%;
+        float:left;
+        background: white;
+    }
+    .box-buttom-bg{
+        height: 370px;
+        width: 100%;
+        float: left;
+        background: url("../../img/top.png") no-repeat;
+        margin-top: 60px;
+        position: relative;
+    }
+
+    .box-top-content{
+        overflow: hidden;
+        height: 400px;
+        width: 85%;
+        margin: -60px auto;
+        background: white;
+        border:1px solid #D3D3D3;
+    }
+
+    .box-content-left{
+        width: 40%;
+        height: 100%;
+        float: left;
+        background: black;
+    }
+
+    .box-content-center{
+        width: 10%;
+        height: 100%;
+        float: left;
+        background: url("../../i/about.jpg") no-repeat;
+    }
+    .box-content-right{
+        float: left;
+        width: 50%;
+        height: 80%;
+        margin-top: 5px;
+    }
+}
+@media only screen and (max-width: 640px) {
+    .box-content-left{
+        width: 100%;
+    }
+    .box-content-center{
+        display: none;
+    }
+    .box-content-right{
+        display: none;
+    }
+}

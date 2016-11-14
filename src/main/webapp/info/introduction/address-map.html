@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>位置</title>
+</head>
+<body>
+<div style="width: 100%;height: 250px" id="map"></div>
+</body>
+
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=paZ9pLvRcaBCcnoH0PmlI0UbWxqelIBb"></script>
+<script type="text/javascript">
+    // 百度地图API功能
+    var map = new BMap.Map("map");
+    var point = new BMap.Point(115.823147,28.734236);
+    map.centerAndZoom(point, 16);
+    var marker = new BMap.Marker(point); // 创建标注
+    map.addOverlay(marker); // 将标注添加到地图中
+    marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+    addMapControl(map)
+
+    //向地图添加控件
+    function addMapControl(map){
+        var scaleControl = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+        scaleControl.setUnit(BMAP_UNIT_IMPERIAL);
+        map.addControl(scaleControl);
+        var navControl = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+        map.addControl(navControl);
+
+    }
+</script>
+</html>

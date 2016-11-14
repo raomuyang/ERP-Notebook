@@ -25,9 +25,11 @@
 
     <bean class="com.fasterxml.jackson.databind.ObjectMapper"/>
 
-    <bean   class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-            p:prefix= "/WEB-INF/pages/"
-            p:suffix= ".jsp"/>
+    <!--采用RESTful API，后端只开放接口，不控制跳转，给予前端最大自由度-->
+    <mvc:resources mapping="/**" location="/"></mvc:resources>
+    <!--<bean   class="org.springframework.web.servlet.view.InternalResourceViewResolver"-->
+            <!--p:prefix= "/WEB-INF/"-->
+            <!--p:suffix= ".jsp"/>-->
 
     <bean   id="multipartResolver"
             class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
@@ -39,6 +41,7 @@
             <bean class="org.jufe.erp.handle.AuthInterceptor"></bean>
         </mvc:interceptor>
     </mvc:interceptors>
+
 
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 </beans>

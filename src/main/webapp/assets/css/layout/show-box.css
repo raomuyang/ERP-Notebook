@@ -1,0 +1,60 @@
+.show{
+    width: 100%;
+    background: white;
+}
+.show-left{
+    width: 30%;
+    height: 100%;
+    float: left;
+    /*background: rebeccapurple;*/
+}
+
+.show-right{
+    width: 70%;
+    height: 100%;
+    float: left;
+    /*background: red;*/
+}
+
+.show-right ul li {
+    display: inline-block;
+    margin: 0.5%;
+    width: 20%;
+    border: thick solid white;
+    text-align: left;
+    transition: box-shadow 0.5s;
+}
+
+.show-right ul li:hover {
+    transform: scale(1.01,1.01);
+    box-shadow: 0 20px 50px rgba(0, 0, 0,0.2);
+}
+
+
+
+.link-box{
+    float: left;
+    margin-right: 90px;
+}
+.link-box a{
+    color: #666666;
+}
+.news_list{
+    list-style: none;
+}
+.news_item{
+    margin: 10px 10px;
+}
+.news_item:hover{
+    color: #4bad4b;
+}
+.news_item a{
+    color: #666;
+    font: 14px 微软雅黑, 黑体, 仿宋;
+    text-decoration: none;
+}
+@media only screen and (max-width: 640px) {
+    .show{
+        display: none;
+    }
+}
