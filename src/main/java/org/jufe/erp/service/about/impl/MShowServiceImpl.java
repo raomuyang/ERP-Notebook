@@ -4,6 +4,7 @@ import com.qiniu.http.Response;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.MShow;
+import org.jufe.erp.repository.QOSComponent;
 import org.jufe.erp.repository.about.MShowRepository;
 import org.jufe.erp.service.about.MShowService;
 import org.jufe.erp.utils.DateTools;
@@ -33,8 +34,7 @@ public class MShowServiceImpl implements MShowService{
     private MShowRepository mShowRepository;
 
     @Autowired
-    private QiniuConfig qiniuConfig;
-    private QiniuQOS qiniuQOS;
+    private QOSComponent qosComponent;
 
     private Logger logger = Logger.getLogger(MShowServiceImpl.class);
 
@@ -141,7 +141,7 @@ public class MShowServiceImpl implements MShowService{
         int len = urls.size();
         urls.forEach(u->{
             try {
-                boolean delF = getQos().deleteFile(u);
+                boolean delF = qosComponent.getQos().deleteFile(u);
                 boolean remU = imageList.remove(u);
                 logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
                         (rootPath + u), delF, u, remU));
@@ -170,7 +170,7 @@ public class MShowServiceImpl implements MShowService{
             return false;
         urls.forEach(u->{
             try {
-                boolean delF = getQos().deleteFile(u);
+                boolean delF = qosComponent.getQos().deleteFile(u);
                 boolean remU = videoList.remove(u);
                 logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
                         (rootPath + u), delF, u, remU));
@@ -195,7 +195,7 @@ public class MShowServiceImpl implements MShowService{
             final String filename = fileId + suffix;
 
             final String key = "/" + subpath + "/" + filename;
-            Response response = getQos().upload(multipartFile.getBytes(), key, true);
+            Response response = qosComponent.getQos().upload(multipartFile.getBytes(), key, true);
             if(response.isOK()) {
                 //将新的图片url加到历史【图库】中
                 List iurls = new ArrayList();
@@ -203,7 +203,7 @@ public class MShowServiceImpl implements MShowService{
                 List<String> iHistory = createNewIHistoryList(iurls, getMShow());
                 updateIHistory(iHistory);
 
-                return qiniuConfig.getHost() + key;
+                return qosComponent.getHost() + key;
             }
         } catch (IOException e) {
             logger.error("Upload Image:" + e);
@@ -223,14 +223,14 @@ public class MShowServiceImpl implements MShowService{
             final String filename = fileId + suffix;
 
             final String key = "/" + subpath + "/" + filename;
-            Response response = getQos().upload(multipartFile.getBytes(), key, true);
+            Response response = qosComponent.getQos().upload(multipartFile.getBytes(), key, true);
             if(response.isOK()) {
                 //将新的视频url加到历史【视频库】中
 
                 List<String> vHistory = createNewVHistoryList(key, getMShow());
                 updateVHistory(vHistory);
 
-                return qiniuConfig.getHost() + key;
+                return qosComponent.getHost() + key;
             }
         } catch (IOException e) {
             logger.error("Upload Video:" + e);
@@ -265,11 +265,4 @@ public class MShowServiceImpl implements MShowService{
         return vHistoryList;
     }
 
-    private QiniuQOS getQos(){
-        if(qiniuQOS == null)
-            qiniuQOS = new QiniuQOS(qiniuConfig.getAccessKey(),
-                                    qiniuConfig.getSecrecKey(),
-                                    qiniuConfig.getBucket(), qiniuConfig.getZone());
-        return qiniuQOS;
-    }
 }
