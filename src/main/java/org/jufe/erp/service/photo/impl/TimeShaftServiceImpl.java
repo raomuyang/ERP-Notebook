@@ -4,10 +4,12 @@ import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.TimeShaft;
 import org.jufe.erp.repository.Page;
+import org.jufe.erp.repository.QOSComponent;
 import org.jufe.erp.repository.photo.TimeShaftRepository;
 import org.jufe.erp.service.photo.TimeShaftService;
 import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.FileUtils;
+import org.jufe.erp.utils.MultipartFileSave;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,11 +25,13 @@ public class TimeShaftServiceImpl implements TimeShaftService{
 
     @Autowired
     private TimeShaftRepository repository;
+    @Autowired
+    private QOSComponent qosComponent;
 
     private Logger logger = Logger.getLogger(TimeShaftServiceImpl.class);
 
     @Override
-    public boolean addImage(TimeShaft timeShaftNode, MultipartFile multipartFile, String rootPath) {
+    public boolean addImage(TimeShaft timeShaftNode, MultipartFile multipartFile) {
         try {
             if(timeShaftNode == null) {
                 timeShaftNode = new TimeShaft();
@@ -35,17 +39,17 @@ public class TimeShaftServiceImpl implements TimeShaftService{
             }else if(timeShaftNode.getDate() == null){
                 timeShaftNode.setDate(new Date(System.currentTimeMillis()));
             }
-            String subpath = ResourceEnum.TIMESHAFT.p() +
-                    DateTools.dateFormat(timeShaftNode.getDate(), "yyyyMMdd");
-            String path = rootPath + "/" + subpath;
-            String originalFileName = multipartFile.getOriginalFilename();
-            String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String fileId = new ObjectId().toString();
-            //写文件
-            FileUtils.writeFile(path, fileId + suffix, multipartFile.getBytes());
 
-            timeShaftNode.setId(fileId);
-            timeShaftNode.setUrl("/" + rootPath + "/" + fileId + suffix);
+            String id = new ObjectId().toString();
+            String fileId = DateTools.dateFormat(timeShaftNode.getDate(), "yyyyMMdd") + "/" + id;
+            String url = MultipartFileSave.save2Qiniu(
+                    qosComponent.getQos(), multipartFile, ResourceEnum.TIMESHAFT, fileId);
+
+            if(url == null)
+                throw new Exception("Save to Qiniu failed");
+
+            timeShaftNode.setId(id);
+            timeShaftNode.setUrl(url);
             return repository.insert(timeShaftNode);
         }catch (Exception e){
             logger.error("Add Image To Time Shaft: " + e);
@@ -55,15 +59,16 @@ public class TimeShaftServiceImpl implements TimeShaftService{
 
 
     @Override
-    public boolean deleteNodeById(String id, String rootPath) {
+    public boolean deleteNodeById(String id) {
         TimeShaft node = repository.findById(id);
         if (node != null){
             String url = node.getUrl();
-            String path = rootPath + "/" + url;
             boolean res = repository.deleteById(id);
             if(res)
                 try {
-                    FileUtils.deleteFile(path);
+                    boolean r = qosComponent.getQos().deleteFile(url);
+                    if(!r)
+                        throw new Exception("Delete from Qiniu failed");
                 }catch (Exception e){
                     logger.error("deleteNodeById:" + e);
                 }

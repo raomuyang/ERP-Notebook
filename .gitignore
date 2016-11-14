@@ -12,6 +12,6 @@ hs_err_pid*
 
 #Project Config Files
 /target
-/src/main/webapp/WEB-INF/db.properties
 .idea
 ERP-Notebook.iml
+/src/main/webapp/WEB-INF/db.properties

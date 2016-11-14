@@ -4,11 +4,13 @@ import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.NewsImage;
 import org.jufe.erp.repository.Page;
+import org.jufe.erp.repository.QOSComponent;
 import org.jufe.erp.repository.news.NewsImageRepository;
 import org.jufe.erp.repository.news.NewsRepository;
 import org.jufe.erp.service.news.NewsImageService;
 import org.jufe.erp.service.news.NewsService;
 import org.jufe.erp.utils.DateTools;
+import org.jufe.erp.utils.MultipartFileSave;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -31,6 +33,8 @@ public class NewsImageServiceImpl implements NewsImageService {
     private NewsImageRepository newsImageRepository;
     @Autowired
     private NewsRepository newsRepository;
+    @Autowired
+    private QOSComponent qosComponent;
 
     private Logger logger = Logger.getLogger(NewsImageServiceImpl.class);
     @Override
@@ -44,31 +48,27 @@ public class NewsImageServiceImpl implements NewsImageService {
     }
 
     @Override
-    public boolean deleteByUrl(String rootPath, String url) {
-        String path = rootPath + "/" + url;
+    public boolean deleteByUrl(String url) {
         List<NewsImage> newsImages = newsImageRepository.deleteByUrl(url);
         if(newsImages.size() > 0)
             try {
-                File file = new File(path);
-                if(file.exists())
-                    file.delete();
+                qosComponent.getQos().deleteFile(url);
                 return true;
             }catch (Exception e){
-                logger.error(String.format("Delete by url[%s]:", path) + e);
+                logger.error(String.format("Delete by url[%s]:", url) + e);
                 return true;
             }
         return false;
     }
 
     @Override
-    public boolean deleteByNewsId(String rootPath, String newsId) {
+    public boolean deleteByNewsId(String newsId) {
         List<NewsImage> newsImages = newsImageRepository.deleteByNewsId(newsId);
         if(newsImages.size() > 0){
             for (NewsImage newsImage: newsImages){
-                String path = rootPath + "/" + newsImage.getUrl();
+                String key =  newsImage.getUrl();
                 try {
-                    File file = new File(path);
-                    file.delete();
+                    qosComponent.getQos().deleteFile(key);
                 }catch (Exception e){
                     logger.error(String.format("Delete by newsId[%s],", newsId) + e);
                 }
@@ -89,7 +89,7 @@ public class NewsImageServiceImpl implements NewsImageService {
     }
 
     @Override
-    public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile, String rootPath) {
+    public boolean uploadImage(NewsImage newsImage, MultipartFile multipartFile) {
 
         if(newsRepository.findById(newsImage.getNewsId()) != null){
             FileOutputStream fo = null;
@@ -97,21 +97,14 @@ public class NewsImageServiceImpl implements NewsImageService {
                 //新闻图片的上传日期就以传输到服务器上的时间为准
                 newsImage.setDate(new Date(System.currentTimeMillis()));
 
-                String subPath =  ResourceEnum.NEWSIMAGE.p() + "/" + DateTools.dateFormat(newsImage.getDate(), "yyyyMMdd") + "/" + newsImage.getNewsId();
-                String fileId = new ObjectId().toString();
-                String originalFilename = multipartFile.getOriginalFilename();
-                String suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
+                String id = new ObjectId().toHexString();
+                String fileId = DateTools.dateFormat(newsImage.getDate(), "yyyyMMdd") + "/" + id;
+                String url = MultipartFileSave.save2Qiniu(qosComponent.getQos(), multipartFile, ResourceEnum.NEWSIMAGE, fileId);
 
-                String path = rootPath + "/" + subPath + "/";
-                File filePath = new File(path);
-                if(!filePath.exists())
-                    filePath.mkdirs();
-                File file = new File(filePath, fileId  + suffix);
-                fo = new FileOutputStream(file);
-                fo.write(multipartFile.getBytes());
-
-                newsImage.setId(fileId);
-                newsImage.setUrl("/" + subPath + "/" + fileId + suffix);
+                if(url == null)
+                    throw new Exception("Save to Qiniu failed");
+                newsImage.setId(id);
+                newsImage.setUrl(url);
                 return addImage(newsImage);
             }catch (Exception e){
                 logger.error(e);

@@ -1,13 +1,18 @@
 package org.jufe.erp.service.about.impl;
 
+import com.qiniu.http.Response;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.MShow;
+import org.jufe.erp.repository.QOSComponent;
 import org.jufe.erp.repository.about.MShowRepository;
 import org.jufe.erp.service.about.MShowService;
 import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.FileUtils;
+import org.jufe.erp.utils.MultipartFileSave;
 import org.jufe.erp.utils.enums.ResourceEnum;
+import org.jufe.erp.utils.qiniu.QiniuConfig;
+import org.jufe.erp.utils.qiniu.QiniuQOS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -28,6 +33,9 @@ public class MShowServiceImpl implements MShowService{
 
     @Autowired
     private MShowRepository mShowRepository;
+
+    @Autowired
+    private QOSComponent qosComponent;
 
     private Logger logger = Logger.getLogger(MShowServiceImpl.class);
 
@@ -131,10 +139,10 @@ public class MShowServiceImpl implements MShowService{
         List<String> imageList = mShow.getiHistory();
         if(imageList == null)
             return false;
-        int len = urls.size();
+        int len = imageList.size();
         urls.forEach(u->{
             try {
-                boolean delF = FileUtils.deleteFile(rootPath + u);
+                boolean delF = qosComponent.getQos().deleteFile(u);
                 boolean remU = imageList.remove(u);
                 logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
                         (rootPath + u), delF, u, remU));
@@ -163,7 +171,7 @@ public class MShowServiceImpl implements MShowService{
             return false;
         urls.forEach(u->{
             try {
-                boolean delF = FileUtils.deleteFile(rootPath + u);
+                boolean delF = qosComponent.getQos().deleteFile(u);
                 boolean remU = videoList.remove(u);
                 logger.info(String.format("Delete[%s]: %s; Remove url[%s]: %s",
                         (rootPath + u), delF, u, remU));
@@ -177,21 +185,16 @@ public class MShowServiceImpl implements MShowService{
     }
 
     @Override
-    public String uploadImage(MultipartFile multipartFile, String rootPath) {
+    public String uploadImage(MultipartFile multipartFile) {
         try {
-            String subpath = ResourceEnum.IMAGE.p() + "/"
-                    + DateTools.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
-            String fileId = new ObjectId().toString();
-            String path = rootPath + "/" + subpath;
 
-            String originalFileName = multipartFile.getOriginalFilename();
-            String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String filename = fileId + suffix;
+            String url = MultipartFileSave.save2Qiniu(qosComponent.getQos(), multipartFile, ResourceEnum.IMAGE, null);
 
-            boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
-            if(res) {
+            final String subpath = ResourceEnum.IMAGE.p() + "/"
+                    + DateTools.dateFormat(new Date(), "yyyyMMdd");
+
+            if(url != null) {
                 //将新的图片url加到历史【图库】中
-                String url = "/" + subpath + "/" + filename;
                 List iurls = new ArrayList();
                 iurls.add(url);
                 List<String> iHistory = createNewIHistoryList(iurls, getMShow());
@@ -206,21 +209,14 @@ public class MShowServiceImpl implements MShowService{
     }
 
     @Override
-    public String uploadVideo(MultipartFile multipartFile, String rootPath) {
+    public String uploadVideo(MultipartFile multipartFile) {
         try {
-            String subpath = ResourceEnum.VIDEO.p() + "/"
-                    + DateTools.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
-            String fileId = new ObjectId().toString();
-            String path = rootPath + "/" + subpath;
 
-            String originalFileName = multipartFile.getOriginalFilename();
-            String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String filename = fileId + suffix;
+            String url = MultipartFileSave.save2Qiniu(qosComponent.getQos(), multipartFile, ResourceEnum.VIDEO, null);
 
-            boolean res = FileUtils.writeFile(path, filename, multipartFile.getBytes());
-            if(res) {
+            if(url != null) {
                 //将新的视频url加到历史【视频库】中
-                String url = "/" + subpath + "/" + filename;
+
                 List<String> vHistory = createNewVHistoryList(url, getMShow());
                 updateVHistory(vHistory);
 
@@ -258,4 +254,5 @@ public class MShowServiceImpl implements MShowService{
             vHistoryList.add(vurl);
         return vHistoryList;
     }
+
 }

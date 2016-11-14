@@ -23,7 +23,7 @@ public class TestNewsRest {
     public String upload(NewsImage newsImage, MultipartFile multipartFile, HttpServletRequest request){
         System.out.println(multipartFile);
         System.out.println(newsImage);
-        newsImageService.uploadImage(newsImage, multipartFile, request.getSession().getServletContext().getRealPath("/"));
+        newsImageService.uploadImage(newsImage, multipartFile);
         return newsImage.getUrl();
     }
 

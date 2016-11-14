@@ -61,8 +61,7 @@ public class PhotoWallRestController {
         if(id == null || id.isEmpty())
             map.put("msg", "参数错误，请检查后重试");
         else {
-            result = photoWallService.deleteByPhotoId(id,
-                    request.getSession().getServletContext().getRealPath("/"));
+            result = photoWallService.deleteByPhotoId(id);
             if(!result)
                 map.put("msg", "删除出错，请检查后重试");
         }
@@ -102,8 +101,7 @@ public class PhotoWallRestController {
         boolean result = false;
         ModelMap map = new ModelMap();
 
-        String rootPath = request.getSession().getServletContext().getRealPath("/");
-        result = photoWallService.updateUserPhoto(id, imageFile, rootPath);
+        result = photoWallService.updateUserPhoto(id, imageFile);
         if(!result)
             map.put("msg", "上传失败，请检查后重试");
 
@@ -119,8 +117,7 @@ public class PhotoWallRestController {
 
         boolean result = false;
         ModelMap map = new ModelMap();
-        result = photoWallService.addUserPhoto(photoInfo, imageFile,
-                request.getSession().getServletContext().getRealPath("/"));
+        result = photoWallService.addUserPhoto(photoInfo, imageFile);
 
         if(!result)
             map.put("msg", "上传失败，请重试");

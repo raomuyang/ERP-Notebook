@@ -157,8 +157,7 @@ public class UserRestController {
         boolean result = false;
         ModelMap map = new ModelMap();
 
-        String root = request.getSession().getServletContext().getRealPath("/");
-        result = userService.updateUserHead(userId, imageFile, root);
+        result = userService.updateUserHead(userId, imageFile);
         if(!result)
             map.put("msg", "更新失败，请检查后重试:" + userId);
 
@@ -173,8 +172,7 @@ public class UserRestController {
         ModelMap map = new ModelMap();
 
         if(!check(user.getId()))
-            result = userService.addUser(user, imageFile,
-                    request.getSession().getServletContext().getRealPath("/"));
+            result = userService.addUser(user, imageFile);
 
         if(!result) {
             user.setPwd("**************");
