@@ -9,6 +9,7 @@ import org.jufe.erp.repository.about.MShowRepository;
 import org.jufe.erp.service.about.MShowService;
 import org.jufe.erp.utils.DateTools;
 import org.jufe.erp.utils.FileUtils;
+import org.jufe.erp.utils.MultipartFileSave;
 import org.jufe.erp.utils.enums.ResourceEnum;
 import org.jufe.erp.utils.qiniu.QiniuConfig;
 import org.jufe.erp.utils.qiniu.QiniuQOS;
@@ -138,7 +139,7 @@ public class MShowServiceImpl implements MShowService{
         List<String> imageList = mShow.getiHistory();
         if(imageList == null)
             return false;
-        int len = urls.size();
+        int len = imageList.size();
         urls.forEach(u->{
             try {
                 boolean delF = qosComponent.getQos().deleteFile(u);
@@ -186,24 +187,20 @@ public class MShowServiceImpl implements MShowService{
     @Override
     public String uploadImage(MultipartFile multipartFile) {
         try {
+
+            String url = MultipartFileSave.save2Qiniu(qosComponent.getQos(), multipartFile, ResourceEnum.IMAGE, null);
+
             final String subpath = ResourceEnum.IMAGE.p() + "/"
                     + DateTools.dateFormat(new Date(), "yyyyMMdd");
 
-            String fileId = new ObjectId().toString();
-            String originalFileName = multipartFile.getOriginalFilename();
-            String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
-            final String filename = fileId + suffix;
-
-            final String key = "/" + subpath + "/" + filename;
-            Response response = qosComponent.getQos().upload(multipartFile.getBytes(), key, true);
-            if(response.isOK()) {
+            if(url != null) {
                 //将新的图片url加到历史【图库】中
                 List iurls = new ArrayList();
-                iurls.add(key);
+                iurls.add(url);
                 List<String> iHistory = createNewIHistoryList(iurls, getMShow());
                 updateIHistory(iHistory);
 
-                return qosComponent.getHost() + key;
+                return url;
             }
         } catch (IOException e) {
             logger.error("Upload Image:" + e);
@@ -214,23 +211,16 @@ public class MShowServiceImpl implements MShowService{
     @Override
     public String uploadVideo(MultipartFile multipartFile) {
         try {
-            final String subpath = ResourceEnum.VIDEO.p() + "/"
-                    + DateTools.dateFormat(new Date(System.currentTimeMillis()), "yyyyMMdd");
 
-            String fileId = new ObjectId().toString();
-            String originalFileName = multipartFile.getOriginalFilename();
-            String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
-            final String filename = fileId + suffix;
+            String url = MultipartFileSave.save2Qiniu(qosComponent.getQos(), multipartFile, ResourceEnum.VIDEO, null);
 
-            final String key = "/" + subpath + "/" + filename;
-            Response response = qosComponent.getQos().upload(multipartFile.getBytes(), key, true);
-            if(response.isOK()) {
+            if(url != null) {
                 //将新的视频url加到历史【视频库】中
 
-                List<String> vHistory = createNewVHistoryList(key, getMShow());
+                List<String> vHistory = createNewVHistoryList(url, getMShow());
                 updateVHistory(vHistory);
 
-                return qosComponent.getHost() + key;
+                return url;
             }
         } catch (IOException e) {
             logger.error("Upload Video:" + e);

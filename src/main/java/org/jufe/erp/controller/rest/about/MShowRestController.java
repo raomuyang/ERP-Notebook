@@ -131,7 +131,7 @@ public class MShowRestController {
             result = mShowService.deleteImages(JsonUtils.jsonToList(args),
                     request.getSession().getServletContext().getRealPath("/"));
             if(!result)
-                map.put("msg", "更新失败，请重试");
+                map.put("msg", "删除失败，请刷新重试");
         }
         else
             map.put("msg", "参数错误");
@@ -151,7 +151,7 @@ public class MShowRestController {
             result = mShowService.deleteVideos(JsonUtils.jsonToList(args),
                     request.getSession().getServletContext().getRealPath("/"));
             if(!result)
-                map.put("msg", "更新失败，请重试");
+                map.put("msg", "删除失败，请重试");
         }
         else
             map.put("msg", "参数错误");
