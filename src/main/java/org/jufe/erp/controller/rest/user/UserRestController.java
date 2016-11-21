@@ -17,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -197,7 +198,7 @@ public class UserRestController {
      * @return {reslut:true/false, token "xxxxxx"}
      */
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> login(@RequestBody User user){
+    public ResponseEntity<ModelMap> login(@RequestBody User user, HttpServletResponse response){
 
         logger.debug("login:" + user);
         ModelMap map = new ModelMap();
@@ -209,6 +210,9 @@ public class UserRestController {
                 result = true;
                 TokenInfo tokenInfo = tokenService.create(user.getId());
                 map.put("token", tokenInfo.getToken());
+                Cookie cookie = new Cookie("token", tokenInfo.getToken());
+                cookie.setMaxAge(3600);
+                response.addCookie(cookie);
             }
         }
 
