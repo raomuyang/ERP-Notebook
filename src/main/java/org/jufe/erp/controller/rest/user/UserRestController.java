@@ -68,6 +68,17 @@ public class UserRestController {
         return users;
     }
 
+    @RequestMapping("/info/list/name/")
+    public List<User> getAll(){
+        logger.debug("User: get-all");
+        List<User> users = userService.findByName("");
+        users.forEach(user -> {
+            user.setPwd(null);
+        });
+
+        return users;
+    }
+
     @RequestMapping("/info/list/grade/{grade}")
     public List<User> getByGrade(@PathVariable("grade") int grade){
         logger.debug("/get-by-grade/"+ grade);
