@@ -23,6 +23,8 @@ public class UserRepositoryImpl extends BaseRepository<User> implements UserRepo
     }
 
     public List<User> findByName(String name){
+        if(name == null || name.equals(""))
+            return super.findAll();
         Criteria criteria = MongoUtil.fuzzyCriteria("userName", name);
         return super.find(new Query(criteria));
     }
