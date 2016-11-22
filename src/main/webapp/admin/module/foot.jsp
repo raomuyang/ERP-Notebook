@@ -19,3 +19,4 @@
 <script src="/admin/js/calendar/bootstrap_calendar.js" cache="false"></script>
 <script src="/admin/js/calendar/demo.js" cache="false"></script>
 <script src="/admin/js/sortable/jquery.sortable.js" cache="false"></script>
+<script src="/API.js"></script>
