@@ -9119,7 +9119,7 @@ Validator.prototype.init = function() {
   /*if (options.errorMessage === 'tooltip') {
     this.$tooltip = $('<div></div>', {
       'class': 'am-validator-message',
-      id: UI.utils.generateGUID('am-validator-message')
+      id: UI.commons.generateGUID('am-validator-message')
     });
 
     $(document.body).append(this.$tooltip);

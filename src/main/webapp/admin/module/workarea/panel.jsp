@@ -31,7 +31,7 @@
                         </span>
                         <a class="clear" href="#">
                             <span class="h3 block m-t-xs">
-                                <strong class="user-numbers">52,000</strong></span>
+                                <strong class="user-numbers">0</strong></span>
                             <small class="text-muted text-uc">User Numbers</small>
                         </a>
                     </div>
@@ -56,7 +56,7 @@
                         </span>
                         <a class="clear" href="#">
                             <span class="h3 block m-t-xs">
-                                <strong id="bugs">468</strong>
+                                <strong class="news-numbers">0</strong>
                             </span>
                             <small class="text-muted text-uc">文章数量</small>
                         </a>
@@ -70,7 +70,7 @@
                         </span>
                         <a class="clear" href="#">
                             <span class="h3 block m-t-xs">
-                                <strong id="firers">359</strong>
+                                <strong id="firers" class="image-numbers">0</strong>
                             </span>
                             <small class="text-muted text-uc">历史图片</small>
                         </a>
@@ -83,7 +83,7 @@
                         </span>
                         <a class="clear" href="#">
                             <span class="h3 block m-t-xs">
-                                <strong>31</strong>
+                                <strong class="video-numbers">0</strong>
                             </span>
                             <small class="text-muted text-uc">历史视频</small>
                         </a>
@@ -104,8 +104,8 @@
                         <footer class="panel-footer bg-white no-padder">
                             <div class="row text-center no-gutter">
                                 <div class="col-xs-3 b-r b-light">
-                                    <span class="h4 font-bold m-t block">5,860</span>
-                                    <small class="text-muted m-b block">Orders</small>
+                                    <span class="h4 font-bold m-t block" id="flot-line-strucstatic">5,860</span>
+                                    <small class="text-muted m-b block">注册总人数</small>
                                 </div>
                             </div>
                         </footer>
@@ -184,10 +184,4 @@
     </section>
     <a href="#" class="hide nav-off-screen-block" data-toggle="class:nav-off-screen" data-target="#nav"></a>
 
-<script>
-    (function () {
-        var token = "xxxxxxxxx";
-
-    })();
-</script>
 

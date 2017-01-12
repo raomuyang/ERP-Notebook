@@ -36,6 +36,8 @@
 </section>
 
 <jsp:include page="/admin/module/foot.jsp"></jsp:include>
-
+<script src="/admin/js_view/index/index.js"></script>
+<script src="/admin/js_view/index/calendar.js"></script>
+<script src="/assets/js/tools.js"></script>
 </body>
 </html>

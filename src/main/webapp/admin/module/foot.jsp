@@ -15,8 +15,6 @@
 <script src="/admin/js/charts/flot/jquery.flot.tooltip.min.js" cache="false"></script>
 <script src="/admin/js/charts/flot/jquery.flot.resize.js" cache="false"></script>
 <script src="/admin/js/charts/flot/jquery.flot.grow.js" cache="false"></script>
-<script src="/admin/js/charts/flot/demo.js" cache="false"></script>
 <script src="/admin/js/calendar/bootstrap_calendar.js" cache="false"></script>
-<script src="/admin/js/calendar/demo.js" cache="false"></script>
 <script src="/admin/js/sortable/jquery.sortable.js" cache="false"></script>
 <script src="/API.js"></script>
