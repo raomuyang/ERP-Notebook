@@ -17,6 +17,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -60,6 +61,17 @@ public class UserRestController {
     public List<User> getByName(@PathVariable("name") String name){
         logger.debug("/get-by-name/"+ name);
         List<User> users = userService.findByName(name);
+        users.forEach(user -> {
+            user.setPwd(null);
+        });
+
+        return users;
+    }
+
+    @RequestMapping("/info/list/name/")
+    public List<User> getAll(){
+        logger.debug("User: get-all");
+        List<User> users = userService.findByName("");
         users.forEach(user -> {
             user.setPwd(null);
         });
@@ -197,7 +209,7 @@ public class UserRestController {
      * @return {reslut:true/false, token "xxxxxx"}
      */
     @RequestMapping(value = "/auth", method = RequestMethod.POST)
-    public ResponseEntity<ModelMap> login(@RequestBody User user){
+    public ResponseEntity<ModelMap> login(@RequestBody User user, HttpServletResponse response){
 
         logger.debug("login:" + user);
         ModelMap map = new ModelMap();
@@ -209,6 +221,9 @@ public class UserRestController {
                 result = true;
                 TokenInfo tokenInfo = tokenService.create(user.getId());
                 map.put("token", tokenInfo.getToken());
+                Cookie cookie = new Cookie("token", tokenInfo.getToken());
+                cookie.setMaxAge(3600);
+                response.addCookie(cookie);
             }
         }
 

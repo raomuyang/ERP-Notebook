@@ -1,0 +1,58 @@
+.content{
+    width: 100%;
+    background: #ffffff;
+}
+
+.content li a{
+    color: #999999;
+    font-size: 14px;
+}
+
+.am-nav-en{
+    margin-left:5px;
+    color:#aaa;font-size:10px;
+    vertical-align:bottom
+}
+
+.navi-l{
+    display: inline-block;
+    vertical-align: top;
+    width: 19%;
+    max-height: 400px;
+    overflow: auto;
+}
+.info{
+    margin:0 auto;
+    width: 80%;
+    /*vertical-align: top;*/
+    /*display: inline-block;*/
+}
+
+
+/*------------------------*/
+.text-title{
+    margin-top: 10px;
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+.text-body{
+    /*padding: 15px 15px 15px 15px;*/
+    margin: auto;
+    color: #222222;
+    text-align: left;
+    font-size:14px;
+    min-height: 100px;
+}
+
+
+@media only screen and (max-width: 640px) {
+    .navi-l {
+        display: none;
+    }
+    .info {
+        padding-left: 1em;
+        padding-right: 1em;
+        width: 100%;
+    }
+}
