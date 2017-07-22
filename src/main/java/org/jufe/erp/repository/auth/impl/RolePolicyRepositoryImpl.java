@@ -15,18 +15,19 @@ import java.util.List;
  * 绑定角色和授权关系
  */
 @Repository
-public class RolePolicyRepositoryImpl extends BaseRepository<RolePolocy> implements RolePolicyRepository{
-    public List<RolePolocy> findByRoleId(String roleId){
+public class RolePolicyRepositoryImpl extends BaseRepository<RolePolocy> implements RolePolicyRepository {
+    public List<RolePolocy> findByRoleId(String roleId) {
         return super.find(new Query(new Criteria("roleId").is(roleId)));
     }
 
     /**
      * 查找角色有效的授权绑定
+     *
      * @param roleId
      * @param termDate
      * @return
      */
-    public List<RolePolocy> findBeforeTermD(String roleId, Date termDate){
+    public List<RolePolocy> findBeforeTermD(String roleId, Date termDate) {
         return super.find(new Query(new Criteria("roleId").is(roleId).and("termD").gte(termDate)));
     }
 }

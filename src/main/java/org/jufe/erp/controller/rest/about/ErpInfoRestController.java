@@ -57,7 +57,7 @@ public class ErpInfoRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody ERPInfo erpInfo){
         logger.debug("/update:" + erpInfo);
         ModelMap map = new ModelMap();
@@ -76,7 +76,7 @@ public class ErpInfoRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update-tel", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-tel", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateTel(@RequestBody String tel){
         logger.debug("/update-tel: " + tel);
         ModelMap map = new ModelMap();
@@ -95,7 +95,7 @@ public class ErpInfoRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update-intro", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-intro", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateIntro(@RequestBody String intro){
         logger.debug("/update-intro: " + intro);
         ModelMap map = new ModelMap();
@@ -114,7 +114,7 @@ public class ErpInfoRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update-join", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-join", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateJoin(@RequestBody String join){
         logger.debug("/update-join: " + join);
         ModelMap map = new ModelMap();
@@ -133,7 +133,7 @@ public class ErpInfoRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update-org-staruct", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-org-staruct", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateOrg(@RequestBody String org){
         logger.debug("/update-org-staruct: " + org);
         ModelMap map = new ModelMap();

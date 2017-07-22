@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by raomengnan on 16-8-31.
  */
-public class Page<T>{
+public class Page<T> {
     private static int DEFAULT_PAGE_SIZE = 15;
     private long count;
     private int pageSize;
@@ -14,58 +14,59 @@ public class Page<T>{
 
     private List<T> data;
 
-    public Page(){
+    public Page() {
         this.pageSize = DEFAULT_PAGE_SIZE;
         this.data = new ArrayList<T>();
     }
-    public Page(int pno, long count){
+
+    public Page(int pno, long count) {
         this(pno, count, DEFAULT_PAGE_SIZE);
     }
 
-    public Page(int pno, long count, int pageSize){
+    public Page(int pno, long count, int pageSize) {
         this.count = count;
         this.pageSize = pageSize;
         this.data = new ArrayList<T>();
 
-        if(hasPageNo(pno))
+        if (hasPageNo(pno))
             this.pno = pno;
         else
-            this.pno = getPageCount() == 0?1:getPageCount();
+            this.pno = getPageCount() == 0 ? 1 : getPageCount();
 
     }
 
-    public boolean hasNextPage(){
-        return ( count - pno * pageSize ) > 0;
+    public boolean hasNextPage() {
+        return (count - pno * pageSize) > 0;
     }
 
-    public boolean hasPrePage(){
+    public boolean hasPrePage() {
         return pno > 1;
     }
 
-    public boolean hasPageNo(long pageNo){
+    public boolean hasPageNo(long pageNo) {
         return count - (pageNo - 1) * pageSize > 0;
     }
 
     public long getPageCount() {
         long pageCount = count / pageSize;
-        if(count % pageSize != 0)
+        if (count % pageSize != 0)
             pageCount++;
         return pageCount;
     }
 
-    public long getDataSkip(){
+    public long getDataSkip() {
         return (pno - 1) * pageSize;
     }
 
 
-    public long getDatatart(){
-        if(count == 0)
+    public long getDatatart() {
+        if (count == 0)
             return 0;
-        return ( pno - 1) * pageSize + 1;
+        return (pno - 1) * pageSize + 1;
     }
 
-    public long getDataEnd(){
-        if(count == 0)
+    public long getDataEnd() {
+        if (count == 0)
             return 0;
         return pageSize + getDatatart() - 1;
     }

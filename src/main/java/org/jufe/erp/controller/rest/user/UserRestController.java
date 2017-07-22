@@ -89,7 +89,7 @@ public class UserRestController {
     }
 
     @AuthRequest
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update:" + user);
         boolean result = false;
@@ -104,7 +104,7 @@ public class UserRestController {
     }
 
     @AuthRequest
-    @RequestMapping(value = "/update-username", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-username", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateUsername(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update username:" + user);
         boolean result = false;
@@ -119,7 +119,7 @@ public class UserRestController {
     }
 
     @AuthRequest
-    @RequestMapping(value = "/update-pwd", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-pwd", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updatePwd(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update pwd:" + user);
         boolean result = false;
@@ -136,7 +136,7 @@ public class UserRestController {
     }
 
     @AuthRequest
-    @RequestMapping(value = "/update-location", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-location", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateLocation(@RequestBody User user, HttpServletRequest request, HttpServletResponse response){
         logger.debug("update location:" + user);
         boolean result = false;
@@ -217,7 +217,7 @@ public class UserRestController {
     }
 
     @AuthRequest
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/logout", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> logout(HttpServletRequest request){
         logger.debug(String.format("logout[%s]", request.getHeader(StandardStr.TOKEN.s())));
         boolean res = tokenService.delete(request.getHeader(StandardStr.TOKEN.s()));

@@ -2,10 +2,9 @@ package org.jufe.erp.service.user.impl;
 
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.User;
-import org.jufe.erp.repository.QOSComponent;
+import org.jufe.erp.component.QOSComponent;
 import org.jufe.erp.repository.user.UserRepository;
 import org.jufe.erp.service.user.UserService;
-import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.MD5;
 import org.jufe.erp.utils.MultipartFileSave;
 import org.jufe.erp.utils.enums.ResourceEnum;

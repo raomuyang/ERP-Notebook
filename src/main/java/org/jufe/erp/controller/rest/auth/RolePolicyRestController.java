@@ -84,7 +84,7 @@ public class RolePolicyRestController {
     }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody RolePolocy rolePolocy){
 
         logger.debug("update role-policy:" + rolePolocy);

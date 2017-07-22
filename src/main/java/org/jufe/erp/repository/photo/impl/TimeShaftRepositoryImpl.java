@@ -14,14 +14,14 @@ import org.springframework.stereotype.Repository;
  * Created by raomengnan on 16-8-31.
  */
 @Repository
-public class TimeShaftRepositoryImpl extends BaseRepository<TimeShaft> implements TimeShaftRepository{
+public class TimeShaftRepositoryImpl extends BaseRepository<TimeShaft> implements TimeShaftRepository {
 
-    public boolean updateIntro(String id, String intro){
+    public boolean updateIntro(String id, String intro) {
         return super.update(new Query(new Criteria("id").is(id)),
                 new Update().set("intro", intro));
     }
 
-    public Page<TimeShaft> findPage(int pno, int pSize){
+    public Page<TimeShaft> findPage(int pno, int pSize) {
         return super.findPage(MongoUtil.soryBy(new Query(), MongoUtil.DESC, "date"), pno, pSize);
     }
 }

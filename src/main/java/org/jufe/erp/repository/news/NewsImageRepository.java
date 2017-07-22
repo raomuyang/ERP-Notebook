@@ -2,13 +2,7 @@ package org.jufe.erp.repository.news;
 
 import org.jufe.erp.entity.NewsImage;
 import org.jufe.erp.repository.BaseInterface;
-import org.jufe.erp.repository.BaseRepository;
 import org.jufe.erp.repository.Page;
-import org.jufe.erp.utils.MongoUtil;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -17,13 +11,13 @@ import java.util.List;
  */
 public interface NewsImageRepository extends BaseInterface<NewsImage> {
 
-    public Page<NewsImage> findPage(int pno, int pSize);
+    Page<NewsImage> findPage(int pno, int pSize);
 
-    public List<NewsImage> findByNewsId(String newsId);
+    List<NewsImage> findByNewsId(String newsId);
 
-    public boolean updateIntro(NewsImage newsImage);
+    boolean updateIntro(NewsImage newsImage);
 
-    public List<NewsImage> deleteByNewsId(String newsId);
+    List<NewsImage> deleteByNewsId(String newsId);
 
-    public List<NewsImage> deleteByUrl(String url);
+    List<NewsImage> deleteByUrl(String url);
 }

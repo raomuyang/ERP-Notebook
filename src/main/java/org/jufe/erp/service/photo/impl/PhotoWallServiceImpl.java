@@ -4,20 +4,16 @@ import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.jufe.erp.entity.PhotoWall;
 import org.jufe.erp.repository.Page;
-import org.jufe.erp.repository.QOSComponent;
+import org.jufe.erp.component.QOSComponent;
 import org.jufe.erp.repository.photo.PhotoWallRepository;
 import org.jufe.erp.service.photo.PhotoWallService;
-import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.MongoUtil;
 import org.jufe.erp.utils.MultipartFileSave;
 import org.jufe.erp.utils.enums.ResourceEnum;
-import org.jufe.erp.utils.qiniu.QiniuConfig;
-import org.jufe.erp.utils.qiniu.QiniuQOS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.List;
 
 /**

@@ -49,7 +49,7 @@ public class RoleRestController {
     }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping(value = "/add-role", method = RequestMethod.PUT)
+    @RequestMapping(value = "/add-role", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> addRole(@RequestBody Role role){
         logger.debug("/add-role: " + role);
         ModelMap map = new ModelMap();
@@ -63,7 +63,7 @@ public class RoleRestController {
     }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping(value = "/update-role", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-role", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody Role role){
         logger.debug("/update-role: " + role);
         ModelMap map = new ModelMap();
@@ -82,7 +82,7 @@ public class RoleRestController {
      * @return
      */
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping(value = "/update-role-info", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-role-info", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateInfo(@RequestBody Role role){
         logger.debug("/update-role-info: " + role);
         ModelMap map = new ModelMap();

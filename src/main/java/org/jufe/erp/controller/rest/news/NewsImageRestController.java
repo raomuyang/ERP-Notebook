@@ -71,7 +71,7 @@ public class NewsImageRestController {
     }
 
     @AuthRequest(level = AuthLevel.USER)
-    @RequestMapping(value = "update-intro", method = RequestMethod.POST)
+    @RequestMapping(value = "update-intro", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateIntro(@RequestBody NewsImage newsImage){
         logger.debug("update-intro:" + newsImage);
 

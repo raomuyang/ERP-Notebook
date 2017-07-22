@@ -36,7 +36,7 @@ public class MShowRestController {
     }
 
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody MShow mShow){
         logger.debug("/update: " + mShow);
         ModelMap map = new ModelMap();
@@ -55,7 +55,7 @@ public class MShowRestController {
      * @return
      */
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update-words", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-words", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateWords(@RequestBody String words){
         logger.debug("/update-words: " + words);
         ModelMap map = new ModelMap();
@@ -79,7 +79,7 @@ public class MShowRestController {
      * @return
      */
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update-iurls", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-iurls", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateIUrls(@RequestBody String args){
         logger.debug("/update-iurls: " + args);
         ModelMap map = new ModelMap();
@@ -103,7 +103,7 @@ public class MShowRestController {
      * @return
      */
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update-video", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-video", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateVUrl(@RequestBody String vurl){
         logger.debug("/update-video: " + vurl);
         ModelMap map = new ModelMap();

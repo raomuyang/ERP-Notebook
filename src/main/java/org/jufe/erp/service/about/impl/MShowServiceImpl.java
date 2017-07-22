@@ -1,18 +1,13 @@
 package org.jufe.erp.service.about.impl;
 
-import com.qiniu.http.Response;
 import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
 import org.jufe.erp.entity.MShow;
-import org.jufe.erp.repository.QOSComponent;
+import org.jufe.erp.component.QOSComponent;
 import org.jufe.erp.repository.about.MShowRepository;
 import org.jufe.erp.service.about.MShowService;
 import org.jufe.erp.utils.DateTools;
-import org.jufe.erp.utils.FileUtils;
 import org.jufe.erp.utils.MultipartFileSave;
 import org.jufe.erp.utils.enums.ResourceEnum;
-import org.jufe.erp.utils.qiniu.QiniuConfig;
-import org.jufe.erp.utils.qiniu.QiniuQOS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;

@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
  * Created by raomengnan on 16-8-31.
  */
 @Repository
-public class RoleRepositoryImpl extends BaseRepository<Role> implements RoleRepository{
+public class RoleRepositoryImpl extends BaseRepository<Role> implements RoleRepository {
 }
