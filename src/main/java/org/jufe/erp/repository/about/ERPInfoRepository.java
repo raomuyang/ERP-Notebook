@@ -6,18 +6,18 @@ import org.jufe.erp.repository.BaseInterface;
 /**
  * Created by Raomengnan on 2016/8/31.
  */
-public interface ERPInfoRepository extends BaseInterface<ERPInfo>{
-    public static final String id = "org.jufe.erp";
+public interface ERPInfoRepository extends BaseInterface<ERPInfo> {
+    static final String id = "org.jufe.erp";
 
-    public ERPInfo getInfo();
+    ERPInfo getInfo();
 
-    public boolean update(ERPInfo info);
+    boolean update(ERPInfo info);
 
-    public boolean updateTel(String tel);
+    boolean updateTel(String tel);
 
-    public boolean updateIntro(String intro);
+    boolean updateIntro(String intro);
 
-    public boolean updateJoinUs(String context);
+    boolean updateJoinUs(String context);
 
-    public boolean updateOrg(String context);
+    boolean updateOrg(String context);
 }

@@ -3,7 +3,6 @@ package org.jufe.erp.repository.news;
 import org.jufe.erp.entity.News;
 import org.jufe.erp.repository.BaseInterface;
 import org.jufe.erp.repository.Page;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,22 +11,22 @@ import java.util.List;
  */
 public interface NewsRepository extends BaseInterface<News> {
 
-    public List<News> findByAuthor(String author);
+    List<News> findByAuthor(String author);
 
-    public List<News> findByTitle(String title);
+    List<News> findByTitle(String title);
 
-    public List<News> findByKeyword(String keyword);
+    List<News> findByKeyword(String keyword);
 
-    public Page<News> findPage(int pno, int pSize);
+    Page<News> findPage(int pno, int pSize);
 
-    public List<News> findAll();
+    List<News> findAll();
 
-    public List<News> findUserNoFinished(String userId);
+    List<News> findUserNoFinished(String userId);
 
-    public Page<News> findUserNoFinishedPage(String userId, int pno, int psize);
+    Page<News> findUserNoFinishedPage(String userId, int pno, int psize);
 
-    public boolean update(News news);
+    boolean update(News news);
 
-    public List<News> findByAuthorId(String authorId);
+    List<News> findByAuthorId(String authorId);
 
 }

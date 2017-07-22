@@ -16,9 +16,9 @@ import java.util.List;
  * Created by raomengnan on 16-8-31.
  */
 @Repository
-public class NewsImageRepositoryImpl extends BaseRepository<NewsImage> implements NewsImageRepository{
+public class NewsImageRepositoryImpl extends BaseRepository<NewsImage> implements NewsImageRepository {
 
-    public Page<NewsImage> findPage(int pno, int pSize){
+    public Page<NewsImage> findPage(int pno, int pSize) {
         return super.findPage(MongoUtil.soryBy(new Query(), MongoUtil.DESC, "date"), pno, pSize);
     }
 
@@ -27,7 +27,7 @@ public class NewsImageRepositoryImpl extends BaseRepository<NewsImage> implement
         return super.find(new Query(new Criteria("newsId").is(newsId)));
     }
 
-    public boolean updateIntro(NewsImage newsImage){
+    public boolean updateIntro(NewsImage newsImage) {
         return super.update(new Query(new Criteria("id").is(newsImage.getId())),
                 new Update().set("intro", newsImage.getIntro()));
     }

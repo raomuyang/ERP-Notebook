@@ -17,13 +17,13 @@ import java.util.List;
  */
 public interface NewsImageRepository extends BaseInterface<NewsImage> {
 
-    public Page<NewsImage> findPage(int pno, int pSize);
+    Page<NewsImage> findPage(int pno, int pSize);
 
-    public List<NewsImage> findByNewsId(String newsId);
+    List<NewsImage> findByNewsId(String newsId);
 
-    public boolean updateIntro(NewsImage newsImage);
+    boolean updateIntro(NewsImage newsImage);
 
-    public List<NewsImage> deleteByNewsId(String newsId);
+    List<NewsImage> deleteByNewsId(String newsId);
 
-    public List<NewsImage> deleteByUrl(String url);
+    List<NewsImage> deleteByUrl(String url);
 }

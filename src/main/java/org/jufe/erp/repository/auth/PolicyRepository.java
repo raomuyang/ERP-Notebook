@@ -6,5 +6,5 @@ import org.jufe.erp.repository.BaseInterface;
 /**
  * Created by Raomengnan on 2016/9/1.
  */
-public interface PolicyRepository extends BaseInterface<Policy>{
+public interface PolicyRepository extends BaseInterface<Policy> {
 }

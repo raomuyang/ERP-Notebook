@@ -17,38 +17,38 @@ import java.util.List;
  * 所有的一般查询，均只展示finish==true的
  */
 @Repository
-public class NewsRepositoryImpl extends BaseRepository<News> implements NewsRepository{
+public class NewsRepositoryImpl extends BaseRepository<News> implements NewsRepository {
 
     private Criteria crFin = new Criteria("finish").is(true);
 
-    public List<News> findByAuthorId(String authorId){
+    public List<News> findByAuthorId(String authorId) {
         Criteria criteria = new Criteria("authorId").is(authorId);
         return super.find(new Query(new Criteria().andOperator(criteria, crFin)));
     }
 
-    public List<News> findByAuthor(String author){
+    public List<News> findByAuthor(String author) {
         Criteria criteria = MongoUtil.fuzzyCriteria("author", author);
         return super.find(new Query(new Criteria().andOperator(criteria, crFin)));
     }
 
-    public List<News> findByTitle(String title){
+    public List<News> findByTitle(String title) {
         Criteria criteria = MongoUtil.fuzzyCriteria("title", title);
         return super.find(new Query(new Criteria().andOperator(criteria, crFin)));
     }
 
-    public List<News> findByKeyword(String keyword){
+    public List<News> findByKeyword(String keyword) {
         Criteria c1 = MongoUtil.fuzzyCriteria("title", keyword);
         Criteria c2 = MongoUtil.fuzzyCriteria("context", keyword);
         Criteria criteria = new Criteria().orOperator(c1, c2);
         return super.find(new Query(new Criteria().andOperator(criteria, crFin)));
     }
 
-    public Page<News> findPage(int pno, int pSize){
+    public Page<News> findPage(int pno, int pSize) {
         return super.findPage(MongoUtil.soryBy(new Query(crFin), MongoUtil.DESC, "date"), pno, pSize);
     }
 
-    public List<News> findAll(){
-        Query query = MongoUtil.soryBy(new Query(crFin),MongoUtil.DESC, "date");
+    public List<News> findAll() {
+        Query query = MongoUtil.soryBy(new Query(crFin), MongoUtil.DESC, "date");
         return super.find(query);
     }
 
@@ -64,8 +64,8 @@ public class NewsRepositoryImpl extends BaseRepository<News> implements NewsRepo
                 .and("finish").is(false)), pno, psize);
     }
 
-    public boolean update(News news){
-        if(news == null || news.getId() == null)
+    public boolean update(News news) {
+        if (news == null || news.getId() == null)
             return false;
         return super.update(new Query(new Criteria("id").is(news.getId())),
                 new Update().set("title", news.getTitle())
