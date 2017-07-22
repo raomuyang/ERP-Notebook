@@ -131,7 +131,7 @@ public class NewsRestController {
     }
 
     @AuthRequest(level = AuthLevel.USER)
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody News news, HttpServletRequest request){
         logger.debug("update: " + news);
         boolean result = false;
@@ -147,7 +147,7 @@ public class NewsRestController {
     }
 
     @AuthRequest(level = AuthLevel.USER)
-    @RequestMapping(value = "/update-status", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-status", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> updateStatus(@RequestBody News news, HttpServletRequest request){
         logger.debug("update-status: " + news==null?news:news.getId());
         boolean result = false;
@@ -168,7 +168,7 @@ public class NewsRestController {
      * @return
      */
     @AuthRequest(level = AuthLevel.USER)
-    @RequestMapping(value = "/create", method = RequestMethod.PUT)
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> add(@RequestBody News news, HttpServletRequest request){
         logger.debug("add: " + news);
         boolean result = false;

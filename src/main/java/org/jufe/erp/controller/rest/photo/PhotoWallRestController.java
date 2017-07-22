@@ -77,7 +77,7 @@ public class PhotoWallRestController {
      * @return
      */
     @AuthRequest(level = AuthLevel.CONTROLLER)
-    @RequestMapping(value = "/update-info", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-info", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody PhotoWall photoInfo){
         logger.debug("update-username:" + photoInfo);
         boolean result = false;

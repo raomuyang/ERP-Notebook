@@ -38,7 +38,7 @@ public class TimeShaftRestController {
     }
 
     @AuthRequest(level = AuthLevel.KEEPER)
-    @RequestMapping(value = "/update-info", method = RequestMethod.POST)
+    @RequestMapping(value = "/update-info", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody TimeShaft shaftNode){
         logger.debug("update-intro:" + shaftNode);
         ModelMap map = new ModelMap();

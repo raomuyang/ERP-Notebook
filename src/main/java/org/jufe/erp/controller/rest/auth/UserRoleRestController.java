@@ -85,7 +85,7 @@ public class UserRoleRestController {
     }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<ModelMap> update(@RequestBody UserRole userRole){
         logger.debug("update: " + userRole);
         ModelMap map = new ModelMap();

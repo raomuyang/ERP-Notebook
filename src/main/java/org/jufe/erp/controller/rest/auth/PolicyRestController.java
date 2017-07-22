@@ -30,7 +30,7 @@ public class PolicyRestController {
     }
 
     @AuthRequest(level = AuthLevel.ADMIN)
-    @RequestMapping(value = "/save-policy", method = RequestMethod.PUT)
+    @RequestMapping(value = "/save-policy", method = RequestMethod.POST)
     public ResponseEntity<ModelMap> savePolicy(@RequestBody Policy policy){
         logger.debug("/save-policy:" + policy);
         ModelMap map = new ModelMap();
