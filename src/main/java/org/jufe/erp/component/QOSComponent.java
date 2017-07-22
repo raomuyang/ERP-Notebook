@@ -1,6 +1,5 @@
-package org.jufe.erp.repository;
+package org.jufe.erp.component;
 
-import org.jufe.erp.utils.qiniu.QiniuConfig;
 import org.jufe.erp.utils.qiniu.QiniuQOS;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class QOSComponent {
     @Autowired
-    private QiniuConfig qiniuConfig;
+    private QiniuConfig qiniuConfig = new QiniuConfig();
     private QiniuQOS qiniuQOS;
 
     public QiniuQOS getQos(){
