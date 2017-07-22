@@ -1,6 +1,5 @@
 package org.jufe.erp.controller.rest.auth;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.jufe.erp.entity.Role;
 import org.jufe.erp.entity.User;
@@ -9,7 +8,6 @@ import org.jufe.erp.service.auth.RoleService;
 import org.jufe.erp.service.auth.UserRoleService;
 import org.jufe.erp.service.user.UserService;
 import org.jufe.erp.utils.DateTools;
-import org.jufe.erp.utils.JsonUtils;
 import org.jufe.erp.utils.anno.AuthRequest;
 import org.jufe.erp.utils.enums.AuthLevel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by raomengnan on 16-9-12.
